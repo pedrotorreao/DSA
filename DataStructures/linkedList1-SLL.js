@@ -74,8 +74,7 @@ class LinkedList {
     
       let node = currentNode.next.next; //Skips the node to be deleted
       currentNode.next = node; // Updates current node 'next reference' to newly created 'node' 
-  }
-    //console.log(node);
+    }
   }
 
   printList() {
