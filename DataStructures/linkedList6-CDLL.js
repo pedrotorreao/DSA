@@ -23,6 +23,8 @@ function CDLL () {
     let node = new Node(value);
     if (this.head === null) {
       this.head = node;
+      this.head.prev = node;
+      this.head.next = node;
       this.tail = this.head;
     } else {
       let currentNode = this.head;
