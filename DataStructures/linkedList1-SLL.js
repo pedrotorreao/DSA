@@ -78,6 +78,26 @@ class LinkedList {
     }
   }
 
+  reverse () {//creates a new ll by reversing the original
+    if (!this.head.next) { //If there is only one element in the ll (@head), return it.
+      return this.head;
+    }
+    let first = this.head;
+    this.tail = this.head;
+    let second = first.next;
+
+    while(second) {//while we don't get to the end of the list second = tail.next = null
+      const temp = second.next;//the temp variable gets the next element at the list
+      second.next = first; //the second node ref. points now at the first node
+      first = second; //first and second nodes change places
+      second = temp; //this moves to the next element until we get to the end of the list
+    }
+
+    this.head.next = null;//update the head ref. of to point at null, since this node will be the tail.
+    this.head = first;
+    return this.printList();
+  }
+  
   printList() {
     const array = [];
     let currentNode = this.head;
@@ -108,6 +128,8 @@ myLinkedList.printList();
 
 myLinkedList.remove(8);
 myLinkedList.printList();
+
+myLinkedList.reverse();
 //console.log(myLinkedList);
 
 //JavaScript -- Variable Assignment
