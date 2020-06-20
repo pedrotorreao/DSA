@@ -24,22 +24,27 @@ class BinarySearchTree {
     let node = new Node(value);
 
     if (this.root === null) {
+      //In case the tree is empty, add new node to the root.
       this.root = node;
     } else {
+      //Create temp node so we can traverse the tree.
       let currentNode = this.root;
       while (currentNode) {
+        //If new value is less than the root value, go left.
         if (node.value < currentNode.value) {
           if (!currentNode.left) {
+            //If the left spot is empty, assign it the new node value.
             currentNode.left = node;
             return;
           }
           currentNode = currentNode.left;
-        } else {
-          if (!currentNode.rigth) {
-            currentNode.rigth = node;
+        } else {//If new value is greater than the root value, go right.
+          if (!currentNode.right) {
+            //If the right spot is empty, assign it the new node value.
+            currentNode.right = node;
             return;
           }
-          currentNode = currentNode.rigth;
+          currentNode = currentNode.right;
         }
       }
       currentNode.left = node;
