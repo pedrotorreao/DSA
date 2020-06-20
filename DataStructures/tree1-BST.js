@@ -51,7 +51,17 @@ class BinarySearchTree {
     }
   }
   lookup(value){
-    //Code here
+    let currentNode = this.root;
+    while (currentNode) {
+      if (currentNode.value === value) {
+        return currentNode;
+      } else if (value < currentNode.value) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
+    }
+    return `${value} is not in the tree.`;
   }
   // remove
 }
