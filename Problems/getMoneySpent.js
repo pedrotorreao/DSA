@@ -17,7 +17,6 @@ function getMoneySpent(keyboards, drives, b) {
   let map = {};
   let sum = 0;
   for (let i = 0; i < keyboards.length; i++) {
-    let item = keyboards[i];
     let complement = b - keyboards[i];
     if (!map[complement]) {
       map[complement] = true;
