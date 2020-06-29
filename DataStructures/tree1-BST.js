@@ -1,13 +1,6 @@
 /****************************************************************/
 /*Problem: Tree Exercise (BST)  ********/
 /****************************************************************/
-/*
--- Summary:
--- Input(s):
--- Expected output(s):
--- Constraints:
-*/
-
 class Node {
   constructor(value){
     this.left = null;
