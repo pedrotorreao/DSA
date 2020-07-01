@@ -55,9 +55,11 @@ class BinarySearchTree {
           return currentNode;
         }
         else if(value < currentNode.value) {
+          if (currentNode.left === null) {return null;}
           return searchTree(currentNode.left);
         } 
         else if(value > currentNode.value) {
+          if (currentNode.right === null) {return null;}
           return searchTree(currentNode.right);
         } 
         else {
@@ -147,4 +149,4 @@ tree.insert(15);
 tree.insert(1);
 tree.remove(9);
 console.log(tree);
-//console.log(tree.lookup(9));
+console.log(tree.lookup(9));
