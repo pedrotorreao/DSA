@@ -127,15 +127,34 @@ class BinarySearchTree {
     }
     return currentNode.value;
   }
-  // isBalanced() {
-
-  // }
-  // minHeight() {
-
-  // }
-  // maxHeight() {
-
-  // }
+  minHeight(node = this.root) { //distance from the root node to the first node without two children
+    if (node === null) {
+      return -1;
+    }
+    let left = this.minHeight(node.left);
+    let right = this.minHeight(node.right);
+    if (left < right) {
+      return (left + 1);
+    } else {
+      return (right + 1);
+    }
+  }
+  maxHeight(node = this.root) { //distance from the root node to the bottommost node
+    if (node === null) {
+      return -1;
+    }
+    let left = this.maxHeight(node.left);
+    let right = this.maxHeight(node.right);
+    if (left > right) {
+      return (left + 1);
+    } else {
+      return (right + 1);
+    }
+  }
+  //a bst is balanced if the difference in height between the left and the right subtree differ at most by 1.
+  isBalanced() {
+    return (this.minHeight() >= this.maxHeight() - 1);
+  }
   // inOrderTraversal() {
 
   // }
