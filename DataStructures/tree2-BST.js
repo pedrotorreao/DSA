@@ -113,6 +113,20 @@ class BinarySearchTree {
     //calling the recursive function by passing the root node and the value to be removed
     this.root = removeNode(this.root,value);
   }
+  minValue() {
+    let currentNode = this.root;
+    while(currentNode.left !== null) {
+      currentNode = currentNode.left;
+    }
+    return currentNode.value;
+  }
+  maxValue() {
+    let currentNode = this.root;
+    while (currentNode.right !== null) {
+      currentNode = currentNode.right;
+    }
+    return currentNode.value;
+  }
   // isBalanced() {
 
   // }
@@ -147,6 +161,8 @@ tree.insert(20);
 tree.insert(170);
 tree.insert(15);
 tree.insert(1);
-tree.remove(9);
+//tree.remove(9);
 console.log(tree);
+console.log(tree.minValue());
+console.log(tree.maxValue());
 console.log(tree.lookup(9));
