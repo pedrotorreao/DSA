@@ -182,9 +182,24 @@ class BinarySearchTree {
       console.log(node.value);
     }
   }
-  // levelOrderTraversal() {
-
-  // }
+  levelOrderTraversal() {//1st level --> 2nd level --> 3rd level ...
+    let queue = [];
+    if (this.root !== null) {
+      queue.push(this.root);
+      while (queue.length > 0) {
+        let node = queue.shift();
+        console.log(node.value);
+        if (node.left !== null) {
+          queue.push(node.left);
+        }
+        if (node.right !== null) {
+          queue.push(node.right);
+        }
+      }
+    } else {
+      return null;
+    }
+  }
 }
 //     9
 //  4     20
@@ -214,3 +229,5 @@ console.log('preOrderTraversal():');
 tree.preOrderTraversal(); //9 > 4 > 1 > 6 > 20 > 15 > 170
 console.log('postOrderTraversal():');
 tree.postOrderTraversal();  //1 > 6 > 4 > 15 > 170 > 20 > 9
+console.log('levelOrderTraversal():');
+tree.levelOrderTraversal();  //9 > 4 > 20 > 1 > 6 > 15 > 170
