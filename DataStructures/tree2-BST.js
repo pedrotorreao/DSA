@@ -173,9 +173,15 @@ class BinarySearchTree {
       this.preOrderTraversal(node.right);
     }
   }
-  // postOrderTraversal() {
-
-  // }
+  postOrderTraversal(node = this.root) {//Left Subtree --> Right Subtree --> Root
+    if (node === null) {
+      return;
+    } else {
+      this.postOrderTraversal(node.left);
+      this.postOrderTraversal(node.right);
+      console.log(node.value);
+    }
+  }
   // levelOrderTraversal() {
 
   // }
@@ -202,5 +208,9 @@ console.log(tree.minHeight());
 console.log(tree.maxHeight());
 console.log('The BST is balanced: ', tree.isBalanced());
 
+console.log('inOrderTraversal():');
 tree.inOrderTraversal(); //1 > 4 > 6 > 9 > 15 > 20 > 170
+console.log('preOrderTraversal():');
 tree.preOrderTraversal(); //9 > 4 > 1 > 6 > 20 > 15 > 170
+console.log('postOrderTraversal():');
+tree.postOrderTraversal();  //1 > 6 > 4 > 15 > 170 > 20 > 9
