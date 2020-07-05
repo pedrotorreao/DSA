@@ -155,9 +155,15 @@ class BinarySearchTree {
   isBalanced() {
     return (this.minHeight() >= this.maxHeight() - 1);
   }
-  // inOrderTraversal() {
-
-  // }
+  inOrderTraversal(node = this.root) {//Left Subtree --> Root --> Right Subtree
+    if (node === null) {
+      return;
+    } else {
+      this.inOrderTraversal(node.left);
+      console.log(node.value);
+      this.inOrderTraversal(node.right);
+    }
+  }
   // preOrderTraversal() {
 
   // }
@@ -181,7 +187,13 @@ tree.insert(170);
 tree.insert(15);
 tree.insert(1);
 //tree.remove(9);
+//console.log(tree.lookup(9));
 console.log(tree);
 console.log(tree.minValue());
 console.log(tree.maxValue());
-console.log(tree.lookup(9));
+
+console.log(tree.minHeight());
+console.log(tree.maxHeight());
+console.log('The BST is balanced: ', tree.isBalanced());
+
+tree.inOrderTraversal(); //1 > 4 > 6 > 9 > 15 > 20 > 170
