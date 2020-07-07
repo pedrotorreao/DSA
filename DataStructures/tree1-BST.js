@@ -40,7 +40,7 @@ class BinarySearchTree {
           currentNode = currentNode.right;
         }
       }
-      currentNode.left = node;
+      //currentNode.left = node;
     }
   }
   lookup(value){
