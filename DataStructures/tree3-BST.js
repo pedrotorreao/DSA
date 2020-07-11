@@ -52,7 +52,7 @@ class BinarySearchTree {
   //remove method:
   remove(value) {
     const removeNode = function(arr,current,value) {
-      if (arr[current] === null) {
+      if (arr[current] === null) {//tree is empty
         return null;
       }
       if (arr[current] === value) {
@@ -70,9 +70,7 @@ class BinarySearchTree {
           return;
         }
         if ((arr[2*current + 1] === undefined)) { //no right child
-          console.log(':>',arr[current])
           arr[current] = arr[2*current];
-          console.log(':>',arr[current])
 
           while(arr[(2*current)] !== undefined) {
             arr[2*current] = arr[2*(2*current)];
@@ -80,25 +78,26 @@ class BinarySearchTree {
           }
           return;
         }
-        let temp = 2*current + 1;
-        while(arr[temp*2] !== undefined) {
+        //both childs:
+        let temp = 2*current + 1; //go to the right child's position 
+        while(arr[temp*2] !== undefined) {//from the right child's position, go to its leftmost child
           temp = temp*2;
         }
-        arr[current] = arr[temp];
+        arr[current] = arr[temp];//replace node being removed by its right child leftmost node
 
-        while(arr[temp] !== undefined) {
+        while(arr[temp] !== undefined) {//reorganize the tree to avoid duplicate elements
           arr[temp] = arr[temp*2];
           temp*2;
         }
       }
-      else if (value < arr[current]) {
+      else if (value < arr[current]) {//go left if value we want to remove is less than the current value
         return removeNode(arr,current*2,value);
       }
-      else if (value > arr[current]) {
+      else if (value > arr[current]) {//go right if value we want to remove is greater than the current value
         return removeNode(arr,(current*2 + 1),value);
       }
-      else {
-        console.log('PERDEEEU')
+      else {//in case the value is not on the tree
+        console.log(`${value} is not on the tree.`);
         return null;
       }
     }
