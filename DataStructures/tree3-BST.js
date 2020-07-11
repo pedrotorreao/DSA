@@ -51,7 +51,58 @@ class BinarySearchTree {
   }
   //remove method:
   remove(value) {
+    const removeNode = function(arr,current,value) {
+      if (arr[current] === null) {
+        return null;
+      }
+      if (arr[current] === value) {
+        if ((arr[2*current] === undefined) && (arr[2*current + 1] === undefined)) {//no child
+          arr[current] = null;
+          return;
+        }
+        if ((arr[2*current] === undefined)) { //no left child
+          arr[current] = arr[2*current + 1];
 
+          while(arr[(2*current + 1)] !== undefined) {
+            arr[2*current + 1] = arr[2*(2*current + 1)+1];
+            current++;
+          }
+          return;
+        }
+        if ((arr[2*current + 1] === undefined)) { //no right child
+          console.log(':>',arr[current])
+          arr[current] = arr[2*current];
+          console.log(':>',arr[current])
+
+          while(arr[(2*current)] !== undefined) {
+            arr[2*current] = arr[2*(2*current)];
+            current++;
+          }
+          return;
+        }
+        let temp = 2*current + 1;
+        while(arr[temp*2] !== undefined) {
+          temp = temp*2;
+        }
+        arr[current] = arr[temp];
+
+        while(arr[temp] !== undefined) {
+          arr[temp] = arr[temp*2];
+          temp*2;
+        }
+      }
+      else if (value < arr[current]) {
+        return removeNode(arr,current*2,value);
+      }
+      else if (value > arr[current]) {
+        return removeNode(arr,(current*2 + 1),value);
+      }
+      else {
+        console.log('PERDEEEU')
+        return null;
+      }
+    }
+    return removeNode(this.treeArr,this.lastIndex,value);
   }
 }
 /*       9
@@ -73,3 +124,5 @@ console.log(tree);
 tree.lookup(15);
 tree.lookup(4);
 tree.lookup(55);
+tree.remove(9);
+console.log(tree);
