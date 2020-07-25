@@ -19,6 +19,7 @@ Delete as few nodes as possible to ensure that no two nodes have the same data. 
  * }
  *
  */
+//SOLUTION 1: Time complexity O(n+m) 
 function removeDuplicates(head) {
   if (head === null) { return null; }
 
@@ -39,6 +40,22 @@ function removeDuplicates(head) {
     ll.insertNode(lldata[i]);
   }
   return ll.head;
+}
+// SOLUTION 2: Time complexity O(n). Cleaner solution.
+function removeDuplicates(head) {
+  if (head === null) { return null; }
+
+  let currentNode = head;
+  while(currentNode !== null) {
+      //if (currentNode.next === null) {return;}
+      if (currentNode.next !== null && currentNode.data === currentNode.next.data) {
+          let nodeTemp = currentNode.next.next;
+          currentNode.next = nodeTemp;
+      } else {
+          currentNode = currentNode.next;
+      }
+  }
+  return head;
 }
 // ---- How the LL is set up in the rest of the code ----:
 /*
