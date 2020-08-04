@@ -34,3 +34,37 @@ console.log(isBalanced('{[()}'));
 console.log(isBalanced('{{[[(())]]}}'));
 
 //SOLUTION USING STACKS:
+function isBalanced(s) {
+  let stack = [];
+  for(let i = 0; i < s.length; i++) {
+    switch(s[i]) {
+      case '{': stack.push('}'); break;
+      case '[': stack.push(']'); break;
+      case '(': stack.push(')'); break;
+      default: 
+        let top = stack.pop();
+        if (top !== s[i]) {return 'NO';}
+    }
+  }
+  if (stack.length !== 0) {return 'NO';}
+  else {return 'YES';}
+}
+/* -- SOLUTION EXPLANATION:
+Every time we pass through an opening bracket, we insert a closing matching bracket to the stack. In case the element being evaluated is not an opening bracket, the execution falls into the default case in which we evaluate if the top element of the stack matches the current element. If so, that indicates that there is a matching opening bracket for the current element, if not, the string is not balanced.
+*/
+console.log(isBalanced('{{[[(())]]}}')); //YES - ok
+console.log(isBalanced('{[()}')); //NO - ok
+console.log(isBalanced('{{[[(())]]}}')); //YES - ok
+console.log('-----');
+console.log(isBalanced('}][}}(}][))]')); //NO - nok
+console.log(isBalanced('[](){()}')); //YES - ok
+console.log(isBalanced('()')); //YES - ok
+console.log(isBalanced('({}([][]))[]()')); //YES - ok
+console.log(isBalanced('{)[](}]}]}))}(())(')); //NO - ok
+console.log(isBalanced('([[)')); //NO - ok
+console.log('-----');
+console.log(isBalanced('{}')); //YES - ok
+console.log(isBalanced('}([[{)[]))]{){}[')); //NO - ok
+console.log(isBalanced('{]]{()}{])')); //NO - nok
+console.log(isBalanced('(){}')); //YES - ok
+console.log(isBalanced('{}{()}{{}}')); //YES - ok
