@@ -19,11 +19,12 @@ function queueFrom2Stacks(input) {
   let str = input.split('\n'); str.shift();
 
   str.forEach((query, index) => {
-    switch(true) {
-      case query[0] == 1:
-        stack1.push(query.split(' ')[1]); break;
+    switch(true) {//trick to use switches to analyze expressions
+      case query[0] == 1: //checks if our query type is 1 (enqueue).
+        stack1.push(query.split(' ')[1]); break; //if so, it splits the pair '1 x', and pushes x.
       default:
-        if (!stack2.length) {
+        //if stack2 is empty, load elements from stack1 in reverse order to keep first queue element on top of the stack2. if not, stack2 already has te fist element of the queue as the last element on the stack.
+        if (!stack2.length) { 
           while (stack1.length) {stack2.push(stack1.pop());}
         }
         query[0] == 2 ? stack2.pop() : console.log(stack2[stack2.length-1]); break;
