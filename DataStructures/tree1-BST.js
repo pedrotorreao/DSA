@@ -106,13 +106,13 @@ class BinarySearchTree {
               this.root = currentNode.left;
             }
             else {
-              //if the value being removed is at the left of its parent, update its parent left reference to point to the node's left child (it doesn't matter if there is a left child or if it is null).
+              //if the value being removed is at the left of its parent, update its parent left reference to point to the node's right child (it doesn't matter if there is a left child or if it is null).
               if (currentNode.value < parentNode.value) {
-                parentNode.left = currentNode.left;
+                parentNode.left = currentNode.right;
               }
-              //if the value being removed is at the right of its parent, update its parent right reference to point to the node's left child (it doesn't matter if there is a left child or if it is null).
+              //if the value being removed is at the right of its parent, update its parent right reference to point to the node's right child (it doesn't matter if there is a left child or if it is null).
               else if (currentNode.value > parentNode.value) {
-                parentNode.right = currentNode.left;
+                parentNode.right = currentNode.right;
               }
             }
             return;
