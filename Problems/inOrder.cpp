@@ -76,7 +76,7 @@ std::cin >> data;
 root = myTree.insert(root, data);
 }
 
-myTree.preOrder(root);
+myTree.inOrder(root);
 return 0;
 }
 */

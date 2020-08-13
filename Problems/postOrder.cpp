@@ -76,7 +76,7 @@ int main() {
     root = myTree.insert(root, data);
   }
 
-  myTree.preOrder(root);
+  myTree.postOrder(root);
   return 0;
 }
 */
