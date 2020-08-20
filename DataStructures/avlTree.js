@@ -27,85 +27,89 @@ class avlTree {
     return searchTree(currentNode);
   }
   insert(value, currentNode = this.root) {
-    if (this.root === null) {
-      this.root = new Node(value); return;
-    }
+    let node = new Node(value);
 
-    if (value < currentNode.value) {
-      if (currentNode.left === null) {currentNode.left = new Node(value);} 
-      else {this.insert(value, currentNode.left);}
+    if (this.root === null) { this.root = node; }
+    else if (node.value < currentNode.value) {
+      if (currentNode.left === null) {currentNode.left = node;} 
+      else { this.insert(value, currentNode.left); }
     }
-    else if (value > currentNode.value) {
-      if (currentNode.right === null) {currentNode.right = new Node(value);}
-      else {this.insert(value, currentNode.right);}
+    else if (node.value > currentNode.value) {
+      if (currentNode.right === null) {currentNode.right = node;}
+      else { this.insert(value, currentNode.right); }
     }
-    else {return null;}
+    else {return this.root;}
 
-    // AVL tree part:
-    let balance = 0;
-    balance = this.getBalance(currentNode);
-    //balance = -2;
-
-    if (balance > 1) {// Left subtree is disbalanced
-        if (this.getBalance(currentNode.left) > 0) {
-          currentNode = this.rightRotation(currentNode);
-          
-        }
-        else { currentNode.left = this.leftRotation(currentNode.left); currentNode = this.rightRotation(currentNode);}
-        this.root = currentNode;
+    //AVL tree part:
+    if (this.root.left !== null && this.getBalance(this.root) > 1) {// Left subtree is disbalanced
+      if (node.value > this.root.left.value) {
+        this.root = this.rotationLL(this.root);
+      }
+      else { this.root = this.rotationLR(this.root);}
     }
-    else if (balance < -1) {//Right subtree is disbalanced
-        if (this.getBalance(currentNode.right) > 0) { 
-          currentNode = this.leftRotation(currentNode);
-          
-        }
-        else { currentNode.right = this.rightRotation(currentNode.right); currentNode = this.leftRotation(currentNode); }
-        this.root = currentNode;
+    else if (this.root.right !== null && this.getBalance(this.root) < -1) {//Right subtree is disbalanced
+      if (node.value > this.root.right.value) { 
+        this.root = this.rotationRR(this.root);
+      }
+      else { this.root = this.rotationRL(this.root);}
     }
+    // if (currentNode.left !== null && this.getBalance(currentNode) > 1) {// Left subtree is disbalanced
+    //     if (this.getBalance(currentNode.left) > 0) {
+    //       currentNode = this.rightRotation(currentNode);
+    //     }
+    //     else { currentNode.left = this.leftRotation(currentNode.left); currentNode = this.rightRotation(currentNode);}
+    //     this.root = currentNode;
+    // }
+    // else if (currentNode.right !== null && this.getBalance(currentNode) < -1) {//Right subtree is disbalanced
+    //     if (this.getBalance(currentNode.right) > 0) { 
+    //       currentNode = this.leftRotation(currentNode);
+    //     }
+    //     else { currentNode.right = this.rightRotation(currentNode.right); currentNode = this.leftRotation(currentNode); }
+    //     this.root = currentNode;
+    // }
 
-    return currentNode;
+    return this.root;
   }
 
   remove(value) {
 
   }
   getHeight(node = this.root) {
-    if (node === null) {return 0;}
-    return 1 + Math.max(((node.left!==null) ? this.getHeight(node.left) :-1),((node.right!==null) ? this.getHeight(node.right) :-1));
+    let nodeHeight = 0;
+    if (node === null) { nodeHeight = -1;}
+    else { nodeHeight = Math.max(this.getHeight(node.left),this.getHeight(node.right)) + 1;}
+  //return 1 + Math.max(((node.left!==null) ? this.getHeight(node.left) :-1),((node.right!==null) ? this.getHeight(node.right) :-1));
+    return nodeHeight;
   }
   getBalance(node = this.root) {
-    //it may be needed to add checks for empty nodes
-    // if (node.left === null && node.right === null) {return 0;}
-    // else if (node.left === null) {return -1 * (this.getHeight(node.right) + 1);}
-    // else if (node.right === null) {return 1 + this.getHeight(node.left);}
-    
     return (this.getHeight(node.left) - this.getHeight(node.right));
   }
-  leftRotation(node = this.root) {
-    let newRoot = node.right;
-    node.right = node.right.left;
-    newRoot.left = node;
-
-    return newRoot;
-    //may add height calc. later
-  }
-  rightRotation(node = this.root) {
+  
+  rotationLL(node) {//LL condition --> Right Rotation
     let newRoot = node.left;
-    node.left = node.left.right;
+    node.left = newRoot.right;
     newRoot.right = node;
 
     return newRoot;
-    //may add height calc. later
   }
 
+  rotationRR(node) {//RR condition --> Left Rotation
+    let newRoot = node.right;
+    node.right = newRoot.left;
+    newRoot.left = node;
 
-  minHeight(node = this.root) {
-
+    return newRoot;
   }
-  maxHeight(node = this.root) {
-    
+
+  rotationLR(node) {
+    node.left = this.rotationRR(node.left);
+    return this.rotationLL(node);
   }
 
+  rotationRL(node) {
+    node.right = this.rotationLL(node.right);
+    return this.rotationRR(node);
+  }
 }
 let seBalanceTree = new avlTree();
 
@@ -120,18 +124,19 @@ let seBalanceTree = new avlTree();
 
 // Left-Left condition:
 //Test 2:
-// seBalanceTree.insert(9);
-// seBalanceTree.insert(4);
-// seBalanceTree.insert(20);
-// seBalanceTree.insert(3);
-// seBalanceTree.insert(30);
-// seBalanceTree.insert(15);
-// seBalanceTree.insert(10);
-
-seBalanceTree.insert(10);
+seBalanceTree.insert(9);
+seBalanceTree.insert(4);
 seBalanceTree.insert(20);
-seBalanceTree.insert(35);
-seBalanceTree.insert(53);
+seBalanceTree.insert(2);
+seBalanceTree.insert(30);
+seBalanceTree.insert(15);
+seBalanceTree.insert(10);
+seBalanceTree.insert(13);
+
+// seBalanceTree.insert(10);
+// seBalanceTree.insert(20);
+// seBalanceTree.insert(35);
+//seBalanceTree.insert(53);
 // seBalanceTree.insert(30);
 // seBalanceTree.insert(15);
 // seBalanceTree.insert(10);
