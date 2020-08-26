@@ -1,12 +1,9 @@
-/****************************************************************/
-/*Trees: AVL Tree  ********/
-/****************************************************************/
-
 class Node {
   constructor(value) {
     this.left = null;
     this.right = null;
     this.value = value;
+    this.height = 1;
   }
 }
 class avlTree {
@@ -26,119 +23,104 @@ class avlTree {
     };
     return searchTree(currentNode);
   }
-  insert(value, currentNode = this.root) {
+  insert(value) {
     let node = new Node(value);
 
-    if (this.root === null) { this.root = node; }
-    else if (node.value < currentNode.value) {
-      if (currentNode.left === null) {currentNode.left = node;} 
-      else { this.insert(value, currentNode.left); }
-    }
-    else if (node.value > currentNode.value) {
-      if (currentNode.right === null) {currentNode.right = node;}
-      else { this.insert(value, currentNode.right); }
-    }
-    else {return this.root;}
+    if (this.root === null) { 
+      this.root = node; 
+      return;
+    } else {
+      const insertHelper = function(self, root, node) {
+        //Regular BST insertion:
+        if(root === null) { root = node; } 
+        else if (node.value < root.value) { root.left = insertHelper(self, root.left, node); } 
+        else if (node.value > root.value) { root.right = insertHelper(self, root.right, node); } 
+        else { return null; } //Cannot have repeated nodes on BST
 
-    //AVL tree part:
-    if (this.root.left !== null && this.getBalance(this.root) > 1) {// Left subtree is disbalanced
-      if (node.value > this.root.left.value) {
-        this.root = this.rotationLL(this.root);
-      }
-      else { this.root = this.rotationLR(this.root);}
-    }
-    else if (this.root.right !== null && this.getBalance(this.root) < -1) {//Right subtree is disbalanced
-      if (node.value > this.root.right.value) { 
-        this.root = this.rotationRR(this.root);
-      }
-      else { this.root = this.rotationRL(this.root);}
-    }
-    // if (currentNode.left !== null && this.getBalance(currentNode) > 1) {// Left subtree is disbalanced
-    //     if (this.getBalance(currentNode.left) > 0) {
-    //       currentNode = this.rightRotation(currentNode);
-    //     }
-    //     else { currentNode.left = this.leftRotation(currentNode.left); currentNode = this.rightRotation(currentNode);}
-    //     this.root = currentNode;
-    // }
-    // else if (currentNode.right !== null && this.getBalance(currentNode) < -1) {//Right subtree is disbalanced
-    //     if (this.getBalance(currentNode.right) > 0) { 
-    //       currentNode = this.leftRotation(currentNode);
-    //     }
-    //     else { currentNode.right = this.rightRotation(currentNode.right); currentNode = this.leftRotation(currentNode); }
-    //     this.root = currentNode;
-    // }
+        root.height = 1 + Math.max(self.getHeight(root.left),self.getHeight(root.right)); //Updates node height.
 
-    return this.root;
+        //AVL Tree operations:
+        let balance = self.getBalance(root);
+
+        if (balance > 1 && root.left !== null) { // Left subtree disbalanced
+          //Left-Left case (1 rotation needed): do rightRotation on disbalanced node.
+          if (node.value < root.left.value) { 
+            return self.rightRotation(root);
+          }
+          //Left-Right case (2 rotations needed): do leftRotation on disb. node left subtree and rightRotation on disb. node.
+          else {
+            root.left = self.leftRotation(root.left);
+            return self.rightRotation(root);
+          }
+        }
+        if (balance < -1 && root.right !== null) { // Right subtree disbalanced
+          //Right-Right case (1 rotation needed): do leftRotation on disbalanced node.
+          if (node.value > root.right.value) {
+            return self.leftRotation(root);
+          }
+          //Right-Left case (2 rotations needed): do rightRotation on disb. node right subtree and leftRotation on disb. node.
+          else {
+            root.right = self.rightRotation(root.right);
+            return self.leftRotation(root);
+          }
+        }
+        return root;
+      };
+      //doing this saved my life and got the rotations to work properly, just calling method is not enough, must assign.
+      this.root = insertHelper(this, this.root, node); 
+    }
   }
 
   remove(value) {
-
+    //to be implemented
   }
   getHeight(node = this.root) {
-    let nodeHeight = 0;
-    if (node === null) { nodeHeight = -1;}
-    else { nodeHeight = Math.max(this.getHeight(node.left),this.getHeight(node.right)) + 1;}
-  //return 1 + Math.max(((node.left!==null) ? this.getHeight(node.left) :-1),((node.right!==null) ? this.getHeight(node.right) :-1));
-    return nodeHeight;
+    if (node === null) {
+      return 0;
+    } else {
+      return node.height;
+    }
   }
   getBalance(node = this.root) {
+    if (node === null) {
+      return 0;
+    }
     return (this.getHeight(node.left) - this.getHeight(node.right));
   }
   
-  rotationLL(node) {//LL condition --> Right Rotation
-    let newRoot = node.left;
-    node.left = newRoot.right;
-    newRoot.right = node;
+  rightRotation(node) {//LL condition --> Right Rotation
+    let tempNode = node.left;
+    node.left = tempNode.right;
+    tempNode.right = node;
 
-    return newRoot;
+    node.height = 1 + Math.max(this.getHeight(node.left),this.getHeight(node.right));
+    tempNode.height = 1 + Math.max(this.getHeight(tempNode.left),this.getHeight(tempNode.right));
+
+    return tempNode;
   }
 
-  rotationRR(node) {//RR condition --> Left Rotation
-    let newRoot = node.right;
-    node.right = newRoot.left;
-    newRoot.left = node;
+  leftRotation(node) {//RR condition --> Left Rotation
+    let tempNode = node.right;
+    node.right = tempNode.left;
+    tempNode.left = node;
 
-    return newRoot;
-  }
+    node.height = 1 + Math.max(this.getHeight(node.left),this.getHeight(node.right));
+    tempNode.height = 1 + Math.max(this.getHeight(tempNode.left),this.getHeight(tempNode.right));
 
-  rotationLR(node) {
-    node.left = this.rotationRR(node.left);
-    return this.rotationLL(node);
-  }
-
-  rotationRL(node) {
-    node.right = this.rotationLL(node.right);
-    return this.rotationRR(node);
+    return tempNode;
   }
 }
 let seBalanceTree = new avlTree();
 
-// Left-Left condition:
-//Test 1:
-// seBalanceTree.insert(9);
-// seBalanceTree.insert(4);
-// seBalanceTree.insert(20);
-// seBalanceTree.insert(3);
-// seBalanceTree.insert(7);
-// seBalanceTree.insert(1);
-
-// Left-Left condition:
-//Test 2:
-seBalanceTree.insert(9);
-seBalanceTree.insert(4);
-seBalanceTree.insert(20);
-seBalanceTree.insert(2);
-seBalanceTree.insert(30);
-seBalanceTree.insert(15);
+//Test cases:
 seBalanceTree.insert(10);
-seBalanceTree.insert(13);
-
-// seBalanceTree.insert(10);
-// seBalanceTree.insert(20);
-// seBalanceTree.insert(35);
-//seBalanceTree.insert(53);
-// seBalanceTree.insert(30);
-// seBalanceTree.insert(15);
-// seBalanceTree.insert(10);
+seBalanceTree.insert(20);
+seBalanceTree.insert(30); //Right subtree disb. - Right-Right case: do leftRotation in disbalanced node
+seBalanceTree.insert(40);
+seBalanceTree.insert(50); //Right subtree disb. - Right-Right case: do leftRotation in disbalanced node
+seBalanceTree.insert(25); //Right subtree disb. - Right-Left case: do rightRotation in node.right and leftRotation on disb. node
+seBalanceTree.insert(5);
+seBalanceTree.insert(4); //Left subtree disb. - Left-Left case: do rightRotation in disbalanced node.
+seBalanceTree.insert(9); //Left subtree disb. - Left-Right case: do leftRotation in node.left and rightRotation on disb. node.
 
 console.log(seBalanceTree);
