@@ -75,7 +75,56 @@ class avlTree {
   }
 
   remove(value) {
-    //to be implemented
+    const removeHelper = function (self, root, value) {
+      if (root === null) { return null; } //Tree is empty bro
+      if (value === root.value) { //value to be removed was found
+        if ((root.left === null) && (root.right === null)) { return null; } //node has no children, just remove it (assigning null).
+        if (root.left === null) { return root.right; } //node has no left child, replace it w/ its right node.
+        if (root.right === null) { return root.left; } //node has no right child, replace it w/ its left node.
+        //In case the node to be deleted has both children:
+        let tempNode = root.right;
+        while (tempNode.left !== null) { tempNode = tempNode.left; } //find node's right child leftmost node
+        root.value = tempNode.value; //copies leftmost node value and uses it to replace the value to be removed
+        root.right = removeHelper (self, root.right, tempNode.value); //we still have to remove leftmost.value from its original node
+      }
+      else if (value < root.value) {
+        root.left = removeHelper(self, root.left, value);
+      }
+      else if (value > root.value) {
+        root.right = removeHelper(self, root.right, value);
+      }
+
+      root.height = 1 + Math.max(self.getHeight(root.left),self.getHeight(root.right)); //Updates node height.
+
+      //AVL Tree operations:
+      let balance = self.getBalance(root);
+
+      if (balance > 1 && root.left !== null) { // Left subtree disbalanced
+        //Left-Left case (1 rotation needed): do rightRotation on disbalanced node.
+        if (self.getBalance(root.left) >= 0) { 
+          return self.rightRotation(root);
+        }
+        //Left-Right case (2 rotations needed): do leftRotation on disb. node left subtree and rightRotation on disb. node.
+        else {
+          root.left = self.leftRotation(root.left);
+          return self.rightRotation(root);
+        }
+      }
+      if (balance < -1 && root.right !== null) { // Right subtree disbalanced
+        //Right-Right case (1 rotation needed): do leftRotation on disbalanced node.
+        if (self.getBalance(root.right) <= 0) {
+          return self.leftRotation(root);
+        }
+        //Right-Left case (2 rotations needed): do rightRotation on disb. node right subtree and leftRotation on disb. node.
+        else {
+          root.right = self.rightRotation(root.right);
+          return self.leftRotation(root);
+        }
+      }
+
+      return root;
+    };
+    this.root = removeHelper(this, this.root, value);
   }
   getHeight(node = this.root) {
     if (node === null) {
@@ -112,18 +161,45 @@ class avlTree {
 
     return tempNode;
   }
+
+  inOrderTraversal (node = this.root) {
+    //To be added
+  }
 }
 let seBalanceTree = new avlTree();
 
-//Test cases:
-seBalanceTree.insert(10);
-seBalanceTree.insert(20);
-seBalanceTree.insert(30); //Right subtree disb. - Right-Right case: do leftRotation in disbalanced node
-seBalanceTree.insert(40);
-seBalanceTree.insert(50); //Right subtree disb. - Right-Right case: do leftRotation in disbalanced node
-seBalanceTree.insert(25); //Right subtree disb. - Right-Left case: do rightRotation in node.right and leftRotation on disb. node
-seBalanceTree.insert(5);
-seBalanceTree.insert(4); //Left subtree disb. - Left-Left case: do rightRotation in disbalanced node.
-seBalanceTree.insert(9); //Left subtree disb. - Left-Right case: do leftRotation in node.left and rightRotation on disb. node.
+//Test cases - insert():
+// seBalanceTree.insert(10);
+// seBalanceTree.insert(20);
+// seBalanceTree.insert(30); //Right subtree disb. - Right-Right case: do leftRotation on disbalanced node
+// seBalanceTree.insert(40);
+// seBalanceTree.insert(50); //Right subtree disb. - Right-Right case: do leftRotation on disbalanced node
+// seBalanceTree.insert(25); //Right subtree disb. - Right-Left case: do rightRotation on node.right and leftRotation on disb. node
+// seBalanceTree.insert(5);
+// seBalanceTree.insert(4); //Left subtree disb. - Left-Left case: do rightRotation on disbalanced node.
+// seBalanceTree.insert(9); //Left subtree disb. - Left-Right case: do leftRotation on node.left and rightRotation on disb. node.
+
+//Test cases - remove():
+// --- step 1: original tree:
+seBalanceTree.insert(400);
+seBalanceTree.insert(1000);
+seBalanceTree.insert(100);
+seBalanceTree.insert(80);
+seBalanceTree.insert(200);
+seBalanceTree.insert(500);
+seBalanceTree.insert(2000);
+seBalanceTree.insert(70);
+seBalanceTree.insert(90);
+seBalanceTree.insert(300);
+seBalanceTree.insert(3000);
+seBalanceTree.insert(50);
+// --- step 2: removals:
+seBalanceTree.remove(90); //80 gets disb. - Left-Left case: do rightRotation on disbalanced node
+seBalanceTree.remove(50); //tree remains balanced
+seBalanceTree.remove(300);//tree remains balanced
+seBalanceTree.remove(200);//100 gets disb. - Left-Right case: do leftRotation on disbNode.left and rightRotation on disbNode.
+seBalanceTree.remove(500);//1000 gets disb. - Right-Right case: do leftRotation on disbalanced node
+seBalanceTree.insert(2500);//tree remains balanced
+seBalanceTree.remove(1000);//2000 gets disb. - Right-Left case: do rightRotation on disbNode.right and leftRotation on disbNode.
 
 console.log(seBalanceTree);
