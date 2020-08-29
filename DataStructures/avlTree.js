@@ -162,8 +162,14 @@ class avlTree {
     return tempNode;
   }
 
-  inOrderTraversal (node = this.root) {
+  inOrderTraversal (node = this.root) {//Left Subtree --> Root --> Right Subtree
     //To be added
+    if (node === null) { return null; }
+    else {
+      this.inOrderTraversal(node.left);
+      console.log(node.value);
+      this.inOrderTraversal(node.right);
+    }
   }
 }
 let seBalanceTree = new avlTree();
@@ -203,3 +209,4 @@ seBalanceTree.insert(2500);//tree remains balanced
 seBalanceTree.remove(1000);//2000 gets disb. - Right-Left case: do rightRotation on disbNode.right and leftRotation on disbNode.
 
 console.log(seBalanceTree);
+seBalanceTree.inOrderTraversal();
