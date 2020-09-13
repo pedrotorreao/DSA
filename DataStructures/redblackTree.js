@@ -7,7 +7,7 @@ class Node {
     this.left = null;
     this.right = null;
     this.value = value;
-    this.color = null;
+    this.color = 'red'; //default
     this.height = 1;
   }
 }
@@ -37,15 +37,26 @@ class redBlackTree {
     } else {
       const insertHelper = function(self, root, node) {
         //Regular BST insertion:
-        if(root === null) { root = node; } 
+        if(root === null) { node.color = 'black'; root = node; } 
         else if (node.value < root.value) { root.left = insertHelper(self, root.left, node); } 
         else if (node.value > root.value) { root.right = insertHelper(self, root.right, node); } 
         else { return null; } //Cannot have repeated nodes on BST
 
         root.height = 1 + Math.max(self.getHeight(root.left),self.getHeight(root.right)); //Updates node height.
 
-        //Red Black checks and operations:
-
+        //Red Black properties and rules:
+          // -- Properties:
+          //(A) Every node is either red or black;
+          //(B) The root and leaves (NIL's) are black;
+          //(C) If a node is red, then its parent must be black, there must be no adjacent red nodes;
+          //(D) All paths from any node to a descendant leaf must have the same number of black nodes.
+          // -- Insertion rules:
+          //(1) If tree is empty, create new node as root node and black color; -- property: root node is black
+          //(2) If tree isn't empty, create new node as a leaf node and red color;
+          //(3) If new node's parent is black, we are finished;
+          //(4) If new node's parent is red, check new node's uncle color (parent's sibling):
+          //  (4.a) If color is black or null, do suitable rotations and recolor;
+          //  (4.b) If color is red, recolor (new node's parent and uncle) and check if new node's grandparent is not root node then ////       recolor and recheck.
 
         //AVL Tree operations:
         let balance = self.getBalance(root);
