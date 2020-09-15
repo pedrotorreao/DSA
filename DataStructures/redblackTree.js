@@ -6,9 +6,10 @@ class Node {
   constructor(value) {
     this.left = null;
     this.right = null;
+    this.parent = null;
     this.value = value;
-    this.color = 'red'; //default
-    this.height = 1;
+    this.color = 'RED';
+    //this.height = 1; //probably not needed
   }
 }
 class redBlackTree {
@@ -31,18 +32,21 @@ class redBlackTree {
   insert(value) {
     let node = new Node(value);
 
-    if (this.root === null) { 
-      this.root = node; 
+    if (this.root === null) { //If tree is empty create new node as root node and color it black.
+      node.color = 'BLACK'; 
+      this.root = node;
+      console.log('root node created - root.value: ', this.root.value);
       return;
-    } else {
+    } 
+    else {
       const insertHelper = function(self, root, node) {
         //Regular BST insertion:
-        if(root === null) { node.color = 'black'; root = node; } 
+        if(root === null) { root = node; } 
         else if (node.value < root.value) { root.left = insertHelper(self, root.left, node); } 
         else if (node.value > root.value) { root.right = insertHelper(self, root.right, node); } 
         else { return null; } //Cannot have repeated nodes on BST
 
-        root.height = 1 + Math.max(self.getHeight(root.left),self.getHeight(root.right)); //Updates node height.
+        //root.height = 1 + Math.max(self.getHeight(root.left),self.getHeight(root.right)); //Updates node height.
 
         //Red Black properties and rules:
           // -- Properties:
@@ -59,30 +63,30 @@ class redBlackTree {
           //  (4.b) If color is red, recolor (new node's parent and uncle) and check if new node's grandparent is not root node then ////       recolor and recheck.
 
         //AVL Tree operations:
-        let balance = self.getBalance(root);
+        // let balance = self.getBalance(root);
 
-        if (balance > 1 && root.left !== null) { // Left subtree disbalanced
-          //Left-Left case (1 rotation needed): do rightRotation on disbalanced node.
-          if (node.value < root.left.value) { 
-            return self.rightRotation(root);
-          }
-          //Left-Right case (2 rotations needed): do leftRotation on disb. node left subtree and rightRotation on disb. node.
-          else {
-            root.left = self.leftRotation(root.left);
-            return self.rightRotation(root);
-          }
-        }
-        if (balance < -1 && root.right !== null) { // Right subtree disbalanced
-          //Right-Right case (1 rotation needed): do leftRotation on disbalanced node.
-          if (node.value > root.right.value) {
-            return self.leftRotation(root);
-          }
-          //Right-Left case (2 rotations needed): do rightRotation on disb. node right subtree and leftRotation on disb. node.
-          else {
-            root.right = self.rightRotation(root.right);
-            return self.leftRotation(root);
-          }
-        }
+        // if (balance > 1 && root.left !== null) { // Left subtree disbalanced
+        //   //Left-Left case (1 rotation needed): do rightRotation on disbalanced node.
+        //   if (node.value < root.left.value) { 
+        //     return self.rightRotation(root);
+        //   }
+        //   //Left-Right case (2 rotations needed): do leftRotation on disb. node left subtree and rightRotation on disb. node.
+        //   else {
+        //     root.left = self.leftRotation(root.left);
+        //     return self.rightRotation(root);
+        //   }
+        // }
+        // if (balance < -1 && root.right !== null) { // Right subtree disbalanced
+        //   //Right-Right case (1 rotation needed): do leftRotation on disbalanced node.
+        //   if (node.value > root.right.value) {
+        //     return self.leftRotation(root);
+        //   }
+        //   //Right-Left case (2 rotations needed): do rightRotation on disb. node right subtree and leftRotation on disb. node.
+        //   else {
+        //     root.right = self.rightRotation(root.right);
+        //     return self.leftRotation(root);
+        //   }
+        // }
         return root;
       };
       //doing this saved my life and got the rotations to work properly, just calling method is not enough, must assign.
