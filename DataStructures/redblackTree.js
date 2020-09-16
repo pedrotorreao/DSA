@@ -33,7 +33,8 @@ class redBlackTree {
     let node = new Node(value);
 
     if (this.root === null) { //If tree is empty create new node as root node and color it black.
-      node.color = 'BLACK'; 
+      node.color = 'BLACK';
+      node.parent = null; 
       this.root = node;
       console.log('root node created - root.value: ', this.root.value);
       return;
@@ -42,9 +43,20 @@ class redBlackTree {
       const insertHelper = function(self, root, node) {
         //Regular BST insertion:
         if(root === null) { root = node; } 
-        else if (node.value < root.value) { root.left = insertHelper(self, root.left, node); } 
-        else if (node.value > root.value) { root.right = insertHelper(self, root.right, node); } 
+        else if (node.value < root.value) {
+          node.parent = root;
+          root.left = insertHelper(self, root.left, node); 
+        } 
+        else if (node.value > root.value) { 
+          node.parent = root;
+          root.right = insertHelper(self, root.right, node);
+        } 
         else { return null; } //Cannot have repeated nodes on BST
+
+        //self.rbHelper(node);
+        //if(node.parent !== null && node.parent.left !== null) { self.rbHelper(node); }
+        //self.rbHelper(node);
+        
 
         //root.height = 1 + Math.max(self.getHeight(root.left),self.getHeight(root.right)); //Updates node height.
 
@@ -91,9 +103,46 @@ class redBlackTree {
       };
       //doing this saved my life and got the rotations to work properly, just calling method is not enough, must assign.
       this.root = insertHelper(this, this.root, node); 
+      this.rbHelper(node);
     }
   }
 
+  rbHelper (node = this.root) {
+    if (node === this.root) { return; }
+    if (node.parent.color === 'BLACK') { return; } //3
+    
+    let grandparent = node.parent.parent;
+    let uncle = (node.parent === grandparent.left) ? grandparent.right : grandparent.left;
+
+    if(uncle !== null && uncle.color === 'RED') { //4.b
+      this.colorSwap(node.parent);
+      this.colorSwap(uncle);
+      this.rbHelper(grandparent);
+    } 
+    else {//4.a
+      console.log('roda roda');
+      if(node.parent === grandparent.left) {
+        if(node === node.parent.right) {//LR case
+          this.leftRotation(node.parent);
+        }
+        this.rightRotation(grandparent);
+      }
+      else {
+        if(node === node.parent.left) {//RL case
+          this.rightRotation(node.parent);
+        }
+        this.leftRotation(grandparent);
+      }//gotta update the references, node colors and recheck for the new parent
+    }
+    
+    //console.log(uncle);
+  }
+
+  colorSwap(node) {
+    let tempNode = node;
+    tempNode.color = (node.color === 'RED') ? 'BLACK' : 'RED';
+    return tempNode;
+  }
   remove(value) {
     const removeHelper = function (self, root, value) {
       if (root === null) { return null; } //Tree is empty bro
@@ -195,7 +244,13 @@ class redBlackTree {
   }
 }
 let rbTree = new redBlackTree();
+rbTree.insert(10);
+rbTree.insert(18);
+rbTree.insert(7);
+rbTree.insert(15);
+rbTree.insert(16);
 
+console.log(rbTree);
 //Test cases - insert():
 // rbTree.insert(10);
 // rbTree.insert(20);
@@ -209,18 +264,18 @@ let rbTree = new redBlackTree();
 
 //Test cases - remove():
 // --- step 1: original tree:
-rbTree.insert(400);
-rbTree.insert(1000);
-rbTree.insert(100);
-rbTree.insert(80);
-rbTree.insert(200);
-rbTree.insert(500);
-rbTree.insert(2000);
-rbTree.insert(70);
-rbTree.insert(90);
-rbTree.insert(300);
-rbTree.insert(3000);
-rbTree.insert(50);
+// rbTree.insert(400);
+// rbTree.insert(1000);
+// rbTree.insert(100);
+// rbTree.insert(80);
+// rbTree.insert(200);
+// rbTree.insert(500);
+// rbTree.insert(2000);
+// rbTree.insert(70);
+// rbTree.insert(90);
+// rbTree.insert(300);
+// rbTree.insert(3000);
+// rbTree.insert(50);
 // --- step 2: removals:
 // rbTree.remove(90); //80 gets disb. - Left-Left case: do rightRotation on disbalanced node
 // rbTree.remove(50); //tree remains balanced
