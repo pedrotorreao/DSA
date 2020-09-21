@@ -53,52 +53,6 @@ class redBlackTree {
         } 
         else { return null; } //Cannot have repeated nodes on BST
 
-        //self.rbHelper(node);
-        //if(node.parent !== null && node.parent.left !== null) { self.rbHelper(node); }
-        //self.rbHelper(node);
-        
-
-        //root.height = 1 + Math.max(self.getHeight(root.left),self.getHeight(root.right)); //Updates node height.
-
-        //Red Black properties and rules:
-          // -- Properties:
-          //(A) Every node is either red or black;
-          //(B) The root and leaves (NIL's) are black;
-          //(C) If a node is red, then its parent must be black, there must be no adjacent red nodes;
-          //(D) All paths from any node to a descendant leaf must have the same number of black nodes.
-          // -- Insertion rules:
-          //(1) If tree is empty, create new node as root node and black color; -- property: root node is black
-          //(2) If tree isn't empty, create new node as a leaf node and red color;
-          //(3) If new node's parent is black, we are finished;
-          //(4) If new node's parent is red, check new node's uncle color (parent's sibling):
-          //  (4.a) If color is black or null, do suitable rotations and recolor;
-          //  (4.b) If color is red, recolor (new node's parent and uncle) and check if new node's grandparent is not root node then ////       recolor and recheck.
-
-        //AVL Tree operations:
-        // let balance = self.getBalance(root);
-
-        // if (balance > 1 && root.left !== null) { // Left subtree disbalanced
-        //   //Left-Left case (1 rotation needed): do rightRotation on disbalanced node.
-        //   if (node.value < root.left.value) { 
-        //     return self.rightRotation(root);
-        //   }
-        //   //Left-Right case (2 rotations needed): do leftRotation on disb. node left subtree and rightRotation on disb. node.
-        //   else {
-        //     root.left = self.leftRotation(root.left);
-        //     return self.rightRotation(root);
-        //   }
-        // }
-        // if (balance < -1 && root.right !== null) { // Right subtree disbalanced
-        //   //Right-Right case (1 rotation needed): do leftRotation on disbalanced node.
-        //   if (node.value > root.right.value) {
-        //     return self.leftRotation(root);
-        //   }
-        //   //Right-Left case (2 rotations needed): do rightRotation on disb. node right subtree and leftRotation on disb. node.
-        //   else {
-        //     root.right = self.rightRotation(root.right);
-        //     return self.leftRotation(root);
-        //   }
-        // }
         return root;
       };
       //doing this saved my life and got the rotations to work properly, just calling method is not enough, must assign.
@@ -117,21 +71,34 @@ class redBlackTree {
     if(uncle !== null && uncle.color === 'RED') { //4.b
       this.colorSwap(node.parent);
       this.colorSwap(uncle);
-      this.rbHelper(grandparent);
+
+      node = grandparent;
+      this.rbHelper(node);
     } 
     else {//4.a
       console.log('roda roda');
       if(node.parent === grandparent.left) {
         if(node === node.parent.right) {//LR case
+          console.log('roda left');
           this.leftRotation(node.parent);
+          node = node.parent;
+          node.parent = grandparent;
+          //grandparent = node.parent.parent;//??
         }
         this.rightRotation(grandparent);
+        node = node.parent;
+        this.rbHelper(node);
       }
       else {
         if(node === node.parent.left) {//RL case
           this.rightRotation(node.parent);
+          node = node.parent;
+          node.parent = grandparent;
+          //grandparent = node.parent.parent;//??
         }
         this.leftRotation(grandparent);
+        node = node.parent;
+        this.rbHelper(node);
       }//gotta update the references, node colors and recheck for the new parent
     }
     
@@ -214,10 +181,21 @@ class redBlackTree {
   rightRotation(node) {//LL condition --> Right Rotation
     let tempNode = node.left;
     node.left = tempNode.right;
-    tempNode.right = node;
 
-    node.height = 1 + Math.max(this.getHeight(node.left),this.getHeight(node.right));
-    tempNode.height = 1 + Math.max(this.getHeight(tempNode.left),this.getHeight(tempNode.right));
+    //Update parent reference in case of temp node having a right subtree:
+    if(node.left !== null) { node.left.parent = node; }
+
+    //Update temp node parent to be node's parent:
+    tempNode.parent = node.parent;
+
+    //Update parent references for rotated node:
+    console.log(node.parent.value);
+    if(node.parent === null) { this.root = tempNode; }
+    else if(node = node.parent.left) { node.parent.left = tempNode; }
+    else { node.parent.right = tempNode; }
+
+    tempNode.right = node;
+    node.parent = tempNode;
 
     return tempNode;
   }
@@ -225,10 +203,20 @@ class redBlackTree {
   leftRotation(node) {//RR condition --> Left Rotation
     let tempNode = node.right;
     node.right = tempNode.left;
-    tempNode.left = node;
 
-    node.height = 1 + Math.max(this.getHeight(node.left),this.getHeight(node.right));
-    tempNode.height = 1 + Math.max(this.getHeight(tempNode.left),this.getHeight(tempNode.right));
+    //Update parent reference in case of temp node having a left subtree:
+    if(node.right !== null) { node.right.parent = node; }
+
+    //Update temp node parent to be node's parent:
+    tempNode.parent = node.parent;
+
+    //Update parent references for rotated node:
+    if(node.parent === null) { this.root = tempNode; }
+    else if(node = node.parent.left) { node.parent.left = tempNode; }
+    else { node.parent.right = tempNode; }
+
+    tempNode.left = node;
+    node.parent = tempNode;
 
     return tempNode;
   }
@@ -251,39 +239,5 @@ rbTree.insert(15);
 rbTree.insert(16);
 
 console.log(rbTree);
-//Test cases - insert():
-// rbTree.insert(10);
-// rbTree.insert(20);
-// rbTree.insert(30); //Right subtree disb. - Right-Right case: do leftRotation on disbalanced node
-// rbTree.insert(40);
-// rbTree.insert(50); //Right subtree disb. - Right-Right case: do leftRotation on disbalanced node
-// rbTree.insert(25); //Right subtree disb. - Right-Left case: do rightRotation on node.right and leftRotation on disb. node
-// rbTree.insert(5);
-// rbTree.insert(4); //Left subtree disb. - Left-Left case: do rightRotation on disbalanced node.
-// rbTree.insert(9); //Left subtree disb. - Left-Right case: do leftRotation on node.left and rightRotation on disb. node.
 
-//Test cases - remove():
-// --- step 1: original tree:
-// rbTree.insert(400);
-// rbTree.insert(1000);
-// rbTree.insert(100);
-// rbTree.insert(80);
-// rbTree.insert(200);
-// rbTree.insert(500);
-// rbTree.insert(2000);
-// rbTree.insert(70);
-// rbTree.insert(90);
-// rbTree.insert(300);
-// rbTree.insert(3000);
-// rbTree.insert(50);
-// --- step 2: removals:
-// rbTree.remove(90); //80 gets disb. - Left-Left case: do rightRotation on disbalanced node
-// rbTree.remove(50); //tree remains balanced
-// rbTree.remove(300);//tree remains balanced
-// rbTree.remove(200);//100 gets disb. - Left-Right case: do leftRotation on disbNode.left and rightRotation on disbNode.
-// rbTree.remove(500);//1000 gets disb. - Right-Right case: do leftRotation on disbalanced node
-// rbTree.insert(2500);//tree remains balanced
-// rbTree.remove(1000);//2000 gets disb. - Right-Left case: do rightRotation on disbNode.right and leftRotation on disbNode.
-
-// console.log(rbTree);
 rbTree.inOrderTraversal();
