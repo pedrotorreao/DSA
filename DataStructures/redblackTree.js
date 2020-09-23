@@ -40,30 +40,33 @@ class redBlackTree {
       return;
     } 
     else {
-      const insertHelper = function(self, root, node) {
-        //Regular BST insertion:
-        if(root === null) { root = node; } 
-        else if (node.value < root.value) {
-          node.parent = root;
-          root.left = insertHelper(self, root.left, node); 
-        } 
-        else if (node.value > root.value) { 
-          node.parent = root;
-          root.right = insertHelper(self, root.right, node);
-        } 
-        else { return null; } //Cannot have repeated nodes on BST
 
-        return root;
-      };
       //doing this saved my life and got the rotations to work properly, just calling method is not enough, must assign.
-      this.root = insertHelper(this, this.root, node); 
-      this.rbHelper(node);
+      this.root = this.insertBST(this.root, node); 
+      this.rbHelper(this.root, node);
     }
   }
 
-  rbHelper (node = this.root) {
-    if (node === this.root) { return; }
-    if (node.parent.color === 'BLACK') { return; } //3
+  insertBST (root, node) {
+    //Regular BST insertion:
+    if(root === null) { root = node; } 
+    else if (node.value < root.value) {
+      node.parent = root; //console.log(`node.value: ${node.value} | node.parent: ${node.parent.value} `);
+      root.left = this.insertBST(root.left, node); 
+    } 
+    else if (node.value > root.value) { 
+      node.parent = root; //console.log(`node.value: ${node.value} | node.parent: ${node.parent.value} `);
+      root.right = this.insertBST(root.right, node);
+    } 
+    else { return null; } //Cannot have repeated nodes on BST
+
+    //return self.rbHelper(root);
+    return root;
+  };
+
+  rbHelper (root, node) {
+    if (node === root) { return; } //console.log(`passed 1st check`);
+    if (node.parent !== null && node.parent.color === 'BLACK') { return; } //3
     
     let grandparent = node.parent.parent;
     let uncle = (node.parent === grandparent.left) ? grandparent.right : grandparent.left;
@@ -73,35 +76,34 @@ class redBlackTree {
       this.colorSwap(uncle);
 
       node = grandparent;
-      this.rbHelper(node);
+      this.rbHelper(root, node);
     } 
     else {//4.a
       console.log('roda roda');
       if(node.parent === grandparent.left) {
         if(node === node.parent.right) {//LR case
           console.log('roda left');
-          this.leftRotation(node.parent);
+          this.leftRotation(root, node.parent);
           node = node.parent;
           node.parent = grandparent;
           //grandparent = node.parent.parent;//??
         }
-        this.rightRotation(grandparent);
+        this.rightRotation(root, node.parent); //<--- PROBLEM HERE <<<<<---
         node = node.parent;
-        this.rbHelper(node);
       }
       else {
         if(node === node.parent.left) {//RL case
-          this.rightRotation(node.parent);
-          node = node.parent;
-          node.parent = grandparent;
+          this.rightRotation(root, node.parent);
+          //node = node.parent;
+          //node.parent = grandparent;
           //grandparent = node.parent.parent;//??
         }
-        this.leftRotation(grandparent);
+        this.leftRotation(root, grandparent);
         node = node.parent;
-        this.rbHelper(node);
       }//gotta update the references, node colors and recheck for the new parent
+      this.rbHelper(root, node);
     }
-    
+    root.color = 'BLACK';
     //console.log(uncle);
   }
 
@@ -178,7 +180,7 @@ class redBlackTree {
     return (this.getHeight(node.left) - this.getHeight(node.right));
   }
   
-  rightRotation(node) {//LL condition --> Right Rotation
+  rightRotation(root, node) {//LL condition --> Right Rotation
     let tempNode = node.left;
     node.left = tempNode.right;
 
@@ -190,17 +192,17 @@ class redBlackTree {
 
     //Update parent references for rotated node:
     console.log(node.parent.value);
-    if(node.parent === null) { this.root = tempNode; }
+    if(node.parent === null) { root = tempNode; }
     else if(node = node.parent.left) { node.parent.left = tempNode; }
     else { node.parent.right = tempNode; }
 
     tempNode.right = node;
     node.parent = tempNode;
 
-    return tempNode;
+    //return tempNode;
   }
 
-  leftRotation(node) {//RR condition --> Left Rotation
+  leftRotation(root, node) {//RR condition --> Left Rotation
     let tempNode = node.right;
     node.right = tempNode.left;
 
@@ -211,7 +213,7 @@ class redBlackTree {
     tempNode.parent = node.parent;
 
     //Update parent references for rotated node:
-    if(node.parent === null) { this.root = tempNode; }
+    if(node.parent === null) { root = tempNode; }
     else if(node = node.parent.left) { node.parent.left = tempNode; }
     else { node.parent.right = tempNode; }
 
