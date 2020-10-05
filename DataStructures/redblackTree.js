@@ -42,7 +42,7 @@ class redBlackTree {
     else {
 
       //doing this saved my life and got the rotations to work properly, just calling method is not enough, must assign.
-      this.root = this.insertBST(this.root, node); 
+      this.root = this.insertBST(this.root, node);
       this.rbHelper(this.root, node);
     }
   }
@@ -60,22 +60,35 @@ class redBlackTree {
     } 
     else { return null; } //Cannot have repeated nodes on BST
 
-    //return self.rbHelper(root);
     return root;
   };
 
-  rbHelper (root, node) {
-    if (node === root) { return; } //console.log(`passed 1st check`);
+  rbHelper (root = this.root, node) {
+    if (node === root || node === null) { return; } //console.log(`passed 1st check for ${node.value}`);
     if (node.parent !== null && node.parent.color === 'BLACK') { return; } //3
-    
+
+    //console.log(`passed 1st couple checks : ${node.value}`);
+    // ----- teste -------
+    //let grandparent = node.parent.parent;
     let grandparent = node.parent.parent;
+    //if (node.parent.parent !== null) {grandparent = node.parent.parent;}
+    // -------------------
+
     let uncle = (node.parent === grandparent.left) ? grandparent.right : grandparent.left;
 
     if(uncle !== null && uncle.color === 'RED') { //4.b
       this.colorSwap(node.parent);
       this.colorSwap(uncle);
-
+      this.colorSwap(grandparent);//latest change << causing treta when swaps color of node 25
+      //console.log(`grandparent: ${grandparent.value} ${grandparent.color}`);
+      // ----- teste------
+      //if(grandparent !== root) {this.colorSwap(grandparent); node = grandparent;}
+      // -----------------
       node = grandparent;
+      // ----- teste------
+      //if (grandparent !== root) {node = grandparent;} else {return;}
+      // -----------------
+
       this.rbHelper(root, node);
     } 
     else {//4.a
@@ -84,29 +97,32 @@ class redBlackTree {
           this.leftRotation(root, node.parent);
         }
         this.rightRotation(root, grandparent);
-        //this.colorSwap(node.parent);
-        //this.colorSwap(grandparent); 
+        this.colorSwap(node);
+        this.colorSwap(grandparent); 
         node = node.parent;
       }
-      else {
+      else {//maybe explicitly check for node.parent === grandparent.right
         if(node === node.parent.left) {//RL case
           this.rightRotation(root, node.parent);
-        }
-        this.leftRotation(root, grandparent);
-        this.colorSwap(node.parent);
-        this.colorSwap(grandparent);
-        node = node.parent;
+        } //console.log(`got here ${grandparent.value}`);
+        // ---- teste ----
+        //this.leftRotation(root, grandparent);
+        node = this.leftRotation(root, grandparent);
+        // ---------------
+        
+        this.colorSwap(node);
+        this.colorSwap(grandparent); console.log(`got here ${this.root.value}`);
+        node = node.parent; //console.log(`got here ${node.value}`);
       }
       this.rbHelper(root, node);
-    }
-    root.color = 'BLACK';
-    //console.log(uncle);
+    } 
+    root.color = 'BLACK'; //maybe change to point directly to this.root
   }
 
   colorSwap(node) {
     let tempNode = node;
     tempNode.color = (node.color === 'RED') ? 'BLACK' : 'RED';
-    return tempNode;
+    //return tempNode; // removed when debugging node 40 insertion
   }
   remove(value) {
     const removeHelper = function (self, root, value) {
@@ -162,20 +178,6 @@ class redBlackTree {
     };
     this.root = removeHelper(this, this.root, value);
   }
-  getHeight(node = this.root) {
-    if (node === null) {
-      return 0;
-    } else {
-      return node.height;
-    }
-  }
-  getBalance(node = this.root) {
-    if (node === null) {
-      return 0;
-    }
-    return (this.getHeight(node.left) - this.getHeight(node.right));
-  }
-  
   rightRotation(root, node) {//LL condition --> Right Rotation
     let tempNode = node.left;
     node.left = tempNode.right;
@@ -205,17 +207,17 @@ class redBlackTree {
     if(node.right !== null) { node.right.parent = node; }
 
     //Update temp node parent to be node's parent:
-    tempNode.parent = node.parent; 
+    tempNode.parent = node.parent; //console.log(`left rot. ${tempNode.parent}`);
 
     //Update parent references for rotated node:
-    if(node.parent === null) { root = tempNode;}
+    if(node.parent === null) { this.root = tempNode;} //seliga aqui, era so root
     else if(node === node.parent.left) { node.parent.left = tempNode; }
     else { node.parent.right = tempNode; }
-
+    //console.log(`new root. ${this.root.value}`);
     tempNode.left = node;
     node.parent = tempNode;
 
-    //return tempNode;
+    return tempNode;
   }
 
   inOrderTraversal (node = this.root) {//Left Subtree --> Root --> Right Subtree
@@ -247,9 +249,15 @@ let rbTree = new redBlackTree();
 rbTree.insert(10);
 rbTree.insert(18);
 rbTree.insert(7);
-rbTree.insert(20);
-rbTree.insert(19);
-
+rbTree.insert(15);
+rbTree.insert(16);
+rbTree.insert(30);
+rbTree.insert(25);
+//rbTree.insert(40); //When swapping grandparent color, treta arises here
+// rbTree.insert(60);
+// rbTree.insert(2);
+// rbTree.insert(1);
+// rbTree.insert(70);
 
 
 console.log(rbTree);
