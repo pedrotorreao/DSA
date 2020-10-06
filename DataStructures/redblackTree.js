@@ -43,7 +43,7 @@ class redBlackTree {
 
       //doing this saved my life and got the rotations to work properly, just calling method is not enough, must assign.
       this.root = this.insertBST(this.root, node);
-      this.rbHelper(this.root, node);
+      this.rbHelper(node);
     }
   }
 
@@ -63,8 +63,8 @@ class redBlackTree {
     return root;
   };
 
-  rbHelper (root = this.root, node) {
-    if (node === root || node === null) { return; } //console.log(`passed 1st check for ${node.value}`);
+  rbHelper (node) {
+    if (node === this.root || node === null) { return; } //console.log(`passed 1st check for ${node.value}`);
     if (node.parent !== null && node.parent.color === 'BLACK') { return; } //3
 
     //console.log(`passed 1st couple checks : ${node.value}`);
@@ -89,34 +89,34 @@ class redBlackTree {
       //if (grandparent !== root) {node = grandparent;} else {return;}
       // -----------------
 
-      this.rbHelper(root, node);
+      this.rbHelper(node);
     } 
     else {//4.a
       if(node.parent === grandparent.left) {
         if(node === node.parent.right) {//LR case
-          this.leftRotation(root, node.parent);
+          this.leftRotation(node.parent);
         }
-        this.rightRotation(root, grandparent);
+        this.rightRotation(grandparent); //node = node.parent;
         this.colorSwap(node);
-        this.colorSwap(grandparent); 
-        node = node.parent;
+        this.colorSwap(grandparent); console.log(`${node.value}`);
+        node = node.parent;  // MOVING THIS UP WORKS FOR THE COLORING BUT MESSES UP THE ROTATIONS
       }
       else {//maybe explicitly check for node.parent === grandparent.right
         if(node === node.parent.left) {//RL case
-          this.rightRotation(root, node.parent);
+          this.rightRotation(node.parent);
         } //console.log(`got here ${grandparent.value}`);
         // ---- teste ----
         //this.leftRotation(root, grandparent);
-        node = this.leftRotation(root, grandparent);
+        node = this.leftRotation(grandparent);
         // ---------------
         
         this.colorSwap(node);
-        this.colorSwap(grandparent); console.log(`got here ${this.root.value}`);
+        this.colorSwap(grandparent); //console.log(`got here ${this.root.value}`);
         node = node.parent; //console.log(`got here ${node.value}`);
       }
-      this.rbHelper(root, node);
+      this.rbHelper(node);
     } 
-    root.color = 'BLACK'; //maybe change to point directly to this.root
+    this.root.color = 'BLACK'; //maybe change to point directly to this.root
   }
 
   colorSwap(node) {
@@ -178,48 +178,48 @@ class redBlackTree {
     };
     this.root = removeHelper(this, this.root, value);
   }
-  rightRotation(root, node) {//LL condition --> Right Rotation
-    let tempNode = node.left;
-    node.left = tempNode.right;
 
-    //Update parent reference in case of temp node having a right subtree:
-    if(node.left !== null) { node.left.parent = node; }
+rightRotation(node) {//LL condition --> Right Rotation
+  let tempNode = node.left;
+  node.left = tempNode.right;
 
-    //Update temp node parent to be node's parent:
-    tempNode.parent = node.parent;
+  //Update parent reference in case of temp node having a right subtree:
+  if(node.left !== null) { node.left.parent = node; }
 
-    //Update parent references for rotated node:
-    if(node.parent === null) { root = tempNode; }
-    else if(node === node.parent.left) { node.parent.left = tempNode; }
-    else { node.parent.right = tempNode; }
+  //Update temp node parent to be node's parent:
+  tempNode.parent = node.parent;
 
-    tempNode.right = node;
-    node.parent = tempNode;
+  //Update parent references for rotated node:
+  if(node.parent === null) { this.root = tempNode; }
+  else if(node === node.parent.left) { node.parent.left = tempNode; }
+  else { node.parent.right = tempNode; } 
 
-    //return tempNode;
-  }
+  tempNode.right = node;
+  node.parent = tempNode;
 
-  leftRotation(root, node) {//RR condition --> Left Rotation
-    let tempNode = node.right; 
-    node.right = tempNode.left; 
+  //return tempNode;
+}
 
-    //Update parent reference in case of temp node having a left subtree:
-    if(node.right !== null) { node.right.parent = node; }
+leftRotation(node) {//RR condition --> Left Rotation
+  let tempNode = node.right; 
+  node.right = tempNode.left; 
 
-    //Update temp node parent to be node's parent:
-    tempNode.parent = node.parent; //console.log(`left rot. ${tempNode.parent}`);
+  //Update parent reference in case of temp node having a left subtree:
+  if(node.right !== null) { node.right.parent = node; }
 
-    //Update parent references for rotated node:
-    if(node.parent === null) { this.root = tempNode;} //seliga aqui, era so root
-    else if(node === node.parent.left) { node.parent.left = tempNode; }
-    else { node.parent.right = tempNode; }
-    //console.log(`new root. ${this.root.value}`);
-    tempNode.left = node;
-    node.parent = tempNode;
+  //Update temp node parent to be node's parent:
+  tempNode.parent = node.parent; //console.log(`left rot. ${tempNode.parent}`);
 
-    return tempNode;
-  }
+  //Update parent references for rotated node:
+  if(node.parent === null) { this.root = tempNode;} //seliga aqui, era so root
+  else if(node === node.parent.left) { node.parent.left = tempNode; }
+  else { node.parent.right = tempNode; }
+  //console.log(`new root. ${this.root.value}`);
+  tempNode.left = node;
+  node.parent = tempNode;
 
+  return tempNode;
+}
   inOrderTraversal (node = this.root) {//Left Subtree --> Root --> Right Subtree
     //To be added
     if (node === null) { return null; }
@@ -227,6 +227,24 @@ class redBlackTree {
       this.inOrderTraversal(node.left);
       console.log(`node.value: ${node.value} | node.color: ${node.color}`);
       this.inOrderTraversal(node.right);
+    }
+  }
+  levelOrderTraversal() {//1st level --> 2nd level --> 3rd level ...
+    let queue = [];
+    if (this.root !== null) {
+      queue.push(this.root);
+      while (queue.length > 0) {
+        let node = queue.shift();
+        console.log(node.value);
+        if (node.left !== null) {
+          queue.push(node.left);
+        }
+        if (node.right !== null) {
+          queue.push(node.right);
+        }
+      }
+    } else {
+      return null;
     }
   }
 }
@@ -253,9 +271,9 @@ rbTree.insert(15);
 rbTree.insert(16);
 rbTree.insert(30);
 rbTree.insert(25);
-//rbTree.insert(40); //When swapping grandparent color, treta arises here
-// rbTree.insert(60);
-// rbTree.insert(2);
+rbTree.insert(40); //When swapping grandparent color, treta arises here
+rbTree.insert(60);
+rbTree.insert(2);
 // rbTree.insert(1);
 // rbTree.insert(70);
 
@@ -263,3 +281,4 @@ rbTree.insert(25);
 console.log(rbTree);
 
 rbTree.inOrderTraversal();
+rbTree.levelOrderTraversal();
