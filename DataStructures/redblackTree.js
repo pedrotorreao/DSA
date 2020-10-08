@@ -9,7 +9,6 @@ class Node {
     this.parent = null;
     this.value = value;
     this.color = 'RED';
-    //this.height = 1; //probably not needed
   }
 }
 class redBlackTree {
@@ -51,11 +50,11 @@ class redBlackTree {
     //Regular BST insertion:
     if(root === null) { root = node; } 
     else if (node.value < root.value) {
-      node.parent = root; //console.log(`node.value: ${node.value} | node.parent: ${node.parent.value} `);
+      node.parent = root; 
       root.left = this.insertBST(root.left, node); 
     } 
     else if (node.value > root.value) { 
-      node.parent = root; //console.log(`node.value: ${node.value} | node.parent: ${node.parent.value} `);
+      node.parent = root; 
       root.right = this.insertBST(root.right, node);
     } 
     else { return null; } //Cannot have repeated nodes on BST
@@ -64,65 +63,57 @@ class redBlackTree {
   };
 
   rbHelper (node) {
-    if (node === this.root || node === null) { return; } //console.log(`passed 1st check for ${node.value}`);
+    if (node === this.root || node === null) { return; } 
     if (node.parent !== null && node.parent.color === 'BLACK') { return; } //3
 
-    //console.log(`passed 1st couple checks : ${node.value}`);
-    // ----- teste -------
-    //let grandparent = node.parent.parent;
     let grandparent = node.parent.parent;
-    //if (node.parent.parent !== null) {grandparent = node.parent.parent;}
-    // -------------------
 
     let uncle = (node.parent === grandparent.left) ? grandparent.right : grandparent.left;
 
     if(uncle !== null && uncle.color === 'RED') { //4.b
       this.colorSwap(node.parent);
       this.colorSwap(uncle);
-      this.colorSwap(grandparent);//latest change << causing treta when swaps color of node 25
-      //console.log(`grandparent: ${grandparent.value} ${grandparent.color}`);
-      // ----- teste------
-      //if(grandparent !== root) {this.colorSwap(grandparent); node = grandparent;}
-      // -----------------
+      this.colorSwap(grandparent);
+
       node = grandparent;
-      // ----- teste------
-      //if (grandparent !== root) {node = grandparent;} else {return;}
-      // -----------------
 
       this.rbHelper(node);
     } 
     else {//4.a
       if(node.parent === grandparent.left) {
-        if(node === node.parent.right) {//LR case
-          this.leftRotation(node.parent);
-        }
-        this.rightRotation(grandparent); //node = node.parent;
-        this.colorSwap(node);
-        this.colorSwap(grandparent); console.log(`${node.value}`);
-        node = node.parent;  // MOVING THIS UP WORKS FOR THE COLORING BUT MESSES UP THE ROTATIONS
+      if(node === node.parent.right) {//LR case
+        this.leftRotation(node.parent);
+        this.rightRotation(grandparent); 
+      } else {//LL case
+        this.rightRotation(grandparent); 
+        node = node.parent;
       }
-      else {//maybe explicitly check for node.parent === grandparent.right
+      
+        this.colorSwap(node);
+        this.colorSwap(grandparent); 
+        node = node.parent;  
+      }
+      else {
         if(node === node.parent.left) {//RL case
           this.rightRotation(node.parent);
-        } //console.log(`got here ${grandparent.value}`);
-        // ---- teste ----
-        //this.leftRotation(root, grandparent);
-        node = this.leftRotation(grandparent);
-        // ---------------
+          this.leftRotation(grandparent);
+        } else {//RR case
+          this.leftRotation(grandparent);
+          node = node.parent;
+        }
         
         this.colorSwap(node);
-        this.colorSwap(grandparent); //console.log(`got here ${this.root.value}`);
-        node = node.parent; //console.log(`got here ${node.value}`);
+        this.colorSwap(grandparent); 
+        node = node.parent; 
       }
       this.rbHelper(node);
     } 
-    this.root.color = 'BLACK'; //maybe change to point directly to this.root
+    this.root.color = 'BLACK'; //change to point directly to this.root
   }
 
   colorSwap(node) {
     let tempNode = node;
     tempNode.color = (node.color === 'RED') ? 'BLACK' : 'RED';
-    //return tempNode; // removed when debugging node 40 insertion
   }
   remove(value) {
     const removeHelper = function (self, root, value) {
@@ -178,7 +169,6 @@ class redBlackTree {
     };
     this.root = removeHelper(this, this.root, value);
   }
-
 rightRotation(node) {//LL condition --> Right Rotation
   let tempNode = node.left;
   node.left = tempNode.right;
@@ -271,11 +261,11 @@ rbTree.insert(15);
 rbTree.insert(16);
 rbTree.insert(30);
 rbTree.insert(25);
-rbTree.insert(40); //When swapping grandparent color, treta arises here
+rbTree.insert(40); 
 rbTree.insert(60);
 rbTree.insert(2);
-// rbTree.insert(1);
-// rbTree.insert(70);
+rbTree.insert(1);
+rbTree.insert(70);
 
 
 console.log(rbTree);
