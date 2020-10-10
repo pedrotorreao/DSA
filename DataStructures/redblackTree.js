@@ -116,58 +116,13 @@ class redBlackTree {
     tempNode.color = (node.color === 'RED') ? 'BLACK' : 'RED';
   }
   remove(value) {
-    const removeHelper = function (self, root, value) {
-      if (root === null) { return null; } //Tree is empty bro
-      if (value === root.value) { //value to be removed was found
-        if ((root.left === null) && (root.right === null)) { return null; } //node has no children, just remove it (assigning null).
-        if (root.left === null) { return root.right; } //node has no left child, replace it w/ its right node.
-        if (root.right === null) { return root.left; } //node has no right child, replace it w/ its left node.
-        //In case the node to be deleted has both children:
-        let tempNode = root.right;
-        while (tempNode.left !== null) { tempNode = tempNode.left; } //find node's right child leftmost node
-        root.value = tempNode.value; //copies leftmost node value and uses it to replace the value to be removed
-        root.right = removeHelper (self, root.right, tempNode.value); //we still have to remove leftmost.value from its original node
-      }
-      else if (value < root.value) {
-        root.left = removeHelper(self, root.left, value);
-      }
-      else if (value > root.value) {
-        root.right = removeHelper(self, root.right, value);
-      }
-
-      root.height = 1 + Math.max(self.getHeight(root.left),self.getHeight(root.right)); //Updates node height.
-
-      //Red Black checks and operations:
-
-      //AVL Tree operations:
-      let balance = self.getBalance(root);
-
-      if (balance > 1 && root.left !== null) { // Left subtree disbalanced
-        //Left-Left case (1 rotation needed): do rightRotation on disbalanced node.
-        if (self.getBalance(root.left) >= 0) { 
-          return self.rightRotation(root);
-        }
-        //Left-Right case (2 rotations needed): do leftRotation on disb. node left subtree and rightRotation on disb. node.
-        else {
-          root.left = self.leftRotation(root.left);
-          return self.rightRotation(root);
-        }
-      }
-      if (balance < -1 && root.right !== null) { // Right subtree disbalanced
-        //Right-Right case (1 rotation needed): do leftRotation on disbalanced node.
-        if (self.getBalance(root.right) <= 0) {
-          return self.leftRotation(root);
-        }
-        //Right-Left case (2 rotations needed): do rightRotation on disb. node right subtree and leftRotation on disb. node.
-        else {
-          root.right = self.rightRotation(root.right);
-          return self.leftRotation(root);
-        }
-      }
-
-      return root;
-    };
-    this.root = removeHelper(this, this.root, value);
+    //Cleaned up for RB remove() method:
+  }
+  removeBST(value) {
+    //Regular BST removal:
+  }
+  rbRemoveHelper(node) {
+    //Just in case it is needed, the idea is to somehow use the already functional rbHelper() method:
   }
 rightRotation(node) {//LL condition --> Right Rotation
   let tempNode = node.left;
