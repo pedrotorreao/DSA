@@ -1,15 +1,21 @@
-/* Node is defined as :
+/****************************************************************/
+/*Problem: Tree - Self-balancing Tree (AVL) (HR)  ********/
+/****************************************************************/
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+
 typedef struct node
 {
     int val;
     struct node* left;
     struct node* right;
     int ht;
-} node; */
+} node; 
 
 node * newNode(int val)
 {
-    node * newNode = new node;
+    node * newNode = new node();
     
     newNode->val = val;
     newNode->left = nullptr;
@@ -60,7 +66,7 @@ node * insert(node * root,int val)
     else if(val < root->val) {
         root->left = insert(root->left, val);
     }
-    //else{ return 0; }
+    else{ return root; }
     
     root->ht = 1 + max(getHeight(root->left),getHeight(root->right));
   
@@ -87,9 +93,29 @@ node * insert(node * root,int val)
         else {
             //Right-Left case: perfom a right rotation on the disb. node right subtree
             //and a left rotation on the disb. node
-            root->right = rightRotate(root->left);
+            root->right = rightRotate(root->right);
             return leftRotate(root);
         }
     }
     return root;
+}
+void inOrder(node* root) {
+    if(root == NULL) {
+        return;
+    } else {
+        inOrder(root->left);
+        cout << root->val << " ";
+        inOrder(root->right);
+    }
+}
+int main()
+{
+    node* root=NULL;
+
+    root=insert(root,2);
+    root=insert(root,4);
+    root=insert(root,3);
+    
+    inOrder(root);
+    return 0;
 }
