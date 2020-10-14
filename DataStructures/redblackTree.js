@@ -118,10 +118,37 @@ class redBlackTree {
   remove(value) {
     //Cleaned up for RB remove() method:
   }
-  removeBST(value) {
+  removeBST (root, node) {
     //Regular BST removal:
-  }
-  rbRemoveHelper(node) {
+    if (root === null) { return null; } //Tree is empty bro
+
+    if (node.value === root.value) { //value to be removed was found
+      node = root.parent; //suggestion in order to workaround the value vs node passing issue. How to access the updated value from outside?
+
+      if ((root.left === null) && (root.right === null)) { return null; } //node has no children, just remove it (assigning null).
+
+      if (root.left === null) { return root.right; } //node has no left child, replace it w/ its right node.
+
+      if (root.right === null) { return root.left; } //node has no right child, replace it w/ its left node.
+
+      //In case the node to be deleted has both children:
+      let tempNode = root.right;
+
+      while (tempNode.left !== null) { tempNode = tempNode.left; } //find node's right child leftmost node
+
+      root.value = tempNode.value; //copies leftmost node value and uses it to replace the value to be removed
+
+      root.right = removeBST (root.right, tempNode.value); //we still have to remove leftmost.value from its original node
+    }
+    else if (node.value < root.value) {
+      root.left = removeBST(root.left, node);
+    }
+    else if (node.value > root.value) {
+      root.right = removeBST(root.right, node);
+    }
+    return root;
+  };
+  removeDoubleBlack(node) {
     //Just in case it is needed, the idea is to somehow use the already functional rbHelper() method:
   }
 rightRotation(node) {//LL condition --> Right Rotation
