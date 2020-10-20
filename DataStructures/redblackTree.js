@@ -9,6 +9,7 @@ class Node {
     this.parent = null;
     this.value = value;
     this.color = 'RED';
+    //this.height = 1; //probably not needed
   }
 }
 class redBlackTree {
@@ -115,11 +116,32 @@ class redBlackTree {
     let tempNode = node;
     tempNode.color = (node.color === 'RED') ? 'BLACK' : 'RED';
   }
-  remove(value) {
-    //Cleaned up for RB remove() method:
+
+  valueSwap(node1, node2) {
+    let temp = node1.value;
+    node1.value = node2.value;
+    node2.value = temp;
   }
-  removeBST (root, node) {
+  remove(value) {
+    let node = new Node(value);
+
+    if (this.root === null) {
+      console.log('Tree is currently empty bro!'); return;
+    } 
+    else {
+      this.root = this.removeBST(this.root, node);
+      this.rbHelper(node);
+    }
     //Regular BST removal:
+
+    //Red Black checks and operations:
+
+  }
+
+  fixDoubleBlack(node) {//Double Black -> Single Black
+    //call this method in case a node has been identified as a DB node
+  }
+  removeBST (root, node) {//Binary Search Tree (BST) regular remove() method.
     if (root === null) { return null; } //Tree is empty bro
 
     if (node.value === root.value) { //value to be removed was found
@@ -148,9 +170,8 @@ class redBlackTree {
     }
     return root;
   };
-  removeDoubleBlack(node) {
-    //Just in case it is needed, the idea is to somehow use the already functional rbHelper() method:
-  }
+    // this.root = removeHelper(this, this.root, value);
+  
 rightRotation(node) {//LL condition --> Right Rotation
   let tempNode = node.left;
   node.left = tempNode.right;
@@ -236,19 +257,28 @@ let rbTree = new redBlackTree();
 // rbTree.insert(19);
 
 //TC 3- Complete tree w/ all cases: 
-rbTree.insert(10);
-rbTree.insert(18);
-rbTree.insert(7);
-rbTree.insert(15);
-rbTree.insert(16);
-rbTree.insert(30);
-rbTree.insert(25);
-rbTree.insert(40); 
-rbTree.insert(60);
-rbTree.insert(2);
-rbTree.insert(1);
-rbTree.insert(70);
+// rbTree.insert(10);
+// rbTree.insert(18);
+// rbTree.insert(7);
+// rbTree.insert(15);
+// rbTree.insert(16);
+// rbTree.insert(30);
+// rbTree.insert(25);
+// rbTree.insert(40); 
+// rbTree.insert(60);
+// rbTree.insert(2);
+// rbTree.insert(1);
+// rbTree.insert(70);
 
+rbTree.insert(42);
+rbTree.insert(10);
+rbTree.insert(64);
+rbTree.insert(7);
+rbTree.insert(29);
+rbTree.insert(50);
+rbTree.insert(83);
+rbTree.insert(5); 
+rbTree.insert(31);
 
 console.log(rbTree);
 
