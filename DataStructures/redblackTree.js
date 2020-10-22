@@ -125,52 +125,114 @@ class redBlackTree {
   remove(value) {
     let node = new Node(value);
 
-    if (this.root === null) {
-      console.log('Tree is currently empty bro!'); return;
-    } 
+    if (this.root === null) { console.log('Tree is currently empty bro!'); return; } 
     else {
       this.root = this.removeBST(this.root, node);
-      this.rbHelper(node);
     }
-    //Regular BST removal:
-
-    //Red Black checks and operations:
-
   }
 
-  fixDoubleBlack(node) {//Double Black -> Single Black
-    //call this method in case a node has been identified as a DB node
-  }
   removeBST (root, node) {//Binary Search Tree (BST) regular remove() method.
     if (root === null) { return null; } //Tree is empty bro
-
     if (node.value === root.value) { //value to be removed was found
-      node = root.parent; //suggestion in order to workaround the value vs node passing issue. How to access the updated value from outside?
-
-      if ((root.left === null) && (root.right === null)) { return null; } //node has no children, just remove it (assigning null).
-
-      if (root.left === null) { return root.right; } //node has no left child, replace it w/ its right node.
-
-      if (root.right === null) { return root.left; } //node has no right child, replace it w/ its left node.
-
-      //In case the node to be deleted has both children:
-      let tempNode = root.right;
-
-      while (tempNode.left !== null) { tempNode = tempNode.left; } //find node's right child leftmost node
-
-      root.value = tempNode.value; //copies leftmost node value and uses it to replace the value to be removed
-
-      root.right = removeBST (root.right, tempNode.value); //we still have to remove leftmost.value from its original node
+      if ((root.left === null) && (root.right === null)) { //node has no children, just remove it (assigning null).
+        if(root.parent.data === this.root.data) { //node is root
+          return null; 
+        }
+        else if (root === root.parent.right) { //node is right child
+          fixDoubleBlack(root);
+          root.parent.right = null; //maybe just return null
+        }
+        else { //node is leftt child
+          fixDoubleBlack(root);
+          root.parent.left = null; //maybe just return null
+        }
+      } 
+      else if (root.left === null && root.right !== null) { //node has no left child, replace it w/ its right node.
+        valueSwap(root, root.right);
+        this.removeBST(root, node);
+      }
+      else if (root.left !== null && root.right === null) { //node has no right child, replace it w/ its left node.
+        valueSwap(root, root.left);
+        this.removeBST(root, node); 
+      }
+      else { //node has both children
+        let tempNode = root.right;
+        while (tempNode.left !== null) { tempNode = tempNode.left; } //find node's right child leftmost node
+        valueSwap(root,tempNode);
+        //root.value = tempNode.value; //copies leftmost node value and uses it to replace the value to be removed
+        //root.right = removeBST (root.right, tempNode); //remove leftmost.value from its original node
+        this.removeBST (root.right, tempNode); //it may cause problems HERE <--<--<<<
+      }
     }
-    else if (node.value < root.value) {
-      root.left = removeBST(root.left, node);
-    }
-    else if (node.value > root.value) {
-      root.right = removeBST(root.right, node);
-    }
+    else if (node.value < root.value) { root.left = this.removeBST(root.left, node); }
+    else if (node.value > root.value) { root.right = this.removeBST(root.right, node); }
     return root;
-  };
-    // this.root = removeHelper(this, this.root, value);
+  }
+  fixDoubleBlack(node) {//Double Black -> Single Black
+    while(node.value !== this.root.value && node.color === 'BLACK') {
+      let sibling = null;
+      if(node.parent.left === node) { 
+        if(node.parent.right) { sibling = node.parent.right; }
+        if(sibling) {
+          if(sibling.color === 'RED') {
+            sibling.color = 'BLACK';
+            node.parent.color = 'RED';
+            this.leftRotation(node.parent);
+            sibling = node.parent.right;
+          }
+
+          if((sibling.left === null && sibling.right === null)||(sibling.left.color === 'BLACK' && sibling.right.color === 'BLACK')){
+            sibling.color = 'RED';
+            node = node.parent;
+          }
+          else if(sibling.right.color === 'BLACK'){
+            sibling.left.color === 'BLACK';
+            sibling.color = 'RED';
+            this.rightRotation(sibling);
+            sibling = node.parent.right;
+          }
+          else {
+            sibling.color = node.parent.color;
+            node.parent.color = 'BLACK';
+            if (sibling.right) { sibling.right.color === 'BLACK'; }
+            this.leftRotation(node.parent);
+            node = this.root;
+          }
+        }
+      }
+      else {
+        if(node.parent.right === node) { 
+          if(node.parent.left) { sibling = node.parent.left; }
+          if(sibling) {
+            if(sibling.color === 'RED') {
+              sibling.color = 'BLACK';
+              node.parent.color = 'RED';
+              this.leftRotation(node.parent);
+              sibling = node.parent.left;
+            }
+  
+            if((sibling.left === null && sibling.right === null)||(sibling.left.color === 'BLACK' && sibling.right.color === 'BLACK')){
+              sibling.color = 'RED';
+              node = node.parent;
+            }
+            else if(sibling.left.color === 'BLACK'){
+              sibling.right.color === 'BLACK';
+              sibling.color = 'RED';
+              this.lefttRotation(sibling);
+              sibling = node.parent.left;
+            }
+            else {
+              sibling.color = node.parent.color;
+              node.parent.color = 'BLACK';
+              if (sibling.left) { sibling.left.color === 'BLACK'; }
+              this.rightRotation(node.parent);
+              node = this.root;
+            }
+          }
+        }
+      }
+    }
+  }
   
 rightRotation(node) {//LL condition --> Right Rotation
   let tempNode = node.left;
@@ -242,6 +304,24 @@ leftRotation(node) {//RR condition --> Left Rotation
   }
 }
 let rbTree = new redBlackTree();
+
+rbTree.insert(42);
+rbTree.insert(10);
+rbTree.insert(64);
+rbTree.insert(7);
+rbTree.insert(29);
+rbTree.insert(50);
+rbTree.insert(83);
+rbTree.insert(5); 
+rbTree.insert(31);
+
+console.log(rbTree);
+
+rbTree.remove(31);
+
+rbTree.inOrderTraversal();
+rbTree.levelOrderTraversal();
+
 //TC 1 - Case 4.a w/ LR rotation: ok
 // rbTree.insert(10);
 // rbTree.insert(18);
@@ -269,18 +349,3 @@ let rbTree = new redBlackTree();
 // rbTree.insert(2);
 // rbTree.insert(1);
 // rbTree.insert(70);
-
-rbTree.insert(42);
-rbTree.insert(10);
-rbTree.insert(64);
-rbTree.insert(7);
-rbTree.insert(29);
-rbTree.insert(50);
-rbTree.insert(83);
-rbTree.insert(5); 
-rbTree.insert(31);
-
-console.log(rbTree);
-
-rbTree.inOrderTraversal();
-rbTree.levelOrderTraversal();
