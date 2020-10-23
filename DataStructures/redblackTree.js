@@ -9,14 +9,13 @@ class Node {
     this.parent = null;
     this.value = value;
     this.color = 'RED';
-    //this.height = 1; //probably not needed
   }
 }
 class redBlackTree {
   constructor () {
     this.root = null;
   }
-
+  // ------------------- SEARCH/LOOKUP METHOD ------------------>>
   lookup(value) {
     let currentNode = this.root;
     if (this.root === null) {return null;}
@@ -29,6 +28,8 @@ class redBlackTree {
     };
     return searchTree(currentNode);
   }
+  // -----------------------------------------------------------<<
+  // ------------ RED BLACK: NODE INSERTION METHODS ------------>>
   insert(value) {
     let node = new Node(value);
 
@@ -43,10 +44,9 @@ class redBlackTree {
 
       //doing this saved my life and got the rotations to work properly, just calling method is not enough, must assign.
       this.root = this.insertBST(this.root, node);
-      this.rbHelper(node);
+      this.fixDoubleRed(node);
     }
   }
-
   insertBST (root, node) {
     //Regular BST insertion:
     if(root === null) { root = node; } 
@@ -62,8 +62,7 @@ class redBlackTree {
 
     return root;
   };
-
-  rbHelper (node) {
+  fixDoubleRed (node) {
     if (node === this.root || node === null) { return; } 
     if (node.parent !== null && node.parent.color === 'BLACK') { return; } //3
 
@@ -78,7 +77,7 @@ class redBlackTree {
 
       node = grandparent;
 
-      this.rbHelper(node);
+      this.fixDoubleRed(node);
     } 
     else {//4.a
       if(node.parent === grandparent.left) {
@@ -107,21 +106,12 @@ class redBlackTree {
         this.colorSwap(grandparent); 
         node = node.parent; 
       }
-      this.rbHelper(node);
+      this.fixDoubleRed(node);
     } 
     this.root.color = 'BLACK'; //change to point directly to this.root
   }
-
-  colorSwap(node) {
-    let tempNode = node;
-    tempNode.color = (node.color === 'RED') ? 'BLACK' : 'RED';
-  }
-
-  valueSwap(node1, node2) {
-    let temp = node1.value;
-    node1.value = node2.value;
-    node2.value = temp;
-  }
+  // -----------------------------------------------------------<<
+  // ------------- RED BLACK: NODE REMOVAL METHODS ------------->>
   remove(value) {
     let node = new Node(value);
 
@@ -130,7 +120,6 @@ class redBlackTree {
       this.root = this.removeBST(this.root, node);
     }
   }
-
   removeBST (root, node) {//Binary Search Tree (BST) regular remove() method.
     if (root === null) { return null; } //Tree is empty bro
     if (node.value === root.value) { //value to be removed was found
@@ -138,27 +127,30 @@ class redBlackTree {
         if(root.parent.data === this.root.data) { //node is root
           return null; 
         }
+        else if (root.color === 'RED') { return null; }
         else if (root === root.parent.right) { //node is right child
           fixDoubleBlack(root);
-          root.parent.right = null; //maybe just return null
+          return null;
+          //root.parent.right = null; //maybe just return null
         }
         else { //node is leftt child
           fixDoubleBlack(root);
-          root.parent.left = null; //maybe just return null
+          return null;
+          //root.parent.left = null; //maybe just return null
         }
       } 
       else if (root.left === null && root.right !== null) { //node has no left child, replace it w/ its right node.
-        valueSwap(root, root.right);
-        this.removeBST(root, node);
+        this.valueSwap(root, root.right);
+        this.removeBST(root.right, node);
       }
       else if (root.left !== null && root.right === null) { //node has no right child, replace it w/ its left node.
-        valueSwap(root, root.left);
-        this.removeBST(root, node); 
+        this.valueSwap(root, root.left);
+        this.removeBST(root.left, node); 
       }
       else { //node has both children
         let tempNode = root.right;
         while (tempNode.left !== null) { tempNode = tempNode.left; } //find node's right child leftmost node
-        valueSwap(root,tempNode);
+        this.valueSwap(root,tempNode);
         //root.value = tempNode.value; //copies leftmost node value and uses it to replace the value to be removed
         //root.right = removeBST (root.right, tempNode); //remove leftmost.value from its original node
         this.removeBST (root.right, tempNode); //it may cause problems HERE <--<--<<<
@@ -218,7 +210,7 @@ class redBlackTree {
             else if(sibling.left.color === 'BLACK'){
               sibling.right.color === 'BLACK';
               sibling.color = 'RED';
-              this.lefttRotation(sibling);
+              this.leftRotation(sibling);
               sibling = node.parent.left;
             }
             else {
@@ -233,8 +225,31 @@ class redBlackTree {
       }
     }
   }
-  
-rightRotation(node) {//LL condition --> Right Rotation
+  // -----------------------------------------------------------<<
+  // ---------------------- SUPPORT METHODS -------------------->>
+  colorSwap(node) {
+    let tempNode = node;
+    tempNode.color = (node.color === 'RED') ? 'BLACK' : 'RED';
+  }
+  valueSwap(node1, node2) {
+    let temp = node1.value;
+    node1.value = node2.value;
+    node2.value = temp;
+  }
+  getSuccessor(node) {
+    let successor = null;
+    if (node.right) { successor = node.right; }
+    while (successor !== null) { successor = successor.left; }
+    return successor;
+  }
+  getSibling(node) {
+    let sibling = null;
+    sibling = (node === node.parent.left) ? node.parent.right : node.parent.left;
+    return sibling;
+  }
+  // -----------------------------------------------------------<<
+  // --------------------- ROTATION METHODS -------------------->> 
+  rightRotation(node) {//LL condition --> Right Rotation
   let tempNode = node.left;
   node.left = tempNode.right;
 
@@ -253,9 +268,8 @@ rightRotation(node) {//LL condition --> Right Rotation
   node.parent = tempNode;
 
   //return tempNode;
-}
-
-leftRotation(node) {//RR condition --> Left Rotation
+  }
+  leftRotation(node) {//RR condition --> Left Rotation
   let tempNode = node.right; 
   node.right = tempNode.left; 
 
@@ -274,7 +288,9 @@ leftRotation(node) {//RR condition --> Left Rotation
   node.parent = tempNode;
 
   return tempNode;
-}
+  }
+  // -----------------------------------------------------------<<
+  // --------------------- TRAVERSAL METHODS ------------------->>
   inOrderTraversal (node = this.root) {//Left Subtree --> Root --> Right Subtree
     //To be added
     if (node === null) { return null; }
@@ -302,6 +318,7 @@ leftRotation(node) {//RR condition --> Left Rotation
       return null;
     }
   }
+  // -----------------------------------------------------------<<
 }
 let rbTree = new redBlackTree();
 
@@ -318,6 +335,7 @@ rbTree.insert(31);
 console.log(rbTree);
 
 rbTree.remove(31);
+//rbTree.remove(29);
 
 rbTree.inOrderTraversal();
 rbTree.levelOrderTraversal();
