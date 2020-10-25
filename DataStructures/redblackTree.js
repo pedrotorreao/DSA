@@ -71,9 +71,9 @@ class redBlackTree {
     let uncle = (node.parent === grandparent.left) ? grandparent.right : grandparent.left;
 
     if(uncle !== null && uncle.color === 'RED') { //4.b
-      this.colorSwap(node.parent);
-      this.colorSwap(uncle);
-      this.colorSwap(grandparent);
+      this.colorSwitch(node.parent);
+      this.colorSwitch(uncle);
+      this.colorSwitch(grandparent);
 
       node = grandparent;
 
@@ -89,8 +89,8 @@ class redBlackTree {
         node = node.parent;
       }
       
-        this.colorSwap(node);
-        this.colorSwap(grandparent); 
+        this.colorSwitch(node);
+        this.colorSwitch(grandparent); 
         node = node.parent;  
       }
       else {
@@ -102,8 +102,8 @@ class redBlackTree {
           node = node.parent;
         }
         
-        this.colorSwap(node);
-        this.colorSwap(grandparent); 
+        this.colorSwitch(node);
+        this.colorSwitch(grandparent); 
         node = node.parent; 
       }
       this.fixDoubleRed(node);
@@ -113,47 +113,40 @@ class redBlackTree {
   // -----------------------------------------------------------<<
   // ------------- RED BLACK: NODE REMOVAL METHODS ------------->>
   remove(value) {
-    let node = new Node(value);
+    let node = new Node(value); //SEE IF WE CAN JUST PASS THE VALUE INSTEAD OF CREATING A WHOLE NEW TEMP NODE !!
 
     if (this.root === null) { console.log('Tree is currently empty bro!'); return; } 
-    else {
-      this.root = this.removeBST(this.root, node);
-    }
+    
+    this.root = this.removeBST(this.root, node);
   }
   removeBST (root, node) {//Binary Search Tree (BST) regular remove() method.
     if (root === null) { return null; } //Tree is empty bro
+
     if (node.value === root.value) { //value to be removed was found
-      if ((root.left === null) && (root.right === null)) { //node has no children, just remove it (assigning null).
-        if(root.parent.data === this.root.data) { //node is root
-          return null; 
-        }
-        else if (root.color === 'RED') { return null; }
-        else if (root === root.parent.right) { //node is right child
-          fixDoubleBlack(root);
-          return null;
-          //root.parent.right = null; //maybe just return null
-        }
-        else { //node is leftt child
-          fixDoubleBlack(root);
-          return null;
-          //root.parent.left = null; //maybe just return null
-        }
+      if ((root.left === null) && (root.right === null)) { //node has no children @leaf node.
+        if(root === this.root) { return null; } //node is root, just remove it. <<< MODIFIED, MIGHT BE A PAIN LATER
+        else if (root.color === 'RED') { return null; } //node is a leaf node and is RED, just remove it.
+        else {console.log('hereee');
+          this.fixDoubleBlack(root);
+          return null; //root.parent.right = null; //maybe just return null
+        }//node color is BLACK and it is a right child
       } 
       else if (root.left === null && root.right !== null) { //node has no left child, replace it w/ its right node.
         this.valueSwap(root, root.right);
-        this.removeBST(root.right, node);
+        root.right = this.removeBST(root.right, node);
       }
       else if (root.left !== null && root.right === null) { //node has no right child, replace it w/ its left node.
         this.valueSwap(root, root.left);
-        this.removeBST(root.left, node); 
+        root.left = this.removeBST(root.left, node); 
       }
-      else { //node has both children
-        let tempNode = root.right;
-        while (tempNode.left !== null) { tempNode = tempNode.left; } //find node's right child leftmost node
-        this.valueSwap(root,tempNode);
-        //root.value = tempNode.value; //copies leftmost node value and uses it to replace the value to be removed
-        //root.right = removeBST (root.right, tempNode); //remove leftmost.value from its original node
-        this.removeBST (root.right, tempNode); //it may cause problems HERE <--<--<<<
+      else { //node has both children: replace its value with the value of its inorder predecessor.
+        console.log('node has both children'); // DEBUGGING -- DELETE LATER
+        let successor = this.getSuccessor(root);
+        console.log('successor', successor); // DEBUGGING -- DELETE LATER
+        this.valueSwap(root,successor);
+        console.log('successor', successor); // DEBUGGING -- DELETE LATER
+        console.log('root.left', root.left); // DEBUGGING -- DELETE LATER
+        root.left = this.removeBST (root.left, successor); //it may cause problems HERE <--<--<<<
       }
     }
     else if (node.value < root.value) { root.left = this.removeBST(root.left, node); }
@@ -161,65 +154,54 @@ class redBlackTree {
     return root;
   }
   fixDoubleBlack(node) {//Double Black -> Single Black
-    while(node.value !== this.root.value && node.color === 'BLACK') {
-      let sibling = null;
-      if(node.parent.left === node) { 
-        if(node.parent.right) { sibling = node.parent.right; }
-        if(sibling) {
-          if(sibling.color === 'RED') {
-            sibling.color = 'BLACK';
-            node.parent.color = 'RED';
-            this.leftRotation(node.parent);
-            sibling = node.parent.right;
-          }
+    console.log("Fixing double black yo");
+    if(node === this.root) { return; } //we've reached the root node, remove DB.
+    let sibling = this.getSibling(node);
+    let parent = node.parent;
 
-          if((sibling.left === null && sibling.right === null)||(sibling.left.color === 'BLACK' && sibling.right.color === 'BLACK')){
-            sibling.color = 'RED';
-            node = node.parent;
-          }
-          else if(sibling.right.color === 'BLACK'){
-            sibling.left.color === 'BLACK';
-            sibling.color = 'RED';
-            this.rightRotation(sibling);
-            sibling = node.parent.right;
-          }
-          else {
-            sibling.color = node.parent.color;
-            node.parent.color = 'BLACK';
-            if (sibling.right) { sibling.right.color === 'BLACK'; }
-            this.leftRotation(node.parent);
-            node = this.root;
-          }
-        }
+    if(!sibling) { this.fixDoubleBlack(parent); }//In case there is no sibling, move DB up.
+    else {
+      if(sibling.color === 'RED') {
+        //If sibling node is RED, swap parent and sibling colors, rotate parent in DB's direction, and repeat analysis for node:
+        this.colorSwap(parent,sibling);
+        if(this.isLeftChild(sibling)) { this.rightRotation(parent); }
+        else { this.leftRotation(parent); }
+        this.fixDoubleBlack(node);
       }
-      else {
-        if(node.parent.right === node) { 
-          if(node.parent.left) { sibling = node.parent.left; }
-          if(sibling) {
-            if(sibling.color === 'RED') {
-              sibling.color = 'BLACK';
-              node.parent.color = 'RED';
-              this.leftRotation(node.parent);
-              sibling = node.parent.left;
+      else {//As sibling is BLACK, we have three cases that can be applied:
+        if(this.anyRedChild(sibling)){//1-: sibling has at least one RED child
+          if(this.isLeftChild(sibling)){//sibling is left child
+            if(sibling.left && sibling.left.color === 'RED'){//DB's far nephew is RED:
+              //swap parent and sibling colors, rotate parent in DB's direction and color sibling's child black:
+              console.log('DBs far nephew is RED');
+              this.colorSwap(parent,sibling);
+              this.colorSwitch(sibling.left);
+              this.rightRotation(parent);
             }
-  
-            if((sibling.left === null && sibling.right === null)||(sibling.left.color === 'BLACK' && sibling.right.color === 'BLACK')){
-              sibling.color = 'RED';
-              node = node.parent;
-            }
-            else if(sibling.left.color === 'BLACK'){
-              sibling.right.color === 'BLACK';
-              sibling.color = 'RED';
+            else {//DB's far nephew is either BLACK or NIL
+              this.colorSwap(sibling,sibling.right);
               this.leftRotation(sibling);
-              sibling = node.parent.left;
+              this.fixDoubleBlack(node);
+            }
+          }
+          else {//sibling is right child
+            if(sibling.right && sibling.right.color === 'RED'){
+              this.colorSwap(parent,sibling);
+              this.colorSwitch(sibling.right);
+              this.leftRotation(parent);
             }
             else {
-              sibling.color = node.parent.color;
-              node.parent.color = 'BLACK';
-              if (sibling.left) { sibling.left.color === 'BLACK'; }
-              this.rightRotation(node.parent);
-              node = this.root;
+              this.colorSwap(sibling,sibling.left);
+              this.rightRotation(sibling);
+              this.fixDoubleBlack(node);
             }
+          }
+        } 
+        else {//3-: sibling has only BLACK/NIL children
+          this.colorSwitch(sibling);
+          if(parent.color === 'BLACK') { this.fixDoubleBlack(parent); }
+          else { 
+            parent.color = 'BLACK';
           }
         }
       }
@@ -227,25 +209,35 @@ class redBlackTree {
   }
   // -----------------------------------------------------------<<
   // ---------------------- SUPPORT METHODS -------------------->>
-  colorSwap(node) {
+  colorSwitch(node){//inverts the color of the node, if it was RED, becomes BLACK
     let tempNode = node;
     tempNode.color = (node.color === 'RED') ? 'BLACK' : 'RED';
   }
-  valueSwap(node1, node2) {
+  colorSwap(node1, node2){//swaps the colors of the passed nodes
+    let temp = node1.color;
+    node1.color = node2.color;
+    node2.color = temp;
+  }
+  valueSwap(node1, node2){//swaps the values of the passed nodes
     let temp = node1.value;
     node1.value = node2.value;
     node2.value = temp;
   }
-  getSuccessor(node) {
-    let successor = null;
-    if (node.right) { successor = node.right; }
-    while (successor !== null) { successor = successor.left; }
+  getSuccessor(node){//gets the inorder predecessor of the node passed as argument
+    let successor = node.left; 
+    while (successor.right !== null) { successor = successor.right; }
     return successor;
   }
-  getSibling(node) {
+  getSibling(node){//gets the sibling of the node passed as argument
     let sibling = null;
     sibling = (node === node.parent.left) ? node.parent.right : node.parent.left;
     return sibling;
+  }
+  isLeftChild(node){//returns a boolean indicating if the node passed as argument is a left child
+    return ((node === node.parent.left) ? true : false);
+  }
+  anyRedChild(node){//returns a boolean indicating if the node passed as argument has a RED child
+    return ((node.left && node.left.color === 'RED') || (node.right && node.right.color === 'RED'));
   }
   // -----------------------------------------------------------<<
   // --------------------- ROTATION METHODS -------------------->> 
@@ -335,7 +327,8 @@ rbTree.insert(31);
 console.log(rbTree);
 
 rbTree.remove(31);
-//rbTree.remove(29);
+rbTree.remove(42);
+//rbTree.remove(7);
 
 rbTree.inOrderTraversal();
 rbTree.levelOrderTraversal();
