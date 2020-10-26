@@ -113,48 +113,61 @@ class redBlackTree {
   // -----------------------------------------------------------<<
   // ------------- RED BLACK: NODE REMOVAL METHODS ------------->>
   remove(value) {
-    let node = new Node(value); //SEE IF WE CAN JUST PASS THE VALUE INSTEAD OF CREATING A WHOLE NEW TEMP NODE !!
+    let node = new Node(value); 
 
     if (this.root === null) { console.log('Tree is currently empty bro!'); return; } 
     
     this.root = this.removeBST(this.root, node);
   }
   removeBST (root, node) {//Binary Search Tree (BST) regular remove() method.
-    if (root === null) { return null; } //Tree is empty bro
+    if (root === null || node === null) { return null; } //Tree is either empty or node=null
 
     if (node.value === root.value) { //value to be removed was found
       if ((root.left === null) && (root.right === null)) { //node has no children @leaf node.
         if(root === this.root) { return null; } //node is root, just remove it. <<< MODIFIED, MIGHT BE A PAIN LATER
         else if (root.color === 'RED') { return null; } //node is a leaf node and is RED, just remove it.
-        else {console.log('hereee');
-          this.fixDoubleBlack(root);
-          return null; //root.parent.right = null; //maybe just return null
-        }//node color is BLACK and it is a right child
+        else {
+          console.log(`>>>> The node being removed (${root.value}) is a BLACK node w/ no children. Calling fixDoubleBlack(...) <<<<`);
+          this.fixDoubleBlack(root); //console.log(`>>>> The node being removed (${root.value}) <<<<`);
+          //root.parent = this.removeBST(root.parent,root)
+          //root.parent.right = null; //maybe just return null  !!! OUTPUT HERE IS CORRECT !!! CALL removeBST()
+          //root = root.parent;
+          //return root.parent;
+          //root.parent = this.removeBST(root.parent,root.parent.right);
+          //root.parent.right = this.removeBST(root.parent.right,root.parent.right);
+          //root = root.parent;
+          console.log(`>>>> The node being removed after fixdb (${root.parent.value}) <<<<`);
+        }
       } 
       else if (root.left === null && root.right !== null) { //node has no left child, replace it w/ its right node.
         this.valueSwap(root, root.right);
-        root.right = this.removeBST(root.right, node);
+        //root.right = this.removeBST(root.right, node);
+        root.right = this.removeBST(root.right, root.right); // replaced node by root.right since node had its value swapped
       }
-      else if (root.left !== null && root.right === null) { //node has no right child, replace it w/ its left node.
+      else if (root.left !== null && root.right === null) { //node has no right child, replace it w/ its left node. ## FUNCTIONAL ##
+        console.log(`>>>> The node being removed (${root.value}) only has its left child. <<<<`);
+
         this.valueSwap(root, root.left);
-        root.left = this.removeBST(root.left, node); 
+        root.left = this.removeBST(root.left, root.left); 
+        // prev.: root.left = this.removeBST(root.left, node) but replaced 'node' by 'root.left' since node had its value swapped
+        //return null;
       }
-      else { //node has both children: replace its value with the value of its inorder predecessor.
-        console.log('node has both children'); // DEBUGGING -- DELETE LATER
+      else { //node has both children: replace its value with the value of its inorder predecessor. ## FUNCTIONAL ##
+        console.log(`>>>> The node being removed (${root.value}) has both children. <<<<`);
         let successor = this.getSuccessor(root);
-        console.log('successor', successor); // DEBUGGING -- DELETE LATER
         this.valueSwap(root,successor);
-        console.log('successor', successor); // DEBUGGING -- DELETE LATER
-        console.log('root.left', root.left); // DEBUGGING -- DELETE LATER
         root.left = this.removeBST (root.left, successor); //it may cause problems HERE <--<--<<<
       }
     }
     else if (node.value < root.value) { root.left = this.removeBST(root.left, node); }
     else if (node.value > root.value) { root.right = this.removeBST(root.right, node); }
+    //else { console.log('Value not present in the Tree.'); }
+
     return root;
   }
   fixDoubleBlack(node) {//Double Black -> Single Black
-    console.log("Fixing double black yo");
+    //console.log("Fixing double black yo"); // DEBUGGING -- DELETE LATER
+  
     if(node === this.root) { return; } //we've reached the root node, remove DB.
     let sibling = this.getSibling(node);
     let parent = node.parent;
@@ -173,10 +186,18 @@ class redBlackTree {
           if(this.isLeftChild(sibling)){//sibling is left child
             if(sibling.left && sibling.left.color === 'RED'){//DB's far nephew is RED:
               //swap parent and sibling colors, rotate parent in DB's direction and color sibling's child black:
-              console.log('DBs far nephew is RED');
-              this.colorSwap(parent,sibling);
-              this.colorSwitch(sibling.left);
-              this.rightRotation(parent);
+              console.log(`>>>> DBs is right child and far nephew (${sibling.left.value}) is RED <<<<`);
+              
+              this.colorSwap(parent,sibling); // ## FUNCTIONAL ##
+              this.colorSwitch(sibling.left); // ## FUNCTIONAL ##
+              this.rightRotation(parent); // ## FUNCTIONAL ##
+              
+              parent.right = null;        //testing
+              this.levelOrderTraversal(); //testing
+              //parent.right = null; //testing
+              //node = null;
+              //console.log(`PARENT: parent.value (${node.parent.value}) | parent.color (${parent.color})`);
+              //return;
             }
             else {//DB's far nephew is either BLACK or NIL
               this.colorSwap(sibling,sibling.right);
@@ -242,44 +263,45 @@ class redBlackTree {
   // -----------------------------------------------------------<<
   // --------------------- ROTATION METHODS -------------------->> 
   rightRotation(node) {//LL condition --> Right Rotation
-  let tempNode = node.left;
-  node.left = tempNode.right;
+    console.log(`>>>> Right rotation on (${node.value}) <<<<`);
 
-  //Update parent reference in case of temp node having a right subtree:
-  if(node.left !== null) { node.left.parent = node; }
+    let tempNode = node.left;
+    node.left = tempNode.right;
 
-  //Update temp node parent to be node's parent:
-  tempNode.parent = node.parent;
+    //Update parent reference in case of temp node having a right subtree:
+    if(node.left !== null) { node.left.parent = node; }
 
-  //Update parent references for rotated node:
-  if(node.parent === null) { this.root = tempNode; }
-  else if(node === node.parent.left) { node.parent.left = tempNode; }
-  else { node.parent.right = tempNode; } 
+    //Update temp node parent to be node's parent:
+    tempNode.parent = node.parent;
 
-  tempNode.right = node;
-  node.parent = tempNode;
+    //Update parent references for rotated node:
+    if(node.parent === null) { this.root = tempNode; }
+    else if(node === node.parent.left) { node.parent.left = tempNode; }
+    else { node.parent.right = tempNode; } 
 
-  //return tempNode;
+    tempNode.right = node;
+    node.parent = tempNode;
+    //return tempNode;
   }
   leftRotation(node) {//RR condition --> Left Rotation
-  let tempNode = node.right; 
-  node.right = tempNode.left; 
+    let tempNode = node.right; 
+    node.right = tempNode.left; 
 
-  //Update parent reference in case of temp node having a left subtree:
-  if(node.right !== null) { node.right.parent = node; }
+    //Update parent reference in case of temp node having a left subtree:
+    if(node.right !== null) { node.right.parent = node; }
 
-  //Update temp node parent to be node's parent:
-  tempNode.parent = node.parent; //console.log(`left rot. ${tempNode.parent}`);
+    //Update temp node parent to be node's parent:
+    tempNode.parent = node.parent; //console.log(`left rot. ${tempNode.parent}`);
 
-  //Update parent references for rotated node:
-  if(node.parent === null) { this.root = tempNode;} //seliga aqui, era so root
-  else if(node === node.parent.left) { node.parent.left = tempNode; }
-  else { node.parent.right = tempNode; }
-  //console.log(`new root. ${this.root.value}`);
-  tempNode.left = node;
-  node.parent = tempNode;
+    //Update parent references for rotated node:
+    if(node.parent === null) { this.root = tempNode;} //seliga aqui, era so root
+    else if(node === node.parent.left) { node.parent.left = tempNode; }
+    else { node.parent.right = tempNode; }
+    //console.log(`new root. ${this.root.value}`);
+    tempNode.left = node;
+    node.parent = tempNode;
 
-  return tempNode;
+    return tempNode;
   }
   // -----------------------------------------------------------<<
   // --------------------- TRAVERSAL METHODS ------------------->>
@@ -322,13 +344,14 @@ rbTree.insert(29);
 rbTree.insert(50);
 rbTree.insert(83);
 rbTree.insert(5); 
-rbTree.insert(31);
+//rbTree.insert(31);
 
 console.log(rbTree);
 
-rbTree.remove(31);
-rbTree.remove(42);
-//rbTree.remove(7);
+//rbTree.remove(10); //PASSED
+//rbTree.remove(42); //PASSED
+rbTree.remove(29); 
+// rbTree.remove(83);
 
 rbTree.inOrderTraversal();
 rbTree.levelOrderTraversal();
