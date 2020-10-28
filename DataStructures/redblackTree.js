@@ -14,6 +14,7 @@ class Node {
 class redBlackTree {
   constructor () {
     this.root = null;
+    //this.checkDB = false; //test
   }
   // ------------------- SEARCH/LOOKUP METHOD ------------------>>
   lookup(value) {
@@ -117,58 +118,58 @@ class redBlackTree {
 
     if (this.root === null) { console.log('Tree is currently empty bro!'); return; } 
     
-    this.root = this.removeBST(this.root, node);
+    //this.root = this.removeBST(this.root, node); // TEEEEEEEEST
+    this.removeBST(this.root, node);
   }
   removeBST (root, node) {//Binary Search Tree (BST) regular remove() method.
     if (root === null || node === null) { return null; } //Tree is either empty or node=null
 
     if (node.value === root.value) { //value to be removed was found
       if ((root.left === null) && (root.right === null)) { //node has no children @leaf node.
-        if(root === this.root) { return null; } //node is root, just remove it. <<< MODIFIED, MIGHT BE A PAIN LATER
-        else if (root.color === 'RED') { return null; } //node is a leaf node and is RED, just remove it.
+        if(root === this.root) { this.root = null; } //node is root, just remove it. <<< MODIFIED, MIGHT BE A PAIN LATER
+        else if (root.color === 'RED') { //node is a leaf node and is RED, just remove it.
+          root.parent.right = null; 
+          root.parent = null;
+        } 
         else {
           console.log(`>>>> The node being removed (${root.value}) is a BLACK node w/ no children. Calling fixDoubleBlack(...) <<<<`);
-          this.fixDoubleBlack(root); //console.log(`>>>> The node being removed (${root.value}) <<<<`);
-          //root.parent = this.removeBST(root.parent,root)
-          //root.parent.right = null; //maybe just return null  !!! OUTPUT HERE IS CORRECT !!! CALL removeBST()
-          //root = root.parent;
-          //return root.parent;
-          //root.parent = this.removeBST(root.parent,root.parent.right);
-          //root.parent.right = this.removeBST(root.parent.right,root.parent.right);
-          //root = root.parent;
-          console.log(`>>>> The node being removed after fixdb (${root.parent.value}) <<<<`);
+          this.fixDoubleBlack(root);
+          // console.log(root)
+          if (root === root.parent.right) { root.parent.right = null; root.parent = null; }
+          else { root.parent.left = null; root.parent = null; }
+
+          //this.levelOrderTraversal();
         }
       } 
       else if (root.left === null && root.right !== null) { //node has no left child, replace it w/ its right node.
         this.valueSwap(root, root.right);
-        //root.right = this.removeBST(root.right, node);
-        root.right = this.removeBST(root.right, root.right); // replaced node by root.right since node had its value swapped
+        //root.right = this.removeBST(root.right, root.right); // replaced node by root.right since node had its value swapped
+        this.removeBST(root.right, root.right);
       }
       else if (root.left !== null && root.right === null) { //node has no right child, replace it w/ its left node. ## FUNCTIONAL ##
         console.log(`>>>> The node being removed (${root.value}) only has its left child. <<<<`);
 
         this.valueSwap(root, root.left);
-        root.left = this.removeBST(root.left, root.left); 
+        //root.left = this.removeBST(root.left, root.left); 
         // prev.: root.left = this.removeBST(root.left, node) but replaced 'node' by 'root.left' since node had its value swapped
-        //return null;
+        this.removeBST(root.left, root.left);
       }
       else { //node has both children: replace its value with the value of its inorder predecessor. ## FUNCTIONAL ##
         console.log(`>>>> The node being removed (${root.value}) has both children. <<<<`);
         let successor = this.getSuccessor(root);
         this.valueSwap(root,successor);
-        root.left = this.removeBST (root.left, successor); //it may cause problems HERE <--<--<<<
+        //root.left = this.removeBST (root.left, successor); //it may cause problems HERE <--<--<<<
+        this.removeBST (root.left, successor); 
       }
     }
-    else if (node.value < root.value) { root.left = this.removeBST(root.left, node); }
-    else if (node.value > root.value) { root.right = this.removeBST(root.right, node); }
-    //else { console.log('Value not present in the Tree.'); }
-
-    return root;
+    else if (node.value < root.value) { this.removeBST(root.left, node); }//root.left = this.removeBST(root.left, node); }
+    else if (node.value > root.value) { this.removeBST(root.right, node); }//root.right = this.removeBST(root.right, node); }
+    
+    //return root;
   }
   fixDoubleBlack(node) {//Double Black -> Single Black
-    //console.log("Fixing double black yo"); // DEBUGGING -- DELETE LATER
-  
     if(node === this.root) { return; } //we've reached the root node, remove DB.
+
     let sibling = this.getSibling(node);
     let parent = node.parent;
 
@@ -192,12 +193,7 @@ class redBlackTree {
               this.colorSwitch(sibling.left); // ## FUNCTIONAL ##
               this.rightRotation(parent); // ## FUNCTIONAL ##
               
-              parent.right = null;        //testing
-              this.levelOrderTraversal(); //testing
-              //parent.right = null; //testing
-              //node = null;
-              //console.log(`PARENT: parent.value (${node.parent.value}) | parent.color (${parent.color})`);
-              //return;
+              //this.levelOrderTraversal(); //testing
             }
             else {//DB's far nephew is either BLACK or NIL
               this.colorSwap(sibling,sibling.right);
@@ -219,11 +215,14 @@ class redBlackTree {
           }
         } 
         else {//3-: sibling has only BLACK/NIL children
-          this.colorSwitch(sibling);
-          if(parent.color === 'BLACK') { this.fixDoubleBlack(parent); }
+          console.log(`>>>> DB (${node.value}) sibling (${sibling.value}) is BLACK and doesn't have any children <<<<`);
+          this.colorSwitch(sibling);//console.log(parent)
+          if(parent.color === 'BLACK') { this.fixDoubleBlack(parent);}
           else { 
             parent.color = 'BLACK';
           }
+          //console.log(parent)
+          //parent.left = null; //node.parent = null;
         }
       }
     }
@@ -281,7 +280,6 @@ class redBlackTree {
 
     tempNode.right = node;
     node.parent = tempNode;
-    //return tempNode;
   }
   leftRotation(node) {//RR condition --> Left Rotation
     let tempNode = node.right; 
@@ -344,14 +342,16 @@ rbTree.insert(29);
 rbTree.insert(50);
 rbTree.insert(83);
 rbTree.insert(5); 
-//rbTree.insert(31);
+rbTree.insert(31);
 
 console.log(rbTree);
 
-//rbTree.remove(10); //PASSED
-//rbTree.remove(42); //PASSED
-rbTree.remove(29); 
-// rbTree.remove(83);
+rbTree.remove(42); //PASSED
+rbTree.remove(29); //PASSED
+rbTree.remove(7);  //PASSED
+rbTree.remove(5);  //PASSED
+rbTree.remove(83); //PASSED
+rbTree.remove(10); //PASSED
 
 rbTree.inOrderTraversal();
 rbTree.levelOrderTraversal();
