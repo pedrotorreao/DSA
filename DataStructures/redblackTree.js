@@ -119,9 +119,8 @@ class redBlackTree {
   remove(value) {
     let node = new Node(value); 
 
-    if (this.root === null) { console.log('Tree is currently empty bro!'); return; } 
+    if (this.root === null) { console.log('Tree is currently empty!'); return; } 
     
-    //this.root = this.removeBST(this.root, node); // TEEEEEEEEST
     this.removeBST(this.root, node);
   }
   removeBST (root, node) {//Binary Search Tree (BST) regular remove() method.
