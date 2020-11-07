@@ -4,35 +4,36 @@
 class minHeap {
   constructor() {
     this.heap = [];
+    // this.root = null;
   }
-  lookup(value) {
+  // -----------------------------------------------------------<<
+  // ------------ MIN HEAP: PEEK METHOD ------------------------>>
+  peek() {
+    return this.heap[1];
+  }
 
-  }
+  // -----------------------------------------------------------<<
+  // ------------ MIN HEAP: INSERTION METHODS ------------------>>
   insert(value) {
     if(this.heap.length < 1) {
       this.heap[0] = null;
-      this.heap.push(value); return;
+      this.heap.push(value);
+      return;
     }
     this.heap.push(value);
-
-    let index = this.heap.length-1;
-
-    this.fixHeapRecursively(index);
-    //this.fixHeapIteratively();
+    this.fixInsertRecursively(this.heap.length-1);
+    //this.fixInsertIteratively();
   }
-  remove(value) {
-
-  }
-  fixHeapRecursively(index) {
+  fixInsertRecursively(index) {
       let parentIndex = Math.floor(index/2);
       if(this.heap[parentIndex] > this.heap[index]) {
         this.swapValues(index, parentIndex);
         index = parentIndex;
-        this.fixHeapRecursively(index);
+        this.fixInsertRecursively(index);
       }
       else { return; }
   }
-  fixHeapIteratively() {
+  fixInsertIteratively() {
     let index = this.heap.length-1;
     let parentIndex;
     while(index >= 1){
@@ -44,11 +45,43 @@ class minHeap {
       else { return; }
     }
   }
+
+  // -----------------------------------------------------------<<
+  // ------------ MIN HEAP: DELETION METHODS ------------------->>
   
-  
-  traverse() {
+  remove() {
+    if(this.heap.length <= 1) { return; }
+
+    this.swapValues(this.heap.length-1,1);
+    this.heap.pop();
+
+    this.fixRemoveIteratively();
 
   }
+  
+  fixRemoveIteratively() {
+    let rootIndex, leftIndex, rightIndex;
+
+    rootIndex = 1;
+    leftIndex = 2*rootIndex;
+    rightIndex = (2*rootIndex)+1;
+
+    while(this.heap[rootIndex] > this.heap[leftIndex] || this.heap[rootIndex] > this.heap[rightIndex]) {
+      if(this.heap[leftIndex] < this.heap[rightIndex]) {
+        this.swapValues(rootIndex, leftIndex);
+        rootIndex = leftIndex;
+      }
+      else {
+        this.swapValues(rootIndex, rightIndex);
+        rootIndex = rightIndex;
+      }
+      leftIndex = 2*rootIndex;
+      rightIndex = (2*rootIndex)+1;
+
+      if(this.heap[rootIndex] === undefined) return;
+    }
+  }
+  
   // -----------------------------------------------------------<<
   // ---------------------- SUPPORT METHODS -------------------->>
   swapValues(child, parent) {
@@ -57,7 +90,7 @@ class minHeap {
     this.heap[parent] = temp;
   }
   getSize() {
-    return this.heap.length;
+    return this.heap.length-1;
   }
 }
 const Heap = new minHeap();
@@ -70,6 +103,13 @@ Heap.insert(34);
 Heap.insert(55);
 Heap.insert(67);
 Heap.insert(1);
-console.log(Heap.getSize());
+
+console.log('Min Heap size: ', Heap.getSize());
+console.log('Min/Top element: ', Heap.peek());
+
+Heap.remove();
+
+console.log('Min Heap size: ', Heap.getSize());
+console.log('Min/Top element: ', Heap.peek());
 
 console.log(Heap);
