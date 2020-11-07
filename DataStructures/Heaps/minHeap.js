@@ -55,8 +55,8 @@ class minHeap {
     this.swapValues(this.heap.length-1,1);
     this.heap.pop();
 
-    this.fixRemoveIteratively();
-
+    //this.fixRemoveIteratively();
+    this.fixRemoveRecursively();
   }
   
   fixRemoveIteratively() {
@@ -79,6 +79,27 @@ class minHeap {
       rightIndex = (2*rootIndex)+1;
 
       if(this.heap[rootIndex] === undefined) return;
+    }
+  }
+
+  fixRemoveRecursively(rootIndex=1) {
+    if(!this.heap[rootIndex]) { return; }
+
+    let leftIndex, rightIndex;
+
+    leftIndex = 2*rootIndex;
+    rightIndex = (2*rootIndex)+1;
+
+    if(this.heap[rootIndex] > this.heap[leftIndex] || this.heap[rootIndex] > this.heap[rightIndex]) {
+      if(this.heap[leftIndex] < this.heap[rightIndex]) {
+        this.swapValues(rootIndex, leftIndex);
+        rootIndex = leftIndex;
+      }
+      else {
+        this.swapValues(rootIndex, rightIndex);
+        rootIndex = rightIndex;
+      }
+      this.fixRemoveRecursively(rootIndex);
     }
   }
   
