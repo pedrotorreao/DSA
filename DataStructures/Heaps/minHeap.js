@@ -21,10 +21,10 @@ class minHeap {
       return;
     }
     this.heap.push(value);
-    this.fixInsertRecursively(this.heap.length-1);
+    this.fixInsertRecursively();
     //this.fixInsertIteratively();
   }
-  fixInsertRecursively(index) {
+  fixInsertRecursively(index=this.heap.length-1) {
       let parentIndex = Math.floor(index/2);
       if(this.heap[parentIndex] > this.heap[index]) {
         this.swapValues(index, parentIndex);
