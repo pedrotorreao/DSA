@@ -4,7 +4,6 @@
 class minHeap {
   constructor() {
     this.heap = [];
-    // this.root = null;
   }
   // -----------------------------------------------------------<<
   // ------------ MIN HEAP: PEEK METHOD ------------------------>>
@@ -16,28 +15,38 @@ class minHeap {
   // ------------ MIN HEAP: INSERTION METHODS ------------------>>
   insert(value) {
     if(this.heap.length < 1) {
+      //if heap is empty, set first array element to null and push value to the end:
       this.heap[0] = null;
       this.heap.push(value);
       return;
     }
     this.heap.push(value);
-    this.fixInsertRecursively();
-    //this.fixInsertIteratively();
+
+    this.heapifyBottomTopRecursively();
+    //this.heapifyBottomTopIteratively();
   }
-  fixInsertRecursively(index=this.heap.length-1) {
+  heapifyBottomTopRecursively(index=this.heap.length-1) {
       let parentIndex = Math.floor(index/2);
+      //in case we've reached the root of the heap, return:
+      if(!this.heap[parentIndex]) return;
+
+      //if parent value is greater than the newly added element, swap them and go up in the heap:
       if(this.heap[parentIndex] > this.heap[index]) {
         this.swapValues(index, parentIndex);
         index = parentIndex;
-        this.fixInsertRecursively(index);
+        this.heapifyBottomTopRecursively(index);
       }
       else { return; }
   }
-  fixInsertIteratively() {
+  heapifyBottomTopIteratively() {
     let index = this.heap.length-1;
     let parentIndex;
     while(index >= 1){
       parentIndex = Math.floor(index/2);
+      //in case we've reached the root of the heap, return:
+      if(!this.heap[parentIndex]) return;
+
+      //if parent value is greater than the newly added element, swap them and go up in the heap:
       if(this.heap[parentIndex] > this.heap[index]) {
         this.swapValues(index, parentIndex);
         index = parentIndex;
@@ -50,24 +59,29 @@ class minHeap {
   // ------------ MIN HEAP: DELETION METHODS ------------------->>
   
   remove() {
-    if(this.heap.length <= 1) { return; }
+    if(this.heap.length <= 1) { return; }//heap is empty.
 
+    //Replaces top element by the last element in the heap:
     this.swapValues(this.heap.length-1,1);
     this.heap.pop();
 
-    //this.fixRemoveIteratively();
-    this.fixRemoveRecursively();
+    this.heapifyTopBottomIteratively();
+    //this.heapifyTopBottomRecursively();
   }
   
-  fixRemoveIteratively() {
+  heapifyTopBottomIteratively() {
     let rootIndex, leftIndex, rightIndex;
 
     rootIndex = 1;
     leftIndex = 2*rootIndex;
     rightIndex = (2*rootIndex)+1;
 
+    /*if there are no children, return. Reminder: as the heap must be a complete binary tree, all its levels are filled except possibly for the last, and in the last level, all the keys/values are aligned as left as possible, so if a node doesn't have a left child, it won't have a right child since the left subtree would be filled first:*/
+    if(!this.heap[leftIndex]) { return; }
+
     while(this.heap[rootIndex] > this.heap[leftIndex] || this.heap[rootIndex] > this.heap[rightIndex]) {
-      if(this.heap[leftIndex] < this.heap[rightIndex]) {
+      //if there's no right child or left child's value is less than right child's, swap subtrees' root and left child's values  and go down the heap:
+      if(!this.heap[rightIndex] || this.heap[leftIndex] < this.heap[rightIndex]) {
         this.swapValues(rootIndex, leftIndex);
         rootIndex = leftIndex;
       }
@@ -82,16 +96,19 @@ class minHeap {
     }
   }
 
-  fixRemoveRecursively(rootIndex=1) {
+  heapifyTopBottomRecursively(rootIndex=1) {
     if(!this.heap[rootIndex]) { return; }
 
     let leftIndex, rightIndex;
-
     leftIndex = 2*rootIndex;
     rightIndex = (2*rootIndex)+1;
 
+    /*if there are no children, return. Reminder: as the heap must be a complete binary tree, all its levels are filled except possibly for the last, and in the last level, all the keys/values are aligned as left as possible, so if a node doesn't have a left child, it won't have a right child since the left subtree would be filled first:*/
+    if(!this.heap[leftIndex]) { return; }
+
     if(this.heap[rootIndex] > this.heap[leftIndex] || this.heap[rootIndex] > this.heap[rightIndex]) {
-      if(this.heap[leftIndex] < this.heap[rightIndex]) {
+      //if there's no right child or left child's value is less than right child's, swap subtrees' root and left child's values  and go down the heap:
+      if(!this.heap[rightIndex] || this.heap[leftIndex] < this.heap[rightIndex]) {
         this.swapValues(rootIndex, leftIndex);
         rootIndex = leftIndex;
       }
@@ -99,7 +116,7 @@ class minHeap {
         this.swapValues(rootIndex, rightIndex);
         rootIndex = rightIndex;
       }
-      this.fixRemoveRecursively(rootIndex);
+      this.heapifyTopBottomRecursively(rootIndex);
     }
   }
   
@@ -128,6 +145,8 @@ Heap.insert(1);
 console.log('Min Heap size: ', Heap.getSize());
 console.log('Min/Top element: ', Heap.peek());
 
+Heap.remove();
+Heap.remove();
 Heap.remove();
 
 console.log('Min Heap size: ', Heap.getSize());
