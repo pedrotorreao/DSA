@@ -75,14 +75,11 @@ class maxHeap {
     leftIndex = 2*rootIndex;
     rightIndex = (2*rootIndex)+1;
 
-    //if there are no children, return. Reminder: as the heap must be a complete binary tree, all its levels are 
-    //filled except possibly for the left, and in the last level, all the keys/values are aligned as left as 
-    //possible, so if a node doesn't have a left child, it won't have a right child since the left subtree would 
-    //be filled first:
+    /*if there are no children, return. Reminder: as the heap must be a complete binary tree, all its levels are filled except possibly for the last, and in the last level, all the keys/values are aligned as left as possible, so if a node doesn't have a left child, it won't have a right child since the left subtree would be filled first:*/
     if(!this.heap[leftIndex]) { return; }
 
     while(this.heap[rootIndex] < this.heap[leftIndex] || this.heap[rootIndex] < this.heap[rightIndex]) {
-      //if there's no right child or left child's value greater than right child's, swap subtrees' root and left ////child's values:
+      //if there's no right child or left child's value is greater than right child's, swap subtrees' root and left child's values  and go down the heap:
       if(!this.heap[rightIndex] || this.heap[leftIndex] > this.heap[rightIndex]) {
         this.swapValues(rootIndex, leftIndex);
         rootIndex = leftIndex;
@@ -105,14 +102,11 @@ class maxHeap {
     leftIndex = 2*rootIndex;
     rightIndex = (2*rootIndex)+1;
 
-    //if there are no children, return. Reminder: as the heap must be a complete binary tree, all its levels are 
-    //filled except possibly for the left, and in the last level, all the keys/values are aligned as left as 
-    //possible, so if a node doesn't have a left child, it won't have a right child since the left subtree would 
-    //be filled first:
+    /*if there are no children, return. Reminder: as the heap must be a complete binary tree, all its levels are filled except possibly for the last, and in the last level, all the keys/values are aligned as left as possible, so if a node doesn't have a left child, it won't have a right child since the left subtree would be filled first:*/
     if(!this.heap[leftIndex]) { return; }
 
     if(this.heap[rootIndex] < this.heap[leftIndex] || this.heap[rootIndex] < this.heap[rightIndex]) {
-      //if there's no right child or left child's value greater than right child's, swap subtrees' root and left ////child's values:
+      //if there's no right child or left child's value is greater than right child's, swap subtrees' root and left child's values and go down the heap:
       if(!this.heap[rightIndex] || this.heap[leftIndex] > this.heap[rightIndex]) {
         this.swapValues(rootIndex, leftIndex);
         rootIndex = leftIndex;
