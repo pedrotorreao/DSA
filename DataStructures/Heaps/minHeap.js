@@ -63,10 +63,11 @@ class minHeap {
 
     //Replaces top element by the last element in the heap:
     this.swapValues(this.heap.length-1,1);
-    this.heap.pop();
+    let largest = this.heap.pop();
 
     this.heapifyTopBottomIteratively();
     //this.heapifyTopBottomRecursively();
+    return largest;
   }
   
   heapifyTopBottomIteratively() {
