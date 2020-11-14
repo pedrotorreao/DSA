@@ -11,14 +11,20 @@ class Trie {
   constructor() {
 
   }
-  search(str){
+  searchWord(str){
 
   }
-  insert(str){
+  insertWord(str){
 
   }
-  remove(str){
+  removeWord(str){
 
+  }
+  isOnTree(){
+    
+  }
+  isComplete(){
+    
   }
   print(){
 
