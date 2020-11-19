@@ -11,27 +11,35 @@ class Trie {
   constructor() {
     this.root = new Node();
   }
+  buildList(node=this.root, string=new String(), arr=new Array()){
+    for(let charac of node.keys.keys()){
+      this.buildList(node.keys.get(charac), string.concat(charac), arr);
+    }
+    if(node.endOfWord){ 
+      arr.push(string); 
+    }
+
+    return arr;
+  }
   searchPrefix(prefix){
     /*  
       - Descr.: Print out all the words containing a specific prefix.
       - Input:  It receives the prefix it must look for as input.
       - Output: It stores all the words which begin with that prefix and print them out.
     */
-    if(!prefix.length || !this.root.keys.size) { console.log('Not present.'); return; }
+    let prefixMatch = new Array();
+    let allWords = this.buildList();
 
-    let prefixMatch = new Array(); //stores all the complete words matching this prefix.
-    let str = new String();
-    const search = function(node, string){
-      for(let charac of node.keys.keys()){
-          search(node.keys.get(charac), string.concat(charac));
-      }
-      if(node.endOfWord && string.includes(prefix)){ 
-        prefixMatch.push(string); 
-      }
-    }; 
-    search(this.root, str);
+    if(!allWords.length){ console.log('Trie is empty'); return;}
 
-    console.log(prefixMatch); return;
+    allWords.forEach(element => {
+      if(element.includes(prefix)){ prefixMatch.push(element); }
+    });
+
+    if(prefixMatch.length){ 
+      console.log(prefixMatch); return prefixMatch; 
+    }
+    console.log(`No match for the prefix/word "${prefix}".`);
   }
   insertWord(str, node = this.root){
     /*
@@ -52,19 +60,13 @@ class Trie {
       - Output: Removes the word completely or partially depending on whether part of the word is a prefix to  other words on the trie. Lastly, print out the words on the trie.
     */
   }
-  isOnTree(){
+  isOnTree(str){
     /*
-      - Descr.: Checks if a word is on the Trie (Note.: Maybe we can use searchPrefix passing the full word).
+      - Descr.: Checks if a word is on the Trie.
       - Input:  It receives the word to be searched as argument. 
       - Output: Returns a boolean indicating whether the word is present or not.
     */
-  }
-  isComplete(){
-    /*
-      - Descr.: Checks if a specific word on the Trie is complete or part of a prefix.
-      - Input:  It receives the word to be checked for completion as argument. 
-      - Output: Returns a boolean indicating whether the word is complete or not.
-    */
+    return ((this.buildList().includes(str)) ? true : false);
   }
   printTrie(){
     /*
@@ -72,17 +74,12 @@ class Trie {
       - Input:  - 
       - Output: All the words on the trie are logged on the screen.
     */
-    let allWords = new Array(); //stores all the complete words matching this prefix.
-    let str = new String();
+    let allWords = this.buildList();
 
-    const search = function(node, string){
-      for(let charac of node.keys.keys()){
-        search(node.keys.get(charac), string.concat(charac));
-      }
-      if(node.endOfWord){ allWords.push(string); }
-    }; 
-    search(this.root, str);
-    console.log(allWords); return;
+    if(allWords.length){ 
+      console.log(allWords); return; 
+    }
+    console.log('Trie is empty');
   }
 }
 const myTrie = new Trie();
@@ -94,10 +91,17 @@ myTrie.insertWord('tree');
 myTrie.insertWord('town');
 myTrie.insertWord('middle');
 myTrie.insertWord('app');
-console.log(myTrie);
+
 myTrie.printTrie();
+
 myTrie.searchPrefix('mi');
 myTrie.searchPrefix('app');
+myTrie.searchPrefix('au');
+
+console.log(myTrie.isOnTree('man'));
+console.log(myTrie.isOnTree('tow'));
+
+console.log(myTrie);
 /*
           root
       -------------
