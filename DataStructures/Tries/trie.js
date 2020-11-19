@@ -11,27 +11,27 @@ class Trie {
   constructor() {
     this.root = new Node();
   }
-  searchPrefix(prefix, node = this.root){
+  searchPrefix(prefix){
     /*  
       - Descr.: Print out all the words containing a specific prefix.
       - Input:  It receives the prefix it must look for as input.
       - Output: It stores all the words which begin with that prefix and print them out.
     */
-    if(!prefix.length || !node.keys.has(prefix[0] || !node.keys.size)) { console.log('Not present.'); return; }
+    if(!prefix.length || !this.root.keys.size) { console.log('Not present.'); return; }
+
     let prefixMatch = new Array(); //stores all the complete words matching this prefix.
     let str = new String();
-    const search = function(node,prefix,str){
-      if(node.keys.has(prefix[0])){
-          let charac = prefix[0];
-          str.concat(charac)
-          prefix.slice(1); console.log(str);
-          search(node.keys.get(prefix[0]), prefix, str);
-        if(node.endOfWord){
-          prefixMatch.push(str);
-        }
+    const search = function(node, string){
+      for(let charac of node.keys.keys()){
+          search(node.keys.get(charac), string.concat(charac));
       }
-    }; search(this.root,prefix,str);
-    console.log(str);
+      if(node.endOfWord && string.includes(prefix)){ 
+        prefixMatch.push(string); 
+      }
+    }; 
+    search(this.root, str);
+
+    console.log(prefixMatch); return;
   }
   insertWord(str, node = this.root){
     /*
@@ -72,17 +72,17 @@ class Trie {
       - Input:  - 
       - Output: All the words on the trie are logged on the screen.
     */
-    let words = new Array(); //stores all the complete words matching this prefix.
+    let allWords = new Array(); //stores all the complete words matching this prefix.
     let str = new String();
 
     const search = function(node, string){
-      for(let letter of node.keys.keys()){
-        search(node.keys.get(letter), string.concat(letter));
+      for(let charac of node.keys.keys()){
+        search(node.keys.get(charac), string.concat(charac));
       }
-      if(node.endOfWord){ words.push(string); }
-    };
+      if(node.endOfWord){ allWords.push(string); }
+    }; 
     search(this.root, str);
-    return words;
+    console.log(allWords); return;
   }
 }
 const myTrie = new Trie();
@@ -93,9 +93,11 @@ myTrie.insertWord('apple');
 myTrie.insertWord('tree');
 myTrie.insertWord('town');
 myTrie.insertWord('middle');
+myTrie.insertWord('app');
 console.log(myTrie);
-console.log(myTrie.printTrie());
-// myTrie.searchPrefix('mi');
+myTrie.printTrie();
+myTrie.searchPrefix('mi');
+myTrie.searchPrefix('app');
 /*
           root
       -------------
