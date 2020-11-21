@@ -58,6 +58,11 @@ class Trie {
       - Descr.: Remove a word from the trie.
       - Input:  It receives the word to be removed as argument and checks if this word is on the tree. 
       - Output: Removes the word completely or partially depending on whether part of the word is a prefix to  other words on the trie. Lastly, print out the words on the trie.
+        We can consider three cases when deleting a string form a Trie:
+          -- CASE#1: The word being removed has the same prefix as some other word in the Trie. In this case, we cannot delete the entire string, but only the independent "members". Ex: mind and mid.
+          -- CASE#2: The entire word being removed is a prefix of some other word. In this case, we don't delete anything and just set the flag indicating the end of the word being removed as FALSE. Ex.: mid and middle.
+          -- CASE#3: Some other word is a prefix of the word we want to remove. As with CASE#1, we only delete the independent "members". Ex.: middle and mid.
+          -- CASE#4: No one is dependent on the word we want to remove, we just delete it. Ex.: apple.
     */
   }
   isOnTree(str){
