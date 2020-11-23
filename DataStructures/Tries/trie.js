@@ -53,7 +53,7 @@ class Trie {
     }
     this.insertWord(str.slice(1), node.keys.get(str[0]));
   }
-  removeWord(str){
+  removeWord(word, node = this.root, index = 0){
     /*
       - Descr.: Remove a word from the trie.
       - Input:  It receives the word to be removed as argument and checks if this word is on the tree. 
@@ -64,6 +64,37 @@ class Trie {
           -- CASE#3: Some other word is a prefix of the word we want to remove. As with CASE#1, we only delete the independent "members". Ex.: middle and mid.
           -- CASE#4: No one is dependent on the word we want to remove, we just delete it. Ex.: apple.
     */
+    let currentCharac = word[index];
+    let currentNode = node.keys.get(currentCharac);
+    let canWeDeleteThisNode = false;
+
+    if(this.hasDependent(currentNode)){//CASE#1
+      this.removeWord(word, currentNode, index+1);
+      return false;
+    }
+    if(index === word.length - 1){//CASE#2
+      if(currentNode.keys.size){
+        currentNode.endOfWord = false;
+        return false;
+      }
+      else{
+        node.keys.delete(currentCharac);
+        return true;
+      }
+    }
+    if(currentNode.endOfWord){
+      this.removeWord(word, currentNode, index+1);
+      return false;
+    }
+
+    canWeDeleteThisNode = this.removeWord(word, currentNode, index+1);
+
+    if(canWeDeleteThisNode){
+      node.keys.delete(currentCharac);
+    }
+  }
+  hasDependent(node){
+    return (node.keys.size ? true : false);
   }
   isOnTree(str){
     /*
@@ -106,6 +137,10 @@ myTrie.searchPrefix('au');
 console.log(myTrie.isOnTree('man'));
 console.log(myTrie.isOnTree('tow'));
 
+myTrie.removeWord('apple');
+console.log(myTrie.isOnTree('apple'));
+myTrie.printTrie();
+
 console.log(myTrie);
 /*
           root
@@ -122,5 +157,3 @@ n* n   d*  p    e     w
       l
       |
       e*
-
-*/
