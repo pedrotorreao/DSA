@@ -96,7 +96,7 @@ class Trie {
     }
   }
   hasDependent(node){
-    return ((node.keys.size > 1) ? true : false); //'n' only has 1 dependent, 'd'
+    return ((node.keys.size > 1) ? true : false);
   }
   isOnTree(str){
     /*
