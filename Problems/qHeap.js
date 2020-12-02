@@ -1,0 +1,133 @@
+/****************************************************************/
+/*Problem: QHEAP1  ********/
+/****************************************************************/
+/*
+-- Summary:
+You will be given queries of 3 types:
+  "1 v" - Add an element v to the heap.
+  "2 v" - Delete the element v from the heap.
+  "3" - Print the minimum of all the elements in the heap.
+NOTE: It is guaranteed that the element to be deleted will be there in the heap. Also, at any instant, only distinct elements will be in the heap.
+
+-- Input(s):
+The first line contains the number of queries, Q. Each of the next Q lines contains a single query of any one of the 3 above mentioned types.
+
+-- Expected output(s):
+For each query of type 3, print the minimum value on a single line.
+
+-- Constraints:
+  1 <= Q <= 10^5
+  -10^9 <= v <= 10^9
+*/
+class minHeap {
+  constructor() {
+      this.heap = [];
+      //map to keep track of the deleted elements and not have do heapify every time we have a type 2 query (removal):
+      this.tracker = new Map(); 
+  }
+
+  peek() {
+    let min = this.heap[1];
+    
+    //if the min value is present on the map (it was not deleted from the heap), log it and exit:
+    if(this.tracker.has(min)){ 
+      console.log(this.heap[1]); 
+      return;
+    }
+
+    //in case the min value has been deleted, perform standard heap removal (replace it by the last element in the heap and heapify to maintain properties if min heap). After this is done, recursively call the peek() function and recheck if the new min is still on the map and so on:
+    this.swapValues(this.heap.length-1,1); 
+    this.heap.pop();
+    if(this.heap.length > 2){ this.heapifyTopBottomRecursively(); }
+    
+    this.peek();
+  }
+  
+  insert(value) {
+    if(this.heap.length < 1) {
+      this.heap[0] = null;
+      this.heap.push(value);
+
+      this.tracker.set(value,true); //add new element to the map also (key : val -> value : true or false).
+      return;
+    }
+    this.heap.push(value);
+    this.tracker.set(value,true); //add new element to the map also (key : val -> value : true or false).
+
+    this.heapifyBottomTopRecursively();
+  }
+  heapifyBottomTopRecursively(index=this.heap.length-1) {
+    let parentIndex = Math.floor(index/2);
+    if(!this.heap[parentIndex]) return;
+
+    if(this.heap[parentIndex] > this.heap[index]) {
+      this.swapValues(index, parentIndex);
+      index = parentIndex;
+      this.heapifyBottomTopRecursively(index);
+    }
+    else { return; }
+  }
+
+  remove(value) {
+    if(this.heap.length <= 1) { return; }
+    
+    //remove element directly from the map, instead of from the heap (O(1) vs O(logn)):
+    this.tracker.delete(value); 
+  }
+
+  heapifyTopBottomRecursively(rootIndex=1) {
+    if(!this.heap[rootIndex]) { return; }
+
+    let leftIndex, rightIndex;
+    leftIndex = 2*rootIndex;
+    rightIndex = (2*rootIndex)+1;
+
+    if(!this.heap[leftIndex]) { return; }
+    if(this.heap[rootIndex] > this.heap[leftIndex] || this.heap[rootIndex] > this.heap[rightIndex]) {
+      if(!this.heap[rightIndex] || this.heap[leftIndex] < this.heap[rightIndex]) {
+        this.swapValues(rootIndex, leftIndex);
+        rootIndex = leftIndex;
+      }
+      else {
+        this.swapValues(rootIndex, rightIndex);
+        rootIndex = rightIndex;
+      }
+      this.heapifyTopBottomRecursively(rootIndex);
+    }
+  }
+
+  swapValues(child, parent) {
+    let temp = this.heap[child];
+    this.heap[child] = this.heap[parent];
+    this.heap[parent] = temp;
+  }
+}
+///
+function processData(input) {
+  let request = input.split('\n'); 
+  let queries = parseInt(request.shift()); 
+  
+  let data = new minHeap();
+  
+  for(let i = 0; i < queries; ++i) {
+    let query = request[i].split(' ');
+    let queryType = parseInt(query[0]);
+    let value = parseInt(query[1]);
+          
+    if(queryType === 1){
+      data.insert(value);
+    }
+    else if(queryType === 2){
+      data.remove(value);
+    }
+    else if(queryType === 3){
+      data.peek();
+    }
+  }
+}
+let input1 = "12\n1 10\n1 9\n3\n1 3\n3\n2 9\n3\n2 3\n3\n1 5\n1 2\n3";
+processData(input1);
+
+let input2 = "1000\n1 189076\n2 189076\n1 193865\n2 193865\n1 -419921\n1 429676\n3\n2 429676\n3\n1 21716\n1 551843\n1 950119\n1 63171\n3\n1 841804\n1 170054\n1 835419\n2 835419\n2 950119\n3\n1 258308\n1 -734231\n1 569347\n1 52941\n1 777770\n2 -734231\n1 355316\n3\n1 415025\n1 754479\n2 777770\n1 -744898\n2 551843\n1 509662\n3\n3\n1 765746\n3\n1 809282\n2 -744898\n3\n1 367727\n3\n3\n2 809282\n3\n2 52941\n3\n1 246500\n2 63171\n2 -419921\n1 369292\n1 897961\n2 21716\n2 569347\n1 91419\n1 175735\n1 51897\n2 841804\n3\n3\n1 54459\n3\n2 51897\n3\n3\n1 842004\n1 705665\n3\n1 943329\n1 909673\n3\n3\n1 305472\n3\n1 110230\n1 709523\n1 449825\n1 997699\n3\n2 509662\n2 110230\n3\n1 341004\n1 760694\n3\n1 585977\n1 590699\n2 765746\n1 850310\n1 329713\n1 293617\n2 705665\n2 369292\n1 335461\n3\n2 355316\n3\n2 246500\n3\n1 636216\n1 -200964\n3\n2 329713\n1 963785\n2 943329\n1 536896\n2 754479\n1 292290\n1 829183\n1 580849\n1 668512\n2 850310\n1 439715\n1 405721\n1 246013\n1 224404\n3\n3\n2 897961\n1 471576\n3\n1 -981246\n1 684795\n3\n3\n2 585977\n1 313281\n3\n1 -556695\n3\n1 758174\n2 91419\n1 782464\n1 -432541\n3\n3\n2 684795\n1 555219\n3\n3\n3\n1 179580\n1 594124\n2 471576\n1 442463\n3\n1 757281\n3\n1 -350397\n2 758174\n3\n1 803700\n1 888356\n2 415025\n3\n1 110115\n2 367727\n1 565449\n1 580414\n1 485262\n2 -556695\n1 32109\n1 884510\n3\n1 151595\n3\n1 474791\n1 864073\n1 419158\n1 -525578\n1 832351\n1 779947\n3\n1 745858\n3\n1 570336\n2 151595\n1 981304\n3\n3\n1 894251\n2 485262\n1 935621\n2 341004\n1 759119\n1 605532\n1 550228\n2 888356\n2 759119\n3\n3\n2 258308\n1 7950\n1 927079\n2 590699\n2 779947\n1 414425\n3\n1 683353\n3\n1 230153\n1 287789\n3\n1 647075\n3\n3\n2 927079\n1 169137\n1 141121\n1 731692\n3\n3\n2 246013\n3\n2 110115\n1 95953\n3\n1 584999\n2 757281\n1 85257\n2 963785\n2 580849\n1 744783\n1 304840\n2 580414\n1 900119\n1 95977\n3\n1 -318550\n1 975122\n1 316709\n3\n1 46919\n2 293617\n2 842004\n2 -350397\n2 570336\n1 431530\n1 383159\n2 224404\n2 54459\n1 233433\n2 636216\n3\n3\n1 98946\n2 98946\n2 442463\n1 934548\n2 744783\n1 379408\n2 565449\n1 172933\n1 902675\n3\n1 406271\n1 859885\n1 831350\n1 -424521\n1 414765\n1 816980\n3\n3\n3\n2 406271\n3\n3\n1 823113\n2 909673\n2 7950\n3\n2 859885\n3\n2 474791\n1 391789\n3\n2 313281\n2 175735\n3\n1 844265\n2 832351\n1 391095\n3\n1 665458\n1 -42207\n1 314643\n2 -318550\n1 -285756\n2 665458\n1 799778\n2 584999\n1 432206\n2 414425\n1 -547247\n3\n1 594407\n1 989305\n2 316709\n1 427519\n2 414765\n2 989305\n2 179580\n2 85257\n1 952116\n2 799778\n1 944530\n1 944634\n2 900119\n2 536896\n1 345850\n1 207363\n2 829183\n2 934548\n2 745858\n2 935621\n1 946458\n2 391789\n1 47507\n1 906542\n2 -432541\n3\n3\n2 594124\n3\n1 903097\n2 432206\n1 925993\n3\n2 550228\n2 287789\n2 782464\n3\n1 630573\n2 230153\n1 439517\n1 724986\n2 894251\n1 694680\n1 739122\n3\n2 709523\n2 46919\n1 56270\n1 553952\n3\n2 304840\n1 606109\n1 450773\n3\n1 331922\n1 965731\n1 806736\n3\n1 498132\n1 -643643\n2 816980\n1 363391\n2 997699\n1 753863\n2 391095\n1 487962\n2 906542\n1 237130\n3\n3\n3\n2 884510\n2 305472\n3\n1 61715\n1 987164\n2 233433\n1 -172643\n1 50592\n3\n2 739122\n1 713261\n2 753863\n3\n1 714393\n2 172933\n2 647075\n1 689696\n2 981304\n3\n1 16727\n2 32109\n2 823113\n2 -200964\n3\n1 614139\n3\n2 -285756\n2 292290\n2 170054\n1 -950756\n1 792906\n1 814158\n2 47507\n3\n3\n1 143618\n2 792906\n3\n1 761384\n3\n2 -643643\n1 496513\n2 902675\n3\n3\n1 957592\n1 595858\n3\n1 -118210\n2 595858\n1 618341\n2 335461\n3\n2 683353\n1 219414\n2 439715\n1 287098\n2 363391\n1 864425\n1 253449\n3\n2 -172643\n1 508805\n2 713261\n2 61715\n3\n1 237993\n2 143618\n1 565015\n1 274648\n1 107701\n1 450219\n1 222744\n1 105448\n2 496513\n1 826825\n1 215893\n1 264528\n3\n1 494532\n2 345850\n3\n1 786353\n1 458088\n1 769888\n3\n1 327085\n1 301653\n1 699753\n1 378244\n1 220134\n1 924463\n2 694680\n1 350819\n1 196149\n3\n1 677289\n1 -494886\n1 117368\n1 960949\n2 449825\n2 -118210\n3\n1 302153\n1 973995\n2 -42207\n2 431530\n1 434508\n1 -926919\n2 405721\n1 879338\n2 973995\n1 232462\n1 316937\n2 864425\n1 534492\n2 219414\n1 299477\n1 -869545\n2 498132\n3\n1 59882\n1 651443\n1 67458\n1 552095\n1 875288\n1 276239\n1 836464\n3\n2 -869545\n1 116455\n2 274648\n2 -494886\n2 105448\n3\n2 668512\n2 944530\n3\n1 887265\n2 864073\n1 902579\n2 16727\n3\n2 237993\n1 944015\n1 534412\n1 237406\n2 494532\n1 -680528\n3\n3\n3\n2 207363\n1 135934\n1 199391\n3\n3\n2 439517\n1 582355\n2 487962\n1 754042\n3\n1 60044\n1 326344\n2 -950756\n2 965731\n1 186018\n3\n3\n1 202513\n1 565691\n2 552095\n2 844265\n2 56270\n1 -94801\n1 845310\n3\n1 601664\n1 260835\n1 654991\n1 903406\n2 924463\n1 44138\n1 529085\n2 276239\n2 301653\n2 925993\n2 316937\n2 699753\n1 292729\n2 117368\n1 969918\n2 606109\n2 95953\n1 279330\n2 975122\n1 72171\n1 117130\n2 67458\n3\n2 831350\n2 222744\n1 241235\n2 264528\n1 751844\n2 836464\n1 553736\n3\n2 450773\n3\n1 14456\n2 618341\n2 -525578\n1 326492\n1 333834\n1 677485\n1 546272\n3\n2 769888\n3\n1 618855\n3\n2 287098\n2 -94801\n3\n2 279330\n1 834443\n1 637838\n3\n1 521607\n1 247520\n1 162516\n3\n3\n3\n2 247520\n1 823221\n3\n2 689696\n1 869901\n3\n2 806736\n1 53123\n1 93177\n1 -256428\n3\n1 656142\n1 182174\n1 313755\n1 906850\n1 27073\n1 467227\n1 71179\n3\n3\n1 713946\n1 129168\n1 248000\n1 913631\n2 199391\n1 997113\n1 567410\n2 614139\n1 890199\n2 630573\n1 282972\n1 942903\n2 220134\n1 146864\n1 968954\n1 402077\n2 71179\n2 553952\n1 -131198\n1 126912\n1 405219\n3\n1 947120\n1 55597\n1 447963\n1 751331\n3\n1 276804\n1 863917\n1 -359827\n1 501245\n1 443244\n3\n1 19004\n1 295694\n2 582355\n1 760048\n1 210548\n2 299477\n3\n1 29016\n2 863917\n1 974076\n1 515877\n1 640065\n1 141751\n3\n1 354720\n1 185530\n1 501956\n3\n2 314643\n3\n1 485362\n1 418681\n3\n3\n3\n2 117130\n3\n1 898702\n2 253449\n1 126597\n1 814281\n1 898868\n1 798764\n3\n2 182174\n1 852484\n2 326344\n2 515877\n1 715679\n1 384303\n1 812503\n1 -725785\n3\n2 434508\n1 214823\n1 681870\n2 944634\n1 812008\n1 361139\n2 681870\n2 383159\n3\n1 450125\n2 -256428\n1 309027\n1 392671\n2 906850\n1 73363\n1 891857\n2 823221\n1 216513\n3\n3\n2 751331\n1 445821\n1 903505\n2 898702\n1 890328\n1 714756\n1 806021\n3\n1 793885\n2 378244\n1 758715\n3\n1 874703\n1 142107\n3\n3\n1 324982\n2 -981246\n1 306685\n2 654991\n2 714393\n1 769021\n1 -196486\n2 812008\n1 523029\n1 591965\n2 418681\n1 681624\n3\n1 614795\n1 890360\n1 493470\n2 214823\n3\n2 135934\n1 78172\n1 194132\n2 651443\n1 -487344\n1 384064\n2 724986\n3\n3\n2 793885\n3\n1 946156\n1 265008\n3\n1 328423\n2 845310\n1 762882\n1 -90563\n3\n1 162874\n1 -752413\n1 -588704\n3\n2 534412\n3\n2 276804\n1 914751\n3\n3\n3\n1 455663\n1 800932\n1 225749\n1 132623\n2 292729\n1 819053\n2 467227\n2 282972\n3\n1 58750\n1 351851\n2 852484\n1 813487\n1 97511\n3\n2 942903\n2 677485\n2 754042\n3\n3\n1 -176330\n1 980707\n1 291988\n3\n3\n1 915484\n1 804716\n1 510322\n3\n1 260276\n2 210548\n1 74136\n2 445821\n1 563660\n1 91255\n2 891857\n1 837179\n3\n3\n3\n2 -680528\n2 605532\n1 763401\n3\n2 50592\n1 120120\n3\n2 14456\n1 467756\n2 -359827\n1 959578\n3\n1 61665\n1 716740\n3\n2 392671\n1 477298\n1 616845\n1 916625\n1 911254\n2 120120\n2 902579\n2 874703\n1 341913\n1 168312\n3\n1 354905\n1 532275\n3\n2 493470\n1 553595\n1 268360\n2 237130\n2 248000\n1 -546677\n3\n2 73363\n2 803700\n1 620041\n3\n1 93462\n1 369248\n1 312542\n3\n1 457284\n1 883209\n1 280299\n3\n1 539390\n1 351598\n3\n3\n1 911149\n1 602251\n3\n2 869901\n1 866195\n2 677289\n1 810571\n1 18499\n1 343499\n2 141751\n2 129168\n1 162129\n3\n1 2964\n1 405782\n1 166001\n3\n1 610860\n1 470249\n1 388164\n1 380359\n2 890199\n3\n1 249971\n3\n1 -886902\n2 -926919\n1 123919\n1 776403\n1 607790\n2 510322\n1 703957\n1 695821\n3\n1 758075\n1 600205\n3\n1 777163\n1 146902\n1 389807\n1 370105\n1 -493872\n3\n2 380359\n1 326410\n3\n3\n2 911254\n1 936707\n1 -416119\n2 -886902\n3\n3\n1 6934\n3\n3\n1 146020\n3\n1 115088\n3\n1 602488\n3\n1 454662\n3\n3\n2 107701\n2 969918\n1 491677\n2 760048\n1 619812\n2 19004\n1 475901\n3\n2 714756\n1 908156\n2 384064\n1 743758\n2 607790\n1 -496714\n3\n1 340214\n1 109981\n3\n3\n1 479642\n1 521347\n1 657035\n2 162874\n2 265008\n1 10204\n1 473121\n1 467501\n1 488385\n1 937658\n1 -616492\n3\n2 952116\n1 800576\n2 974076\n2 44138\n1 963014\n2 834443\n3\n1 77191\n1 288313\n1 36829\n1 41513\n2 351851\n1 78193\n1 120102\n2 616845\n3\n1 522862\n1 957309\n1 841850\n2 74136\n2 915484\n1 709024\n2 324982\n1 383817\n2 142107\n3\n1 62152\n2 618855\n3\n3";
+
+processData(input2);
