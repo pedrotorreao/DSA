@@ -26,7 +26,7 @@ class HashTable {
   
   get (key) {
     const address = this._hash(key); //gets the position where the info is stored through the hashing function
-    const currentBucket = this.data[address]; //gets the correct bucket which can contain many elements (if a collision occurs)
+    const currentBucket = this.data[address]; //gets the correct bucket which can contain many elements (if collisions happen)
     let row = 0;
     let col = 0;
     //Initially this doesn't have an O(n) complexity because the access is imediate due to the program already knowing where to look.
@@ -44,12 +44,12 @@ class HashTable {
 
   keys(){
     const keysArray = [];
-    //console.log(this.data.length);
+
     for (let i = 0; i < this.data.length; i++){
       if(this.data[i]){
         keysArray.push(this.data[i][0][0]); 
-        //not the best solution because since it doesn't account for the colisions, it may end up just getting the firs element.
-        //accounting for the collisions may end up increasing complexity to O(n*n). Try later!!!!
+        //not the best solution because since it doesn't account for the collisions, it may end up just getting the first element.
+        //accounting for the collisions may end up increasing complexity to linear time (O(n)). Try later!!!!
       }
     }
     return keysArray;

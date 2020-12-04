@@ -53,24 +53,25 @@ class HashTable {
     return hash;
   }
   set (key, value) {
-    let address = this._hash(key); //makes the key goes through the hashing function
+    let address = this._hash(key); //key goes through the hashing function
     
     if (!this.data[address]) { 
       //checks if the current bucket is empty, if so, creates an empty linked list in that data[address]
       this.data[address] = new SLL();
     }
-    //pushes the (key, value) pair into the position defined by the hash function. In case the location already ////has elements, it appends the current (key, value) pair to the SLL.
+    //pushes the (key, value) pair into the position defined by the hash function. In case the location already has elements, it appends the current (key, value) pair to the SLL.
     this.data[address].append([key, value]);
   }
   
   get (key) {
     const address = this._hash(key); //gets the position where the info is stored through the hashing function
 
-    //gets the first element of the correct bucket which can contain many elements (if a collision occurs)
+    //gets the first element of the correct bucket which can contain many elements (if collisions happened)
     let currentBucket = this.data[address].head;
     let row = 0; //As the values are entered in the format [key, value], row = 0 gets the key name
 
-    while (currentBucket) {//Executes the loop while the current bucket is not null
+    while (currentBucket) {
+      //Executes the loop while the current bucket is not null (last "node.next" reference in a LL should point to null):
       if (typeof currentBucket.value[row] === 'string' && currentBucket.value[row] === key) {
         row = 1;
         console.log(`${key}: ${currentBucket.value[row]}`);
