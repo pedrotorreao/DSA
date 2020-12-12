@@ -1,3 +1,8 @@
+/****************************************************************/
+/*Problem: Contacts (HR)  ********/
+/****************************************************************/
+//This solution works but it takes too long (Runtime errors).
+
 class Node {
   constructor(){
     this.keys = new Map();
@@ -19,20 +24,16 @@ class Trie {
         return ((node.keys.size > 1) ? true : false);
     }
     searchPrefix(prefix, node = this.root, index = 0){
-        let currentCharac = prefix[0];
-        let currentNode = node.keys.get(currentCharac);
         let prefixed = 0;
       
         while(index < prefix.length){
           node = node.keys.get(prefix[index]);
           ++index;
         }
-      
-        if(!currentNode){return 0;}
-        
         let searchHelper = function(node,pref = 0){
           if(!node){return prefixed;}
           if(node && node.endOfWord){ ++prefixed; }
+
           for(let charac of node.keys.keys()){
               console.log(`${charac} : ${prefixed} : ${node.endOfWord}`)
               searchHelper(node.keys.get(charac), prefixed);
@@ -45,7 +46,7 @@ class Trie {
     }
     
 }
-//--------------------------------------------------------------
+
 function contacts(queries) {
     let wordCount = []; 
     let count = 0;
@@ -64,6 +65,9 @@ function contacts(queries) {
     return wordCount;
 }
 
-let queries = [['add','hack'],['add','hackerrank'],['add','hacker'],['find','hac'],['find','hak']];
+let queries1 = [['add','hack'],['add','hackerrank'],['add','hacker'],['find','hac'],['find','hak']];
+console.log(contacts(queries1));
 
-console.log(contacts(queries));
+let queries2 = [['add','man'],['add','mind'],['add','mid'],['add','middle'],['add','apple'],['add','app'],     ['add','tree'],['add','town'],['find','mi'],['find','ap'],['find','t']];
+console.log(contacts(queries2));
+
