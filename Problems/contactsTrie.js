@@ -20,9 +20,7 @@ class Trie {
         }
         this.insertWord(str.slice(1), node.keys.get(str[0]));
     }
-    hasDependent(node){
-        return ((node.keys.size > 1) ? true : false);
-    }
+
     searchPrefix(prefix, node = this.root, index = 0){
         let prefixed = 0;
       
