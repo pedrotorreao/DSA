@@ -1,6 +1,24 @@
 /****************************************************************/
 /*Problem: Contacts (HR)  ********/
 /****************************************************************/
+/*
+--  Description: The application must perform two types of operations:
+      1.  add name: name is a string denoting a contact name to be stored as a new contact in the application.
+      2.  find partial: partial is a string denoting a partial name to search the application for. It must count the number of contacts starting with partial and print the count on a new line.
+    Given  sequential add and find operations, perform each operation in order.
+
+--  Input Format: Each line i contains an operation in one of the two forms defined above.
+
+--  Constraints: 1<=n<=10^5 | 1<=|name|<=21 | 1<=|partial|<=21
+      It is guaranteed that  and  contain lowercase English letters only and the input doesn't have any duplicate  for the  operation.
+
+-- Output: For each find partial operation, print the number of contact names starting with partial on a new line.
+*/
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+Solution 3: The solution below solves the problem and it passes all the test cases in time. This is achieved by keeping a counter on each node so each time a new word is added to the Trie, the nodes which are part of this new word get its counter incremented to indicate that there are 'count' words on the Trie to which this node serves as a prefix, so once it gets to the final character of the prefix we are looking for, it already knows the amount of words which start with this prefix and it doesn't need to look further in the Trie.
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 class Node {
   constructor(){
     this.child = [];
@@ -109,7 +127,7 @@ class Trie {
 */
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-Solution 2: The solution below also seems to solve the problem since is passed the all the tests, but it also takes too long (Runtime errors). This is probably due to the recursive calls inside the foor loop in the searchPrefix() method.
+Solution 2: The solution below also seems to solve the problem since is passed the all the tests, but it also takes too long (Runtime errors).
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*
 class Node {
@@ -134,11 +152,10 @@ class Trie {
 
     searchPrefix(prefix, node = this.root, index = 0){
         let prefixed = 0;
-        let currentNode = null;
         
         while(index < prefix.length){
           node = node.keys.get(prefix[index]);
-          if(index === prefix.length-1 && node && node.endOfWord){++prefixed;}
+          if(index === prefix.length-1 && node && node.endOfWord){++prefixed;} //in case prefix = word
           ++index;
         } 
         return (node ? (node.count+prefixed) : 0);
