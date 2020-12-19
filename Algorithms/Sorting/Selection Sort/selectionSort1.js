@@ -30,7 +30,7 @@ let testArray2 = [593,12,0,-45,1,45,23,-435,-1];
 let orderedArray2 = selectionSort(testArray2);
 // console.timeEnd('Execution Time');
 
-// console.log(orderedArray2);
+console.log(orderedArray2);
 
 //3-:
 let testArray3 = [722,345,299,122,119,90,88,51,23,1,0,-1,-24,-121,-987];
@@ -39,4 +39,4 @@ let testArray3 = [722,345,299,122,119,90,88,51,23,1,0,-1,-24,-121,-987];
 let orderedArray3 = selectionSort(testArray3);
 // console.timeEnd('Execution Time');
 
-// console.log(orderedArray3);
+console.log(orderedArray3);
