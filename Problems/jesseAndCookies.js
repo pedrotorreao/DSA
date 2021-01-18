@@ -21,9 +21,56 @@
 
 */
 
-function cookies(k, A) {
-    /*
-     * Write your code here.
-     */
+/* ---- Min Heap ---- */
+class minHeap {
+    constructor() {
+        this.heap = [];
+    }
+    peek() {
+        return this.heap[1];
+    }
+    insert(value) {
+        if(this.heap.length < 1) {
+            this.heap[0] = null;
+            this.heap.push(value);
+            return;
+        }
+        this.heap.push(value);
+        this.heapifyBottomTop();
+    }
+    heapifyBottomTop(index = this.heap.length - 1) {
+        let parentIndex = Math.floor(index/2);
 
+        if(!this.heap[parentIndex]) { return; }
+
+        if(this.heap[parentIndex] > this.heap[index]) {
+            this.swapValues(index, parentIndex);
+            index = parentIndex;
+            this.heapifyBottomTop(index);
+        } 
+        else { return; }
+    }
+    remove() {
+
+    }
+    heapifyTopBottom() {
+
+    }
+    swapValues(child, parent) {
+        let temp = this.heap[child];
+        this.heap[child] = this.heap[parent];
+        this.heap[parent] = temp;
+    }
 }
+function cookies(k, A) {
+    let sweetnessHeap = new minHeap();
+
+    for(let i = 0; i < A.length; ++i) {
+        if(A[i] < k) { 
+            sweetnessHeap.insert(A[i]);
+        }
+    }
+    console.log(sweetnessHeap);
+}
+
+cookies(7,[10,2,9,12,3,1]);
