@@ -90,14 +90,9 @@ class minHeap {
         this.heap[parent] = temp;
     }
     mixSweeteness() {
-        //get the 1st and 2nd heap values with smaller K values:
-        //  smaller1 = heap.remove()    smaller2 = heap.remove()
         let smaller1 = this.remove();
         let smaller2 = this.remove();
-        //mix sweeteness:
-        //  newCookie = smaller1 + (2*smaller2)
         let newCookie = smaller1 + (2*smaller2);
-        //add newCookie to the heap and increment counter
         this.insert(newCookie);
     }
     getSize() {
@@ -109,20 +104,20 @@ function cookies(k, A) {
     let opCntr = 0;
 
     for(let i = 0; i < A.length; ++i) {
-        if(A[i] < k) { 
-            sweetnessHeap.insert(A[i]);
-        }
+        sweetnessHeap.insert(A[i]);
     } 
     while(sweetnessHeap.peek() < k && sweetnessHeap.getSize() > 1) {
         sweetnessHeap.mixSweeteness();
         opCntr++;
     }
-    if(sweetnessHeap.peek() < k) { return -1; }
+    if(sweetnessHeap.peek() < k ) { return -1; }
     return opCntr;
-    //console.log(sweetnessHeap);
 };
 
-//console.log(cookies(7,[10,2,9,12,3,1,7,16,0]));
-console.log(cookies(7,[1,2,3,9,10,12]));
-console.log(cookies(75,[0,1,1,1,1]));
-console.log(cookies(9,[1,62,14]));
+console.log(cookies(7,[10,2,9,12,3,1,7,16,0])); // Expected: 3
+console.log(cookies(7,[1,2,3,9,10,12])); // Expected: 2
+console.log(cookies(45,[0,1,1,1,1])); // Expected:-1
+console.log(cookies(9,[1,62,14])); // Expected: 1
+console.log(cookies(1,[1,1,1,1,1])); // Expected: 0
+console.log(cookies(5,[6])); // Expected: 0 
+console.log(cookies(10,[52,96,13,37])); // Expected: 0
