@@ -8,6 +8,9 @@ from unsorted part and putting it at the beginning. The algorithm maintains two 
 2) Remaining subarray which is unsorted.
 In every iteration of selection sort, the minimum element (considering ascending order) from the unsorted subarray 
 is picked and moved to the sorted subarray. 
+
+Time complexity: O(n^2)
+Space complexity: O(1)
 */
 function selectionSort(array){
   for(let i = 0; i < array.length - 1; ++i){
