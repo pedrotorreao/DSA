@@ -1,0 +1,13 @@
+# ignore vs code specific files
+.vscode
+
+# ignore the node_modules directory
+node_modules/
+
+# ignore a single file
+package-lock.json
+settings.json
+
+# ignore compile/executable files
+*.o
+*.exe
