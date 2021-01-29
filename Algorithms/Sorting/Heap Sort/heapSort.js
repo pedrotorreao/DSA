@@ -1,5 +1,5 @@
 /****************************************************************/
-/*Heap Sort - Increasing order (Min heap)  ********/
+/* Algorithm: Heap Sort - Increasing order (Min heap)  ********/
 /****************************************************************/
 //Note: it uses minHeap class on '../../../DataStructures/Heaps/minHeap.js'.
 class HeapSort {

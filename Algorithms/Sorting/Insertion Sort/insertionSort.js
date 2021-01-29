@@ -1,5 +1,5 @@
 /****************************************************************/
-/*Insertion Sort  ********/
+/* Algorithm: Insertion Sort  ********/
 /****************************************************************/
 /*
 Simple sorting algorithm that builds the final sorted array (or list) one item at a time. It is much less 

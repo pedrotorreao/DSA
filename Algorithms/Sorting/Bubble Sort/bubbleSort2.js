@@ -1,5 +1,5 @@
 /****************************************************************/
-/*Problem: Bubble Sort - Single loop ********/
+/* Algorithm: Bubble Sort - Single loop ********/
 /****************************************************************/
 /*
 Bubble sort, sometimes referred to as sinking sort, is a simple sorting algorithm that repeatedly steps through the list, 
