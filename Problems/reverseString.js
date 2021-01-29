@@ -1,7 +1,7 @@
 /************************************************************/
 /*Problem: Reversing a string  ********/
 /************************************************************/
-/*
+
 //SOLUTION 1: 
 let string = 'jupiter';
 function reverseString (string) {
@@ -23,5 +23,4 @@ console.log(reverseString(string));
 console.log(string.split('').reverse().join(''));
 
 //SOLUTION 3: LANGUAGE DEPENDENT
-const reversing = string => [...string].reverse().join('');
-*/
+console.log([...string].reverse().join(''));
