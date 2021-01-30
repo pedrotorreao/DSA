@@ -3,12 +3,17 @@
 /****************************************************************/
 /*
 >> Definition: 
-  Search algorithm that finds the position of a target value within a sorted array by repeatedly dividing the search interval in half. 
+  Search algorithm that finds the position of a target value within a sorted array by repeatedly 
+  dividing the search interval in half. 
 >> Steps:
     1 - Binary search compares the target value to the middle element of the array. 
-    2 - If they are not equal, the half in which the target cannot lie is eliminated and the search continues on the remaining half, again taking the middle element to compare to the target value, and repeating this until the target value is found. 
+    2 - If they are not equal, the half in which the target cannot lie is eliminated and the search 
+    continues on the remaining half, again taking the middle element to compare to the target value, 
+    and repeating this until the target value is found. 
     3 - If the search ends with the remaining half being empty, the target is not in the array. 
-  Binary search runs in logarithmic time in the worst case, making O(log n) comparisons, where n is the number of elements in the array. Binary search is faster than linear search except for small arrays. However, the array must be SORTED first to be able to apply binary search.
+  Binary search runs in logarithmic time in the worst case, making O(log n) comparisons, where n is 
+  the number of elements in the array. Binary search is faster than linear search except for small 
+  arrays. However, the array must be SORTED first to be able to apply binary search.
 >> Time complexity:O(log n)
 >> Space complexity: O(1)
 */
