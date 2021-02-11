@@ -9,7 +9,7 @@ Output: Input array with zeros (if present) shifted to the end.
 Constraints:  Don't make a copy of the array.
 */
 //BRUTE FORCE APPROACH: TIME COMPLEXITY - O(N)
-/*
+
 var moveZeroes = function(nums) {
   let count = 0;
   let index = 0;
@@ -18,9 +18,7 @@ var moveZeroes = function(nums) {
   while (count < size) {
     if (nums[index] === 0) { 
       nums.splice(index,1); 
-      nums.push(0);
-      //count++;
-      //console.log(nums);              
+      nums.push(0);         
     } else {
       index++; 
     }
@@ -31,4 +29,3 @@ var moveZeroes = function(nums) {
 console.log(moveZeroes([0,1,0,3,12]));
 console.log(moveZeroes([1,0,0,0,0,1,0,3,0,4,5,88,9,12]));
 console.log(moveZeroes([0,0,0,0,0,1]));
-*/
