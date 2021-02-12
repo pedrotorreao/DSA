@@ -1,5 +1,5 @@
 /****************************************************************/
-/* Algorithm: Merge Sort  ********/
+/* Algorithm: Quick Sort  ********/
 /****************************************************************/
 /*
  >> Definition:
@@ -36,16 +36,11 @@ function quickSort(array,p = 0,q = array.length-1){
         //recursively call quickSort() for subarray with elements greater than pivot.
         quickSort(array,r+1,q);
     }
-    //return array;
 }
 
 /**
  * Makes sure that all elements smaller than the pivot are on the left,
  * and all elements greater than the pivot are on right.
- * @param {array} array 
- * @param {number} first 
- * @param {number} last 
- * @returns {number} partitionedAt
  */
 function partition(array,p,q){
     let pivot = q; //last element in the array
