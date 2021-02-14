@@ -52,7 +52,7 @@ let max = getMax(array);
 ```
 So much for "speedrunning", huh? 
 
-Check the image below to see how the array structure as the sorting evolves.
+Check the image below to see how the array changes as the sorting goes through each digit.
 
 ![radix-sort](../../../resources/img/radix-sort-01.png)
 
