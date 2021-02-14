@@ -1,35 +1,11 @@
 /****************************************************************/
 /* Algorithm: Radix Sort  ********/
 /****************************************************************/
-/*
- >> Definition:
-    Radix-sort is a non-comparative stable sorting algorithm which sorts the data by distributing elements
-    into buckets according to their radix. For elements with more than one significant digit, this 
-    distribution process is repeated for each digit, while preserving the ordering of the prior step, 
-    until all digits have been considered. Radix sorts is usually implemented by starting from the least 
-    significant digit (LSD) for numbers and from the most significant digit (MSD) words.
-
-
->> Steps: 
-    1. Choose an element to be the pivot
-    2. Partition the array around the pivot
-    3. Recursively apply 1. and 2. to the sub-arrays.
- >> Time complexity:
-        - Worst case (rare) - O(n^2): pivot happens to be the largest/smallest
-        element in the array.
-        - Average - O(n*log n): pivot is an intermediary value.
-        - Best - O(n*log n): In the most balanced case, each time we perform a 
-        partition we divide the list into two nearly equal pieces. 
- >> Space complexity - Worst case: O(log n)
-
-*/
 
 function radixSort(array) { 
     let max = getMax(array);
     let sorted = [];
 
-    /*This loop iterates through the place values. First it goes through the 1's, then the 10's, and so on. 
-    */
     for(let position = 1; (max/position) > 1; position = position*10) {
         countingSort(array,position);
     }
@@ -37,19 +13,17 @@ function radixSort(array) {
     console.log(array);
 }
 
-//get max element in an array:
 function getMax(array) {
-    let max = 0; //Key: maximun element in the array, i.e., the range 0...key
+    let max = 0; //Key: maximum element in the array, i.e., the range 0...key
     array.forEach(element => {
         if(element > max) max = element;
     });
     return max;
 }
 
-//counting sort subroutine:
 function countingSort(array,position) {
     let key = 10; //each digit can go only from 0 to 9 (radix = 10)
-    let count = Array(key).fill(0); //Count: array to store how often each element happens
+    let count = Array(key).fill(0); //count: array to store how often each element happens
 
     for(let i = 0; i < array.length; ++i){
         ++count[Math.floor((array[i]/position)%10)];
