@@ -11,7 +11,7 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
   * [Arrays](DataStructures/Array/README.md)
   * [Linked Lists](DataStructures/Linked%20List/README.md)
   * Stacks
-  * Queues
+  * [Queues](DataStructures/Queue/README.md)
   * Binary Search Tree
   * AVL Tree
   * Red-Black Tree
