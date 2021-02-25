@@ -10,7 +10,7 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
 * #### Data Structures
   * [Arrays](DataStructures/Array/README.md)
   * [Linked Lists](DataStructures/Linked%20List/README.md)
-  * Stacks
+  * [Stacks](DataStructures/Stack/README.md)
   * [Queues](DataStructures/Queue/README.md)
   * Binary Search Tree
   * AVL Tree
