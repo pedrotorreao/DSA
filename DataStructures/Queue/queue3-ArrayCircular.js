@@ -1,7 +1,7 @@
-/*
--- Considerations: 
-In case we don't want to shift the elements in the array in order to avoid increasing the time complexity of the code, we have to deal with the problem that, as the array probably has a fixed size, once there is an element in the last position, it is considered as full since we are dealing with queues and new elements are added to the end. A solution to this problem would be to use the concept of a circular queue where we check if there are slots available in the array and, if so, add the new elements in these positions while keeping track of the start and the end of the queue. Despite the concept being simple, implementing it can be quite confusing as you try to keep track of everything. In the end, even though we managed to keep the a constant time complexity O(1), we are better off using LLs.
-*/
+/****************************************************************/
+/*Queue - Circular queue  ********/
+/****************************************************************/
+
 class QueueArray {
   constructor(){
     this.first = null;
