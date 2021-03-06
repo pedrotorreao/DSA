@@ -16,33 +16,49 @@ In a more formal way, we can describe a graph `G` as an abstract data type consi
 
 Weighted graphs have values assigned to their edges, so to go from a vertex to another it is necessary to take these values into account. They can represent the cost or penalty for choosing an specific edge to go from one vertex to another. In unweighted graphs, the edges just represent connections or paths and don't have any value associated with them.
 
-`... add image here`
-
 - Directed _vs_ Undirected
 
 An undirected graph is one in which its edges have no orientations, i.e., edges `(x,y)` and `(y,x)` are equivalent. A directed graph, on the other hand, have a defined orientation and edges may behave like one-way roads where it is possible to use edge _`e1`_ to go from vertex `x` to vertex `y`, but this same edge does not allow us to make the way back. Therefore, an edge `(x,y)` is completely distinct from the edge `(y,x)`.
 
-`... add image here`
-
 - Cyclic _vs_ Acyclic
 
-A graph can be classified as cyclic if there is any path `{A1, …, An}` such that the edges `A1→A2`, `A2→A3`​, `…`, and `An→A1`​ all exist, thus forming a loop. `... add image here`
+A graph can be classified as cyclic if there is any path `{A1, …, An}` such that the edges `A1→A2`, `A2→A3`​, `…`, and `An→A1`​ all exist, thus forming a loop.
+
+A few variations of graph types can be seen in the image below: ![graphtypes](../../resources/img/graphtypes.png)
 
 ### Graph Representation
 
-`... add image here`
+Below is an illustration of a unweighted-undirected-cyclic graph:
+
+![graph-uuc-example](../../resources/img/graphtypes-uuc.png)
 
 - Adjacent List
 
 It is a way of associating each vertex (or node) in the graph with its respective list of neighboring vertices, i.e, vertices which are connected by edges to it. An adjacency list represents a graph as an array of linked lists. The index of the array represents a vertex and each element in its linked list represents the other vertices that form an edge with the vertex. An adjacency list is efficient in terms of storage because it only needs to store the values for the edges. For a graph representing large amounts of data this can save a lot of space.
 
-`... add code snippet here`
+```c++
+adjList = [
+            0: 1→4,
+            1: 0→3→2,
+            2: 1→2,
+            3: 1→4,
+            4: 0→2→3
+          ]
+```
 
 - Adjacent Matrix
 
 An adjacency matrix is a 2D array of `V x V` vertices. Each row and column represent a vertex. If the value of any element `a[i][j]` is `1`, it represents that there is an edge connecting vertex `i` and vertex `j`; otherwise, `a[i][j]` will be assigned the value `0`. This representation allows for extremely fast edge lookup (checking if there is an edge connecting two vertices), but i requires that we have to reserve space for every possible link between all vertices (`V x V`), ending up requiring a lot more space.
 
-`... add code snippet here`
+```c++
+adjMatrix = [
+                [0,1,0,0,1],
+                [1,0,1,1,0],
+                [0,1,0,1,0],
+                [0,1,0,0,1],
+                [1,0,1,1,0]
+            ]
+```
 
 ### Common operations:
 
