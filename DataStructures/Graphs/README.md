@@ -32,7 +32,7 @@ Below is an illustration of a unweighted-undirected-cyclic graph:
 
 ![graph-uuc-example](../../resources/img/graphtypes-uuc.png)
 
-- Adjacent List
+- Adjacency List
 
 It is a way of associating each vertex (or node) in the graph with its respective list of neighboring vertices, i.e, vertices which are connected by edges to it. An adjacency list represents a graph as an array of linked lists. The index of the array represents a vertex and each element in its linked list represents the other vertices that form an edge with the vertex. An adjacency list is efficient in terms of storage because it only needs to store the values for the edges. For a graph representing large amounts of data this can save a lot of space.
 
@@ -46,7 +46,7 @@ adjList = [
           ]
 ```
 
-- Adjacent Matrix
+- Adjacency Matrix
 
 An adjacency matrix is a 2D array of `V x V` vertices. Each row and column represent a vertex. If the value of any element `a[i][j]` is `1`, it represents that there is an edge connecting vertex `i` and vertex `j`; otherwise, `a[i][j]` will be assigned the value `0`. This representation allows for extremely fast edge lookup (checking if there is an edge connecting two vertices), but i requires that we have to reserve space for every possible link between all vertices (`V x V`), ending up requiring a lot more space.
 

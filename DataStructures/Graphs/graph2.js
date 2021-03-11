@@ -4,25 +4,62 @@
 class Graph {
   constructor() {
     this.numberOfNodes = 0;
-    this.adjacentList = {};
+    this.adjacencyList = {};
   }
   addVertex(node) {
-    this.adjacentList[node] = [];
+    this.adjacencyList[node] = [];
+    ++this.numberOfNodes;
   }
   addEdge(node1, node2) {
     //undirected Graph
-    if (
-      this.adjacentList.hasOwnProperty(node1) &&
-      this.adjacentList.hasOwnProperty(node2)
-    ) {
-      this.adjacentList[node1].push(node2);
-      this.adjacentList[node2].push(node1);
+    if (this.hasVertex(node1) && this.hasVertex(node2)) {
+      this.adjacencyList[node1].push(node2);
+      this.adjacencyList[node2].push(node1);
+      return;
+    }
+    let error = this.hasVertex(node1)
+      ? node2
+      : this.hasVertex(node2)
+      ? node1
+      : 0;
+    switch (error) {
+      case node1:
+        console.log(`node1 ${node1} is not a vertex`);
+        break;
+      case node2:
+        console.log(`node2 ${node2} is not a vertex`);
+        break;
+      default:
+        console.log(`nodes ${node1} and ${node2} are not vertices`);
+        break;
     }
   }
+
+  hasVertex(node) {
+    return this.adjacencyList[node] ? true : false;
+  }
+
+  hasNeighbors(node) {
+    return this.adjacencyList[node].length ? true : false;
+  }
+
+  getNeighbors(node) {
+    if (this.hasNeighbors(node)) {
+      let neighborsList = this.adjacencyList[node];
+      let neighbors = "";
+      for (node of neighborsList) {
+        neighbors = neighbors + node + " ";
+      }
+      console.log(neighbors);
+      return;
+    }
+    console.log(`node ${node} has no neighbors`);
+  }
+
   showConnections() {
-    const allNodes = Object.keys(this.adjacentList);
+    const allNodes = Object.keys(this.adjacencyList);
     for (let node of allNodes) {
-      let nodeConnections = this.adjacentList[node];
+      let nodeConnections = this.adjacencyList[node];
       let connections = "";
       let vertex;
       for (vertex of nodeConnections) {
@@ -49,6 +86,9 @@ myGraph.addEdge("1", "2");
 myGraph.addEdge("1", "0");
 myGraph.addEdge("0", "2");
 myGraph.addEdge("6", "5");
+
+myGraph.addVertex("7");
+myGraph.getNeighbors("4");
 
 myGraph.showConnections();
 //Answer:
