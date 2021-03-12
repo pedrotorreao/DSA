@@ -79,8 +79,8 @@ Consider a graph data structure `G`, where `x` and `y` are possible vertices:
 
 `... to be added`
 
-- BFS - Breadth First Search
-- DFS - Depth First Search
+- [BFS](../../Algorithms/Searching/Breadth%20First%20Search/README.md) - Breadth First Search
+- [DFS](../../Algorithms/Searching/Depth%20First%20Search/README.md) - Depth First Search
 
 ### Time complexity
 
