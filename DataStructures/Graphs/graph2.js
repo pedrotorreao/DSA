@@ -10,6 +10,27 @@ class Graph {
     this.adjacencyList[node] = [];
     ++this.numberOfNodes;
   }
+
+  removeVertex(node) {
+    if (this.hasVertex(node)) {
+      // check which vertices have edges connecting to this node
+      let neighbors = this.getNeighbors(node); //[3,2,5]
+      // delete all these edges
+      neighbors.forEach((vertex) => {
+        let neighborEdges = this.getNeighbors(vertex);
+        const foundNode = (element) => element === node;
+        // let edgeIdx = neighborEdges.findIndex((el) => {
+        //   if (el === node) return idx;
+        // });
+        let edgeIdx = neighborEdges.findIndex(foundNode);
+
+        this.adjacencyList[vertex].splice(edgeIdx, 1);
+      });
+      // remove node
+      delete this.adjacencyList[node];
+    }
+  }
+
   addEdge(node1, node2) {
     //undirected Graph
     if (this.hasVertex(node1) && this.hasVertex(node2)) {
@@ -35,12 +56,18 @@ class Graph {
     }
   }
 
+  removeEdge(node1, node2) {}
+
   hasVertex(node) {
     return this.adjacencyList[node] ? true : false;
   }
 
   hasNeighbors(node) {
     return this.adjacencyList[node].length ? true : false;
+  }
+
+  getAllVertices() {
+    return Object.keys(this.adjacencyList);
   }
 
   getNeighbors(node) {
@@ -51,7 +78,7 @@ class Graph {
         neighbors = neighbors + node + " ";
       }
       console.log(neighbors);
-      return;
+      return neighborsList;
     }
     console.log(`node ${node} has no neighbors`);
   }
@@ -91,6 +118,11 @@ myGraph.addVertex("7");
 myGraph.getNeighbors("4");
 
 myGraph.showConnections();
+console.log(myGraph.getAllVertices());
+
+myGraph.removeVertex("4");
+myGraph.showConnections();
+
 //Answer:
 // 0-->1 2
 // 1-->3 2 0
