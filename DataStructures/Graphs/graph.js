@@ -86,6 +86,10 @@ class Graph {
     console.log(`node ${node} has no neighbors`);
   }
 
+  buildAdjMatrix() {
+    /* to be added */
+  }
+
   showConnections() {
     const allNodes = Object.keys(this.adjacencyList);
     for (let node of allNodes) {
