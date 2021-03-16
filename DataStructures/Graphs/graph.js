@@ -1,5 +1,5 @@
 /***************************************************************************/
-/* Graph 2 - Using JS Object as building block for the Adjacent List *******/
+/* Graph - Using JS Object as building block for the Adjacent List *******/
 /***************************************************************************/
 class Graph {
   constructor() {
@@ -28,6 +28,7 @@ class Graph {
       });
       // remove node
       delete this.adjacencyList[node];
+      --this.numberOfNodes;
     }
   }
 
@@ -56,7 +57,9 @@ class Graph {
     }
   }
 
-  removeEdge(node1, node2) {}
+  removeEdge(node1, node2) {
+    /* to be added */
+  }
 
   hasVertex(node) {
     return this.adjacencyList[node] ? true : false;
@@ -122,12 +125,3 @@ console.log(myGraph.getAllVertices());
 
 myGraph.removeVertex("4");
 myGraph.showConnections();
-
-//Answer:
-// 0-->1 2
-// 1-->3 2 0
-// 2-->4 1 0
-// 3-->1 4
-// 4-->3 2 5
-// 5-->4 6
-// 6-->5
