@@ -30,5 +30,5 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
     - [Radix Sort](Algorithms/Sorting/Radix%20Sort/README.md)
   - Searching
     - Binary Search
-    - Breadth First Search (BFS)
+    - [Breadth First Search (BFS)](Algorithms/Searching/Breadth%20First%20Search/README.md)
 - #### Problems
