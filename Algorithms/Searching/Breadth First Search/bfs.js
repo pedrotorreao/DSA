@@ -25,7 +25,7 @@ function bfs(graph) {
 }
 
 // TESTS:
-// (1): Should output 0 -> 1 -> 3 -> 3 -> 5 -> 2 -> 4
+// (1): Should output 0 -> 1 -> 3 -> 5 -> 2 -> 4
 let adjList1 = {
   0: ["1", "3", "5"],
   1: ["0", "2", "4"],

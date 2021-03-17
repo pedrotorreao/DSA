@@ -77,18 +77,14 @@ Consider a graph data structure `G`, where `x` and `y` are possible vertices:
 
 ### Traversal
 
-`... to be added`
+Traversal means visiting every vertex and edge exactly once in a well-defined order. The order in which the vertices are visited are important and may depend upon the algorithm or question that you are solving.
+
+During a traversal, it is important that you track which vertices have been visited. The most common way of tracking vertices is to mark them.
+
+The most common graph traversal algorithms are Breadth First Search (BFS) and Depth First Search (DFS).
 
 - [BFS](../../Algorithms/Searching/Breadth%20First%20Search/README.md) - Breadth First Search
 - [DFS](../../Algorithms/Searching/Depth%20First%20Search/README.md) - Depth First Search
-
-### Time complexity
-
-`... to be added`
-
-### Space complexity
-
-`... to be added`
 
 ### References
 
