@@ -1,24 +1,31 @@
 /****************************************************************/
 /* Algorithm: Breadth First Search (BFS) ********/
 /****************************************************************/
-
+/* -- Comments:
+(1) could also pass as argument the source vertex from which the
+    traversal will begin;
+(2) instead of pushing into the queue ALL adjacent nodes, we
+    could also run another loop through the adjacency list for the 
+    currentVertex and push only the nodes not visited yet.
+ */
 function bfs(graph) {
-  // could also pass the root vertex as argument
-  let traversalMap = new Map();
+  //(1)
+  let visitedMap = new Map();
   let traversing = "";
 
-  //gets a list of keys
+  // sets the source vertex to be the first key in the object:
   let root = Object.keys(graph)[0];
-  let queue = [];
+  visitedMap.set(root, false);
 
+  let queue = [];
   queue.push(root);
 
   while (queue.length) {
     let currentVertex = queue.shift();
-    if (!traversalMap.get(currentVertex)) {
+    if (!visitedMap.get(currentVertex)) {
       traversing += currentVertex + " ";
-      traversalMap.set(currentVertex, true);
-      queue = queue.concat(graph[currentVertex]);
+      visitedMap.set(currentVertex, true);
+      queue = queue.concat(graph[currentVertex]); //(2)
     }
   }
   console.log(traversing);

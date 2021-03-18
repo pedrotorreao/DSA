@@ -50,7 +50,7 @@ queue = [4];
 
 - Next, we dequeue `4`, and since all the nodes have been visited, we are done.
 
-![bfs-graph](../../../resources/img/bfs-graph.png)
+![bfs-graph](../../../resources/img/bfs-dfs-graph.png)
 
 ### Pseudocode
 
@@ -59,7 +59,7 @@ This algorithm can be implemented in many different ways, see below the pseudoco
 ```
 bfs(Graph):
     while all vertices were not visited:
-        enqueue vertice
+        enqueue vertex
             while queue is not empty:
                 currentVertex = dequeue
                 if it is the 1st time we come across currentVertex:
