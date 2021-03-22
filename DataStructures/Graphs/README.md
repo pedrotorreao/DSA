@@ -93,3 +93,5 @@ The most common graph traversal algorithms are Breadth First Search (BFS) and De
 - [VisualAlgo](https://visualgo.net/en/graphds?slide=1)
 - [Brilliant](https://brilliant.org/wiki/graphs/)
 - [Programiz](https://www.programiz.com/dsa/graph)
+
+### [Index](../../README.md)

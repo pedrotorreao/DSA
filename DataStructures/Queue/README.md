@@ -1,7 +1,8 @@
 ## Queues
 
 ### Definition
-Collection of elements that are maintained in a sequence and can be modified by the addition of entities at one end (back/tail) of the sequence and the removal of entities from the other end of the sequence (front/head). 
+
+Collection of elements that are maintained in a sequence and can be modified by the addition of entities at one end (back/tail) of the sequence and the removal of entities from the other end of the sequence (front/head).
 
 Queues are first-in-first-out (FIFO) data structures. Therefore, the first element added to the queue will be the first one to be removed. In queues, the focus is on the head, where elements are removed, and the tail, where they are added.
 
@@ -11,10 +12,10 @@ A queue can be thought of as a supermarket line: the person at the front checks 
 
 ### Basic Operations
 
-* Enqueue: adds an element to the back of the queue.
-* Dequeue: removes an element from the front of the queue.
-* Peek: returns the value of the first element (head) of the queue.
-* Size: returns the size of the queue.
+- Enqueue: adds an element to the back of the queue.
+- Dequeue: removes an element from the front of the queue.
+- Peek: returns the value of the first element (head) of the queue.
+- Size: returns the size of the queue.
 
 ### Arrays _vs_ Linked Lists
 
@@ -25,13 +26,17 @@ Adjustments can be made in case we still want to use an array as building block.
 ### Time Complexity
 
 | Access | Search | Insertion | Deletion |
-|:------:|:------:|:---------:|:--------:|
-|  O(n)  |  O(n)  |    O(1)   |   O(1)   |
+| :----: | :----: | :-------: | :------: |
+|  O(n)  |  O(n)  |   O(1)    |   O(1)   |
 
 ### Space Complexity
-|O(n)|
-|:--:|
+
+| O(n) |
+| :--: |
 
 ### References
-* [Wikipedia](https://en.wikipedia.org/wiki/Queue_(abstract_data_type))
-* [Brilliant](https://brilliant.org/wiki/queues-basic/)
+
+- [Wikipedia](<https://en.wikipedia.org/wiki/Queue_(abstract_data_type)>)
+- [Brilliant](https://brilliant.org/wiki/queues-basic/)
+
+### [Index](../../README.md)
