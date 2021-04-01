@@ -11,38 +11,54 @@
 
 /*
 shortesPathBFS(graph, source, destination):
+  check if source and destination are vertices on the graph
   call bfs()
   call buildPath()
 */
-function bfs(graph, source, destination) {
+function shortestBFS(graph, source, destination) {
+  /* check if source and destination are nodes in the graph: */
+  if (!graph[source] || !graph[destination]) {
+    return !graph[source]
+      ? `${source} is not a vertex`
+      : `${destination} is not a vertex`;
+  }
   let visitedMap = new Map();
-  let traversing = "";
   let predecessor = [];
+  let distance = [];
+  let numberOfNodes = Object.keys(graph).length;
 
-  // gets all the adjacent nodes of A
+  for (let i = 0; i < numberOfNodes; ++i) {
+    predecessor[i] = -1;
+    distance[i] = Infinity;
+  }
+
   let root = graph[source];
-  visitedMap.set(root, false);
+  visitedMap.set(source, false);
 
   let queue = [];
-  queue.push(root);
+  queue.push(source);
 
   while (queue.length) {
     let currentVertex = queue.shift();
-    if (!visitedMap.get(currentVertex)) {
-      traversing += currentVertex + " ";
-      visitedMap.set(currentVertex, true);
-      queue = queue.concat(graph[currentVertex]); //(1)
+    let neighbours = graph[currentVertex];
 
-      // ? If not this way, maybe rewrite this function and break it into smaller methods
-      predecessor[graph[currentVertex]] = currentVertex;
+    neighbours.forEach((vertex) => {
+      if (!visitedMap.get(vertex)) {
+        visitedMap.set(vertex, true);
 
-      if (currentVertex === destination) {
-        return true;
+        queue.push(vertex);
+
+        predecessor[vertex] = currentVertex;
+
+        if (vertex === destination) {
+          //console.log("ai", predecessor);
+          return;
+        }
       }
-    }
+    });
   }
-  console.log(traversing);
-  return false;
+
+  /*  ... review theory */
 }
 
 // TESTS:
@@ -55,18 +71,18 @@ let adjList1 = {
   4: ["1", "3"],
   5: ["0", "3"],
 };
-bfs(adjList1);
+console.log(shortestBFS(adjList1, "2", "5"));
 
 // (2): Should output 0 -> 11 -> 2 -> 4 -> 9 -> 7 -> 19 -> 3 -> 1
-let adjList2 = {
-  0: ["11", "2", "4"],
-  1: ["3", "7", "19"],
-  2: ["0", "4", "7", "19"],
-  3: ["9", "7", "1"],
-  4: ["0", "2"],
-  7: ["2", "11", "9", "1", "19"],
-  9: ["11", "3", "7"],
-  11: ["0", "9", "7"],
-  19: ["2", "7", "1"],
-};
-bfs(adjList2);
+// let adjList2 = {
+//   0: ["11", "2", "4"],
+//   1: ["3", "7", "19"],
+//   2: ["0", "4", "7", "19"],
+//   3: ["9", "7", "1"],
+//   4: ["0", "2"],
+//   7: ["2", "11", "9", "1", "19"],
+//   9: ["11", "3", "7"],
+//   11: ["0", "9", "7"],
+//   19: ["2", "7", "1"],
+// };
+// bfs(adjList2);
