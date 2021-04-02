@@ -23,19 +23,23 @@ function shortestBFS(graph, source, destination) {
       : `${destination} is not a vertex`;
   }
   let visitedMap = new Map();
+  let queue = [];
   let predecessor = [];
   let distance = [];
-  let numberOfNodes = Object.keys(graph).length;
+  let allKeys = Object.keys(graph);
+  let numberOfNodes = allKeys.length;
+
+  allKeys.forEach((node) => {
+    visitedMap.set(node, false);
+  });
 
   for (let i = 0; i < numberOfNodes; ++i) {
     predecessor[i] = -1;
     distance[i] = Infinity;
   }
 
-  let root = graph[source];
-  visitedMap.set(source, false);
-
-  let queue = [];
+  visitedMap.set(source, true); //??
+  distance[source] = 0;
   queue.push(source);
 
   while (queue.length) {
@@ -46,12 +50,13 @@ function shortestBFS(graph, source, destination) {
       if (!visitedMap.get(vertex)) {
         visitedMap.set(vertex, true);
 
-        queue.push(vertex);
-
+        distance[vertex] = distance[currentVertex] + 1;
         predecessor[vertex] = currentVertex;
 
+        queue.push(vertex);
+
         if (vertex === destination) {
-          //console.log("ai", predecessor);
+          // console.log("ai", predecessor);
           return;
         }
       }
@@ -59,6 +64,19 @@ function shortestBFS(graph, source, destination) {
   }
 
   /*  ... review theory */
+
+  // let path = [];
+  // let crawl = destination;
+
+  // path.push(crawl);
+
+  // while (!predecessor[crawl] !== -1) {
+  //   path.push(predecessor[crawl]);
+  //   crawl = predecessor[crawl];
+  // }
+
+  console.log(predecessor);
+  console.log(distance);
 }
 
 // TESTS:
