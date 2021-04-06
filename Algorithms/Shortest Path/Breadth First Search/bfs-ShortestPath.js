@@ -9,12 +9,6 @@
     graph being traversed is an unweighted graph.
  */
 
-/*
-shortesPathBFS(graph, source, destination):
-  check if source and destination are vertices on the graph
-  call bfs()
-  call buildPath()
-*/
 function shortestBFS(graph, source, destination) {
   /* check if source and destination are nodes in the graph: */
   if (!graph[source] || !graph[destination]) {
@@ -22,24 +16,25 @@ function shortestBFS(graph, source, destination) {
       ? `${source} is not a vertex`
       : `${destination} is not a vertex`;
   }
+
   let visitedMap = new Map();
   let queue = [];
   let predecessor = [];
   let distance = [];
-  let allKeys = Object.keys(graph);
-  let numberOfNodes = allKeys.length;
+
+  let allKeys = Object.keys(graph); // get all vertices keys
+  let numberOfNodes = allKeys.length; // get the number of nodes in the graph
 
   allKeys.forEach((node) => {
-    visitedMap.set(node, false);
+    visitedMap.set(node, false); // initialize all vertices to unvisited
   });
 
   for (let i = 0; i < numberOfNodes; ++i) {
     predecessor[i] = -1;
-    distance[i] = Infinity;
+    distance[i] = 0;
   }
 
-  visitedMap.set(source, true); //??
-  distance[source] = 0;
+  visitedMap.set(source, true);
   queue.push(source);
 
   while (queue.length) {
@@ -50,37 +45,46 @@ function shortestBFS(graph, source, destination) {
       if (!visitedMap.get(vertex)) {
         visitedMap.set(vertex, true);
 
-        distance[vertex] = distance[currentVertex] + 1;
-        predecessor[vertex] = currentVertex;
-
         queue.push(vertex);
 
-        if (vertex === destination) {
-          // console.log("ai", predecessor);
-          return;
-        }
+        distance[vertex] = distance[currentVertex] + 1;
+
+        predecessor[vertex] = currentVertex;
       }
     });
   }
 
-  /*  ... review theory */
+  if (!visitedMap.get(destination)) {
+    console.log(`There is no path from ${source} to ${destination}`);
+  } else {
+    let path = [];
+    for (let node = destination; node != -1; node = predecessor[node]) {
+      path.push(node);
+    }
+    path.reverse();
 
-  // let path = [];
-  // let crawl = destination;
+    console.log(
+      `Shortest path length from ${source} to ${destination}: ${distance[destination]}`
+    );
+    console.log("Path: ", displayPath(path));
+    console.log("\n");
+  }
 
-  // path.push(crawl);
-
-  // while (!predecessor[crawl] !== -1) {
-  //   path.push(predecessor[crawl]);
-  //   crawl = predecessor[crawl];
-  // }
-
-  console.log(predecessor);
-  console.log(distance);
+  function displayPath(array) {
+    let output = "";
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] !== array[array.length - 1]) {
+        output += array[i] + " -> ";
+      } else {
+        output += array[i];
+      }
+    }
+    return output;
+  }
 }
 
 // TESTS:
-// (1): Should output 0 -> 1 -> 3 -> 5 -> 2 -> 4
+// (1) - BFS: 0 -> 1 -> 3 -> 5 -> 2 -> 4
 let adjList1 = {
   0: ["1", "3", "5"],
   1: ["0", "2", "4"],
@@ -89,18 +93,26 @@ let adjList1 = {
   4: ["1", "3"],
   5: ["0", "3"],
 };
-console.log(shortestBFS(adjList1, "2", "5"));
+shortestBFS(adjList1, "2", "5");
+shortestBFS(adjList1, "0", "5");
+shortestBFS(adjList1, "3", "1");
+shortestBFS(adjList1, "4", "2");
 
-// (2): Should output 0 -> 11 -> 2 -> 4 -> 9 -> 7 -> 19 -> 3 -> 1
-// let adjList2 = {
-//   0: ["11", "2", "4"],
-//   1: ["3", "7", "19"],
-//   2: ["0", "4", "7", "19"],
-//   3: ["9", "7", "1"],
-//   4: ["0", "2"],
-//   7: ["2", "11", "9", "1", "19"],
-//   9: ["11", "3", "7"],
-//   11: ["0", "9", "7"],
-//   19: ["2", "7", "1"],
-// };
-// bfs(adjList2);
+console.log("-----");
+// (2) - BFS: 0 -> 11 -> 2 -> 4 -> 9 -> 7 -> 19 -> 3 -> 1
+let adjList2 = {
+  0: ["11", "2", "4"],
+  1: ["3", "7", "19"],
+  2: ["0", "4", "7", "19"],
+  3: ["9", "1"],
+  4: ["0", "2"],
+  7: ["2", "11", "9", "1", "19"],
+  9: ["11", "3", "7"],
+  11: ["0", "9", "7"],
+  19: ["2", "7", "1"],
+};
+shortestBFS(adjList2, "1", "11");
+shortestBFS(adjList2, "3", "0");
+shortestBFS(adjList2, "4", "3");
+shortestBFS(adjList2, "0", "0");
+shortestBFS(adjList2, "1", "4");
