@@ -7,6 +7,36 @@ function dijkstra(graph, source) {
   let predecessor = [];
   let distance = [];
   let queue = new priorityQueue();
+
+  let allKeys = Object.keys(graph);
+
+  allKeys.forEach((node) => {
+    distance[node] = Infinity;
+    visitedMap.set(node, false);
+  });
+
+  distance[source] = 0;
+
+  queue.insert([source, distance[source]]);
+
+  while (queue.getSize() !== 0) {
+    let vertex, minValue;
+    [vertex, minValue] = queue.remove();
+
+    visitedMap.set(vertex, true);
+
+    let neighbours = graph[vertex];
+
+    for (let i = 0; i < neighbours.length; i++) {
+      if (!visitedMap[neighbours[i][0]]) {
+        visitedMap.set(neighbours[i][0], true);
+
+        let newDistance = distance[vertex] + neighbours[i][1];
+
+        //if(newDistance < )
+      }
+    }
+  }
 }
 
 /* -----------------------------------------------------------------------------
@@ -142,6 +172,8 @@ let adjList1 = {
   ],
   6: [["5", 3]],
 };
+
+dijkstra(adjList1, 1);
 
 /* 2. source vertex: A
     cost from source to node:
