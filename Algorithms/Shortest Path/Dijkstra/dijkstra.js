@@ -8,35 +8,76 @@ function dijkstra(graph, source) {
   let distance = [];
   let queue = new priorityQueue();
 
-  let allKeys = Object.keys(graph);
+  let allKeys = Object.keys(graph); // get all vertices keys
+  let numberOfNodes = allKeys.length; // get the number of nodes in the graph
 
   allKeys.forEach((node) => {
-    distance[node] = Infinity;
     visitedMap.set(node, false);
+    distance[node] = Infinity;
+    predecessor[node] = -1;
   });
 
+  // for (let i = 0; i < numberOfNodes; i++) {
+  //   distance[i] = Infinity;
+  //   predecessor[i] = -1;
+  // }
+
+  //visitedMap.set(source, true);
   distance[source] = 0;
 
   queue.insert([source, distance[source]]);
 
+  // let [v, min] = queue.remove();
+
+  // console.log(v);
+  // console.log(min);
   while (queue.getSize() !== 0) {
-    let vertex, minValue;
-    [vertex, minValue] = queue.remove();
+    let [currentVertex, minWeight] = queue.remove();
+    let neighbours = graph[currentVertex];
 
-    visitedMap.set(vertex, true);
+    visitedMap.set(currentVertex, true);
 
-    let neighbours = graph[vertex];
+    neighbours.forEach((vertex) => {
+      // vertex[0]: vertexTo, vertex[1]: weight
+      let [vertexTo, weightTo] = vertex;
+      if (!visitedMap.get(vertexTo)) {
+        if (distance[currentVertex] + weightTo < distance[vertexTo]) {
+          distance[vertexTo] = distance[currentVertex] + weightTo;
+          predecessor[vertexTo] = currentVertex;
 
-    for (let i = 0; i < neighbours.length; i++) {
-      if (!visitedMap[neighbours[i][0]]) {
-        visitedMap.set(neighbours[i][0], true);
-
-        let newDistance = distance[vertex] + neighbours[i][1];
-
-        //if(newDistance < )
+          queue.insert([vertexTo, distance[vertexTo]]);
+        }
       }
-    }
+    });
+    console.log(distance);
   }
+
+  //-- Another possible approach to test:
+  // for (let i = 0; i < allKeys.length; i++) {
+  //   let v = -1;
+  //   for (let j = 0; j < allKeys.length; j++) {
+  //     if (!visitedMap.get(v) && (v === -1 || distance[j] < distance[v])) {
+  //       v = j;
+  //     }
+  //   }
+  //   if (distance[v] === Infinity) break;
+
+  //   visitedMap.set(v, true);
+
+  //   let neighbours = graph[v];
+  //   console.log(neighbours);
+
+  //   for (let vertex of graph[v]) {
+  //     let to = vertex[0];
+  //     let weight = vertex[1];
+
+  //     if (distance[v] + weight < distance[to]) {
+  //       distance[to] = distance[v] + weight;
+  //       predecessor[to] = v;
+  //     }
+  //   }
+  // }
+  //--
 }
 
 /* -----------------------------------------------------------------------------
@@ -155,22 +196,22 @@ let adjList1 = {
   1: [
     ["2", 50],
     ["3", 45],
-    ["4", 10],
+    ["4", 10]
   ],
   2: [
     ["4", 15],
-    ["3", 10],
+    ["3", 10]
   ],
   3: [["5", 30]],
   4: [
     ["1", 10],
-    ["5", 15],
+    ["5", 15]
   ],
   5: [
     ["2", 20],
-    ["3", 30],
+    ["3", 30]
   ],
-  6: [["5", 3]],
+  6: [["5", 3]]
 };
 
 dijkstra(adjList1, 1);
@@ -185,14 +226,14 @@ dijkstra(adjList1, 1);
 let adjList2 = {
   A: [
     ["B", 10],
-    ["C", 5],
+    ["C", 5]
   ],
   B: [["D", 1]],
   C: [
     ["B", 3],
     ["D", 9],
-    ["E", 2],
+    ["E", 2]
   ],
   D: [[]],
-  E: [["A", 2]],
+  E: [["A", 2]]
 };
