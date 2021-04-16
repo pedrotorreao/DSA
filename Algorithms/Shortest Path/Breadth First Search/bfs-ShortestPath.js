@@ -27,12 +27,9 @@ function shortestBFS(graph, source, destination) {
 
   allKeys.forEach((node) => {
     visitedMap.set(node, false); // initialize all vertices to unvisited
+    predecessor[node] = -1;
+    distance[node] = 0;
   });
-
-  for (let i = 0; i < numberOfNodes; ++i) {
-    predecessor[i] = -1;
-    distance[i] = 0;
-  }
 
   visitedMap.set(source, true);
   queue.push(source);
@@ -91,7 +88,7 @@ let adjList1 = {
   2: ["1"],
   3: ["0", "4", "5"],
   4: ["1", "3"],
-  5: ["0", "3"],
+  5: ["0", "3"]
 };
 shortestBFS(adjList1, "2", "5");
 shortestBFS(adjList1, "0", "5");
@@ -109,10 +106,12 @@ let adjList2 = {
   7: ["2", "11", "9", "1", "19"],
   9: ["11", "3", "7"],
   11: ["0", "9", "7"],
-  19: ["2", "7", "1"],
+  19: ["2", "7", "1"]
 };
 shortestBFS(adjList2, "1", "11");
 shortestBFS(adjList2, "3", "0");
 shortestBFS(adjList2, "4", "3");
 shortestBFS(adjList2, "0", "0");
 shortestBFS(adjList2, "1", "4");
+shortestBFS(adjList2, "11", "1");
+shortestBFS(adjList2, "9", "4");
