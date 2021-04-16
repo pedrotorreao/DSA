@@ -2,14 +2,13 @@
 /* Algorithm: Dijkstra - Shortest Path ********/
 /****************************************************************/
 
-function dijkstra(graph, source) {
+function dijkstra(graph, source, destination) {
   let visitedMap = new Map();
   let predecessor = [];
   let distance = [];
   let queue = new priorityQueue();
 
   let allKeys = Object.keys(graph); // get all vertices keys
-  let numberOfNodes = allKeys.length; // get the number of nodes in the graph
 
   allKeys.forEach((node) => {
     visitedMap.set(node, false);
@@ -17,22 +16,13 @@ function dijkstra(graph, source) {
     predecessor[node] = -1;
   });
 
-  // for (let i = 0; i < numberOfNodes; i++) {
-  //   distance[i] = Infinity;
-  //   predecessor[i] = -1;
-  // }
-
-  //visitedMap.set(source, true);
   distance[source] = 0;
 
   queue.insert([source, distance[source]]);
 
-  // let [v, min] = queue.remove();
-
-  // console.log(v);
-  // console.log(min);
-  while (queue.getSize() !== 0) {
+  while (queue.peek()) {
     let [currentVertex, minWeight] = queue.remove();
+
     let neighbours = graph[currentVertex];
 
     visitedMap.set(currentVertex, true);
@@ -49,35 +39,33 @@ function dijkstra(graph, source) {
         }
       }
     });
-    console.log(distance);
   }
 
-  //-- Another possible approach to test:
-  // for (let i = 0; i < allKeys.length; i++) {
-  //   let v = -1;
-  //   for (let j = 0; j < allKeys.length; j++) {
-  //     if (!visitedMap.get(v) && (v === -1 || distance[j] < distance[v])) {
-  //       v = j;
-  //     }
-  //   }
-  //   if (distance[v] === Infinity) break;
+  //
+  let path = [];
+  for (let node = destination; node != -1; node = predecessor[node]) {
+    path.push(node);
+  }
+  path.reverse();
 
-  //   visitedMap.set(v, true);
+  console.log(
+    `Shortest path length from ${source} to ${destination}: ${distance[destination]}`
+  );
+  console.log("Path: ", displayPath(path));
+  console.log("\n");
+  return;
 
-  //   let neighbours = graph[v];
-  //   console.log(neighbours);
-
-  //   for (let vertex of graph[v]) {
-  //     let to = vertex[0];
-  //     let weight = vertex[1];
-
-  //     if (distance[v] + weight < distance[to]) {
-  //       distance[to] = distance[v] + weight;
-  //       predecessor[to] = v;
-  //     }
-  //   }
-  // }
-  //--
+  function displayPath(array) {
+    let output = "";
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] !== array[array.length - 1]) {
+        output += array[i] + " -> ";
+      } else {
+        output += array[i];
+      }
+    }
+    return output;
+  }
 }
 
 /* -----------------------------------------------------------------------------
@@ -89,7 +77,9 @@ class minHeap {
   }
 
   peek() {
-    return this.heap[1][0];
+    let top = this.heap[1] ? this.heap[1][0] : null;
+
+    return top;
   }
 
   insert(value) {
@@ -121,15 +111,20 @@ class minHeap {
   // ------------ MIN HEAP: DELETION METHODS ------------------->>
   remove() {
     if (this.heap.length <= 1) {
-      return;
+      return null;
     } //heap is empty.
 
     //Replaces top element by the last element in the heap:
-    this.swapValues(this.heap.length - 1, 1);
-    let largest = this.heap.pop(); //stores the top element being deleted in case we need it for heap sort
+    if (this.heap.length - 1 > 1) {
+      //??
+      this.swapValues(this.heap.length - 1, 1);
+    }
+    let smallest = this.heap.pop(); //stores the top element being deleted in case we need it for heap sort
+
+    //this.heap[this.heap.length - 1] = null; //so we don't have to deal with undefined values when heapifying
 
     this.heapifyTopBottomRecursively();
-    return largest;
+    return smallest;
   }
 
   heapifyTopBottomRecursively(rootIndex = 1) {
@@ -147,8 +142,10 @@ class minHeap {
     }
 
     if (
-      this.heap[rootIndex][1] > this.heap[leftIndex][1] ||
-      this.heap[rootIndex][1] > this.heap[rightIndex][1]
+      (this.heap[leftIndex] &&
+        this.heap[rootIndex][1] > this.heap[leftIndex][1]) ||
+      (this.heap[rightIndex] &&
+        this.heap[rootIndex][1] > this.heap[rightIndex][1])
     ) {
       //if there's no right child or left child's value is less than right child's, swap subtrees' root and left child's values  and go down the heap:
       if (
@@ -213,8 +210,11 @@ let adjList1 = {
   ],
   6: [["5", 3]]
 };
-
-dijkstra(adjList1, 1);
+console.log("---- TEST 1 ----");
+dijkstra(adjList1, 1, 2);
+dijkstra(adjList1, 1, 5);
+dijkstra(adjList1, 1, 3);
+dijkstra(adjList1, 2, 5);
 
 /* 2. source vertex: A
     cost from source to node:
@@ -234,6 +234,11 @@ let adjList2 = {
     ["D", 9],
     ["E", 2]
   ],
-  D: [[]],
+  D: [[null, null]],
   E: [["A", 2]]
 };
+console.log("---- TEST 2 ----");
+dijkstra(adjList2, Object.keys(adjList2)[0], Object.keys(adjList2)[3]);
+dijkstra(adjList2, Object.keys(adjList2)[0], Object.keys(adjList2)[1]);
+dijkstra(adjList2, Object.keys(adjList2)[2], Object.keys(adjList2)[3]);
+dijkstra(adjList2, Object.keys(adjList2)[4], Object.keys(adjList2)[1]);
