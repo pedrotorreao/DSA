@@ -33,7 +33,10 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
     - Binary Search
     - [Breadth First Search (BFS)](Algorithms/Searching/Breadth%20First%20Search/README.md)
     - [Depth First Search (DFS)](Algorithms/Searching/Depth%20First%20Search/README.md)
-  - Shortest Path
+  - Single Source Shortest Path (SSSP)
     - [Breadth First Search (BFS)](Algorithms/Shortest%20Path/Breadth%20First%20Search/README.md)
     - [Dijkstra](Algorithms/Shortest%20Path/Dijkstra/README.md)
+    - [Bellman-Ford](Algorithms/Shortest%20Path/Bellman%20Ford/README.md)
+  - All Pairs Shortest Path (APSP)
+    - [Floyd-Warshall](Algorithms/Shortest%20Path/Floyd-Warshall/README.md)
 - #### Problems
