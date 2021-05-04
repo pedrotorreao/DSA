@@ -1,5 +1,7 @@
 ## Breadth First Search - BFS
 
+See the code by clicking [here](/Algorithms/Searching/Breadth%20First%20Search/bfs.js).
+
 ### Definition
 
 Traversing algorithm in which you start traversing from a selected node (source or starting node), which can be any of the vertices in the graph, followed by its adjacent nodes, then all nodes that can be reached by a path from the start node containing two edges, three edges, and so on, moving towards the next-level neighbour nodes.
@@ -85,4 +87,4 @@ end bfs
 - [Hackerearth](https://www.hackerearth.com/practice/algorithms/graphs/breadth-first-search/tutorial/)
 - [Khan Academy](https://www.khanacademy.org/computing/computer-science/algorithms/breadth-first-search/a/the-breadth-first-search-algorithm)
 
-### [Index](../../../README.md)
+### [Data Structures & Algorithm - Index](../../../README.md)

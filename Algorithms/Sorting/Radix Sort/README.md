@@ -1,5 +1,7 @@
 ## Radix Sort
 
+See the code by clicking [here](/Algorithms/Sorting/Radix%20Sort/radixSort.js).
+
 ### Definition
 
 Radix-sort is a stable non-comparative sorting algorithm which sorts the data by distributing elements into groups according to their radix (place value, base). For elements with more than one significant digit, this distribution process is repeated for each digit, while preserving the ordering of the prior step, until all digits have been considered. Radix sorts is usually implemented by starting from the least significant digit (LSD) for numbers and from the most significant digit (MSD) for words.
@@ -78,4 +80,4 @@ Check the image below to see how the array changes as the sorting goes through e
 - #### [Youtube](https://www.youtube.com/watch?v=Il45xNUHGp0&list=PLdo5W4Nhv31bbKJzrsKfMpo_grxuLl8LU&index=107)
 - #### [GeeksforGeeks](https://www.geeksforgeeks.org/radix-sort/)
 
-### [Index](../../../README.md)
+### [Data Structures & Algorithm - Index](../../../README.md)

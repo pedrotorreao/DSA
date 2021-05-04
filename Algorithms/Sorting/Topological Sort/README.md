@@ -1,5 +1,7 @@
 ## Topological Sort
 
+See the code by clicking [here](/Algorithms/Sorting/Topological%20Sort/topologicalSort.js).
+
 ### Definition
 
 A topological sort is an ordering of the nodes in a directed graph where for each directed edge from `node A` to `node B`, `node A` appears before `node B` in the ordering. The topological sort algorithm is able to find a topological order in O(V+E) time. Also, there may be multiple possible solutions.
@@ -92,4 +94,4 @@ By looking at the initial graph we can see that vertex `B` has an in-degree of `
 
 - [Interview Cake](https://www.interviewcake.com/concept/java/topological-sort)
 
-### [Get back to the Table of Contents](../../../README.md)
+### [Data Structures & Algorithm - Index](../../../README.md)

@@ -1,5 +1,7 @@
 ## Depth First Search
 
+See the code by clicking [here](/Algorithms/Searching/Depth%20First%20Search/dfs.js).
+
 ### Definition
 
 This algorithm goes down a single path until the path leads to the vertex we are looking for or we reach the end of the path. If the end of the path is reached, the path was completely explored and we'll need to backtrack. In other words, if there are no more nodes along the current path, it is necessary to move backwards on the same path in order to find the next path to traverse. This process continues until we have discovered all the vertices that are reachable from the original source vertex. If any undiscovered vertices remain, then DFS selects one of them as a new source, and it repeats the search from that source.
@@ -90,4 +92,4 @@ end dfs
 - [Hackerearth](https://www.hackerearth.com/practice/algorithms/graphs/depth-first-search/tutorial/)
 - [Brilliant](https://brilliant.org/wiki/graphs/)
 
-### [Index](../../../README.md)
+### [Data Structures & Algorithm - Index](../../../README.md)

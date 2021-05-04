@@ -1,5 +1,7 @@
 ## Dijkstra
 
+See the code by clicking [here](/Algorithms/Shortest%20Path/Dijkstra/dijkstra.js).
+
 Consider a graph `G` with `n` vertices, `m` edges and non-negative weights. Next, you're given a source vertex `s` and asked to find the lengths of the shortest paths from `s` to other vertices on the graph `G`, returning also the shortest paths themselves. This problem is called **single-source shortest path** problem and one of the solutions for this problem is given by the Dijkstra algorithm.
 
 ### Definition
@@ -81,3 +83,5 @@ end dijksta
 - [YouTube - Jenny's Lectures](https://www.youtube.com/watch?v=smHnz2RHJBY&list=PLdo5W4Nhv31bbKJzrsKfMpo_grxuLl8LU&index=94)
 - [YouTube - Abdul Bari](https://www.youtube.com/watch?v=XB4MIexjvY0&list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O&index=47)
 - [CP - Algorithms](https://cp-algorithms.com/graph/dijkstra.html)
+
+### [Data Structures & Algorithm - Index](../../../README.md)
