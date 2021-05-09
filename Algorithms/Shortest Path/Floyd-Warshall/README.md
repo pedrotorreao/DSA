@@ -51,7 +51,7 @@ so
 
 > `distance[A][B] = distance[A][C] + distance[C][B] = 1+1 = 2`
 
-This analisys is performed for every pair of vertices and if we write a pseudocode for this check in terms of the adjacency matrix indices we have
+The algorithm runs for `V` iterations, where `V` is the number of vertices on the graph and this analisys is performed for every pair of vertices. If we write a pseudocode for this check in terms of the adjacency matrix indices we have
 
 ```
 if distance[i][j] > distance[i][k] + distance[k][j]:
@@ -129,45 +129,113 @@ The Adjacency Matrix which represents the graph shown above is given below:
 |  C  |  `4`  | `Inf` |  `0`  | `Inf` |
 |  D  | `Inf` |  `2`  |  `9`  |  `0`  |
 
-|       |       | Iter. 1  |       |         |
-| :---: | :---: | :------: | :---: | :-----: |
-| via A |   A   |    B     |   C   |    D    |
-|   A   |  `0`  |   `8`    | `Inf` |   `1`   |
-|   B   | `Inf` |   `0`    |  `1`  |  `Inf`  |
-|   C   |  `4`  | `4+8=12` |  `0`  | `4+1=5` |
-|   D   | `Inf` |   `2`    |  `9`  |   `0`   |
+In the first iteration, we are going to check which paths can be improved by going through vertex `A` when trying to get from `i` to `j`, such that
 
-|       |       | Iter. 2 |         |       |
-| :---: | :---: | :-----: | :-----: | :---: |
-| via B |   A   |    B    |    C    |   D   |
-|   A   |  `0`  |   `8`   | `8+1=9` |  `1`  |
-|   B   | `Inf` |   `0`   |   `1`   | `Inf` |
-|   C   |  `4`  |  `12`   |   `0`   |  `5`  |
-|   D   | `Inf` |   `2`   | `2+1=3` |  `0`  |
+> `distance[i][j] > distance[i][A] + distance[A][j]`.
 
-|       |         | Iter. 3 |     |         |
-| :---: | :-----: | :-----: | :-: | :-----: |
-| via C |    A    |    B    |  C  |    D    |
-|   A   |   `0`   |   `8`   | `9` |   `1`   |
-|   B   | `1+4=5` |   `0`   | `1` | `1+5=6` |
-|   C   |   `4`   |  `12`   | `0` |   `5`   |
-|   D   | `2+5=7` |   `2`   | `3` |   `0`   |
+Since we are going via vertex `A`, the row and column `A` won't get changed so we can repeat the elements. Also, since the diagonal is always filled with zeros, this leaves us with only a few analysis to make. Since there is no edge connecting `B` to `A`, there's no path which can be improved starting at `B` and going through `A`, so we repeat the row `B`. For vertex `C`, we can see that there is currently no edge connecting `C` to `B`, but we can get to `B` from `C` if we go via `A`, so we compare the distances:
 
-|       |         |  Iter. 4  |           |     |
-| :---: | :-----: | :-------: | :-------: | :-: |
-| via D |    A    |     B     |     C     |  D  |
-|   A   |   `0`   |  `1+2=3`  | `1+2+1=4` | `1` |
-|   B   |   `5`   |    `0`    |    `1`    | `6` |
-|   C   |   `4`   | `4+1+2=7` |    `0`    | `5` |
-|   D   | `2+5=7` |    `2`    |    `3`    | `0` |
+> `distance[C][B] = Inf`: there is no edge connecting `C` directly to `B`
+>
+> `distance[C][A] + distance[A][B] = 4+8 = 12`
+>
+> `distance[C][B] > distance[C][A] + distance[A][B]`
 
-|     |     | Result |     |     |
-| :-: | :-: | :----: | :-: | :-: |
-|     |  A  |   B    |  C  |  D  |
-|  A  | `0` |  `3`   | `4` | `1` |
-|  B  | `5` |  `0`   | `1` | `6` |
-|  C  | `4` |  `7`   | `0` | `5` |
-|  D  | `7` |  `2`   | `3` | `0` |
+so,
+
+> `distance[C][B] = distance[C][A] + distance[A][B] = 4+8 = 12`
+
+Next, we can see that there is currently no edge connecting `C` to `D`, but we can get to `D` from `C` if we go via `A`, so we repeat the process above:
+
+> `distance[C][D] = Inf`: there is no edge connecting `C` directly to `D`
+>
+> `distance[C][A] + distance[A][D] = 4+1 = 5`
+>
+> `distance[C][D] > distance[C][A] + distance[A][D]`
+
+so
+
+> `distance[C][D] = distance[C][A] + distance[A][D] = 4+1 = 5`
+
+For vertex `D`, since there is no edge connecting `D` to `A`, there's no path which can be improved starting at `D` and going through `A`, so we repeat the row `D`. The complete distance matrix for the first iteration can be seen below:
+
+|       |       | Iteration 1 |       |         |
+| :---: | :---: | :---------: | :---: | :-----: |
+| via A |   A   |      B      |   C   |    D    |
+|   A   |  `0`  |     `8`     | `Inf` |   `1`   |
+|   B   | `Inf` |     `0`     |  `1`  |  `Inf`  |
+|   C   |  `4`  |  `4+8=12`   |  `0`  | `4+1=5` |
+|   D   | `Inf` |     `2`     |  `9`  |   `0`   |
+
+Repeating the process done in the first iteration, in the second iteration, we are going to check which paths can be improved by going through vertex `B` when trying to get from `i` to `j`, such that
+
+> `distance[i][j] > distance[i][B] + distance[B][j]`.
+
+Again, we can repeat the elements in the diagonal and the elements in the `B`row and column. For vertex `A`, we can see that there is currently no edge connecting `A` to `C`, but we can get to `C` from `A` if we go via `B`, so we compare the distances:
+
+> `distance[A][C] = Inf`: there is no edge connecting `A` directly to `C`
+>
+> `distance[A][B] + distance[B][C] = 8+1 = 9`
+>
+> `distance[A][C] > distance[A][B] + distance[B][C]`
+
+so
+
+> `distance[A][C] = distance[A][B] + distance[B][C] = 8+1 = 9`
+
+For vertex `C`, since there is no edge connecting `C` to `B`, there's no path which can be improved starting at `C` and going through `B`, so we repeat the row `C`. For vertex `D`, on the other hand, even though there is an edge connecting `D` directly to `C`, we can also get to `C` from `D` via `B`, so we need to compare both paths:
+
+> `distance[D][C] = 9`
+>
+> `distance[D][B] + distance[B][C] = 2+1 = 3`
+>
+> `distance[D][C] > distance[D][B] + distance[B][C]`
+
+so,
+
+> `distance[D][C] = distance[D][B] + distance[B][C] = 2+1 = 3`
+
+The complete distance matrix for the second iteration can be seen below:
+
+|       |       | Iteration 2 |         |       |
+| :---: | :---: | :---------: | :-----: | :---: |
+| via B |   A   |      B      |    C    |   D   |
+|   A   |  `0`  |     `8`     | `8+1=9` |  `1`  |
+|   B   | `Inf` |     `0`     |   `1`   | `Inf` |
+|   C   |  `4`  |    `12`     |   `0`   |  `5`  |
+|   D   | `Inf` |     `2`     | `2+1=3` |  `0`  |
+
+Repeating the same analysis done for the first and second iterations, we are able to build the distance matrices for the third and fourth iterations.
+
+The complete distance matrix for the third iteration can be seen below:
+
+|       |         | Iteration 3 |     |         |
+| :---: | :-----: | :---------: | :-: | :-----: |
+| via C |    A    |      B      |  C  |    D    |
+|   A   |   `0`   |     `8`     | `9` |   `1`   |
+|   B   | `1+4=5` |     `0`     | `1` | `1+5=6` |
+|   C   |   `4`   |    `12`     | `0` |   `5`   |
+|   D   | `2+5=7` |     `2`     | `3` |   `0`   |
+
+The complete distance matrix for the fourth iteration can be seen below:
+
+|       |         | Iteration 4 |           |     |
+| :---: | :-----: | :---------: | :-------: | :-: |
+| via D |    A    |      B      |     C     |  D  |
+|   A   |   `0`   |   `1+2=3`   | `1+2+1=4` | `1` |
+|   B   |   `5`   |     `0`     |    `1`    | `6` |
+|   C   |   `4`   |  `4+1+2=7`  |    `0`    | `5` |
+|   D   | `2+5=7` |     `2`     |    `3`    | `0` |
+
+The final result, the matrix containing all pairs shortest paths, after the Floyd-Warshall go through all iterations can be seen below:
+
+|     |     | Final Result |     |     |
+| :-: | :-: | :----------: | :-: | :-: |
+|     |  A  |      B       |  C  |  D  |
+|  A  | `0` |     `3`      | `4` | `1` |
+|  B  | `5` |     `0`      | `1` | `6` |
+|  C  | `4` |     `7`      | `0` | `5` |
+|  D  | `7` |     `2`      | `3` | `0` |
 
 ### Time complexity
 
