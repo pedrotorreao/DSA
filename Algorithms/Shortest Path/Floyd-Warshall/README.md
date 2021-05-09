@@ -109,6 +109,66 @@ In order to go through a cycle, it is necessary to pass by the same node at leas
   end for
 ```
 
+### Additional Example - Step by step
+
+Consider the graph below:
+
+- Graph:
+
+![floyd-warshall2](/resources/img/floyd-warshall2.png)
+
+The Adjacency Matrix which represents the graph shown above is given below:
+
+- Adjacency Matrix:
+
+|     |       | Given |       |       |
+| :-: | :---: | :---: | :---: | :---: |
+|  -  |   A   |   B   |   C   |   D   |
+|  A  |  `0`  |  `8`  | `Inf` |  `1`  |
+|  B  | `Inf` |  `0`  |  `1`  | `Inf` |
+|  C  |  `4`  | `Inf` |  `0`  | `Inf` |
+|  D  | `Inf` |  `2`  |  `9`  |  `0`  |
+
+|       |       | Iter. 1  |       |         |
+| :---: | :---: | :------: | :---: | :-----: |
+| via A |   A   |    B     |   C   |    D    |
+|   A   |  `0`  |   `8`    | `Inf` |   `1`   |
+|   B   | `Inf` |   `0`    |  `1`  |  `Inf`  |
+|   C   |  `4`  | `4+8=12` |  `0`  | `4+1=5` |
+|   D   | `Inf` |   `2`    |  `9`  |   `0`   |
+
+|       |       | Iter. 2 |         |       |
+| :---: | :---: | :-----: | :-----: | :---: |
+| via B |   A   |    B    |    C    |   D   |
+|   A   |  `0`  |   `8`   | `8+1=9` |  `1`  |
+|   B   | `Inf` |   `0`   |   `1`   | `Inf` |
+|   C   |  `4`  |  `12`   |   `0`   |  `5`  |
+|   D   | `Inf` |   `2`   | `2+1=3` |  `0`  |
+
+|       |         | Iter. 3 |     |         |
+| :---: | :-----: | :-----: | :-: | :-----: |
+| via C |    A    |    B    |  C  |    D    |
+|   A   |   `0`   |   `8`   | `9` |   `1`   |
+|   B   | `1+4=5` |   `0`   | `1` | `1+5=6` |
+|   C   |   `4`   |  `12`   | `0` |   `5`   |
+|   D   | `2+5=7` |   `2`   | `3` |   `0`   |
+
+|       |         |  Iter. 4  |           |     |
+| :---: | :-----: | :-------: | :-------: | :-: |
+| via D |    A    |     B     |     C     |  D  |
+|   A   |   `0`   |  `1+2=3`  | `1+2+1=4` | `1` |
+|   B   |   `5`   |    `0`    |    `1`    | `6` |
+|   C   |   `4`   | `4+1+2=7` |    `0`    | `5` |
+|   D   | `2+5=7` |    `2`    |    `3`    | `0` |
+
+|     |     | Result |     |     |
+| :-: | :-: | :----: | :-: | :-: |
+|     |  A  |   B    |  C  |  D  |
+|  A  | `0` |  `3`   | `4` | `1` |
+|  B  | `5` |  `0`   | `1` | `6` |
+|  C  | `4` |  `7`   | `0` | `5` |
+|  D  | `7` |  `2`   | `3` | `0` |
+
 ### Time complexity
 
 - O(V^3), where `V` is the number of vertices.
