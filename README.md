@@ -18,7 +18,9 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
   - Priority Queue
   - Trie
   - [Graphs](DataStructures/Graphs/README.md)
-- #### Algoritms
+    - [Minimum Spanning Tree - MST](/DataStructures/Graphs/Minimum%20Spanning%20Tree/README.md)
+  - [Disjoint Set Union - DSU](/DataStructures/Disjoint%20Set/README.md)
+- #### Algorithms
   - Sorting
     - Bubble Sort
     - Insertion Sort
