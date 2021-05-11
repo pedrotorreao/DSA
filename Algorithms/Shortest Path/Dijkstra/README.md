@@ -84,4 +84,4 @@ end dijksta
 - [YouTube - Abdul Bari](https://www.youtube.com/watch?v=XB4MIexjvY0&list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O&index=47)
 - [CP - Algorithms](https://cp-algorithms.com/graph/dijkstra.html)
 
-### [Data Structures & Algorithm - Index](../../../README.md)
+### [Data Structures & Algorithms - Index](../../../README.md)
