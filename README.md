@@ -7,40 +7,40 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
 ### Contents
 
 - #### Data Structures
-  - [Arrays](DataStructures/Array/README.md)
-  - [Linked Lists](DataStructures/Linked%20List/README.md)
-  - [Stacks](DataStructures/Stack/README.md)
-  - [Queues](DataStructures/Queue/README.md)
-  - [Binary Search Tree](/DataStructures/Binary%20Search%20Tree/README.md)
-  - [AVL Tree](/DataStructures/AVL%20Tree/README.md)
-  - [Red-Black Tree](/DataStructures/Red-Black%20Tree/README.md)
-  - [Heaps](/DataStructures/Heaps/README.md)
-  - [Priority Queue](DataStructures/Priority%20Queue/README.md)
-  - [Trie](DataStructures/Tries/README.md)
-  - [Graphs](DataStructures/Graphs/README.md)
-    - [Minimum Spanning Tree - MST](/DataStructures/Graphs/Minimum%20Spanning%20Tree/README.md)
+  - [Arrays](DataStructures/Array/README.md) [theory + code]
+  - [Linked Lists](DataStructures/Linked%20List/README.md) [theory + code]
+  - [Stacks](DataStructures/Stack/README.md) [theory + code]
+  - [Queues](DataStructures/Queue/README.md) [theory + code]
+  - [Binary Search Tree](/DataStructures/Binary%20Search%20Tree/README.md) [code]
+  - [AVL Tree](/DataStructures/AVL%20Tree/README.md) [code]
+  - [Red-Black Tree](/DataStructures/Red-Black%20Tree/README.md) [code]
+  - [Heaps](/DataStructures/Heaps/README.md) [code]
+  - [Priority Queue](DataStructures/Priority%20Queue/README.md) [code]
+  - [Trie](DataStructures/Tries/README.md) [code]
+  - [Graphs](DataStructures/Graphs/README.md) [theory + code]
+    - [Minimum Spanning Tree - MST](/DataStructures/Graphs/Minimum%20Spanning%20Tree/README.md) [theory]
   - [Disjoint Set Union - DSU](/DataStructures/Disjoint%20Set/README.md)
 - #### Algorithms
   - Sorting
-    - [Bubble Sort](/Algorithms/Sorting/Bubble%20Sort/README.md)
-    - [Insertion Sort](/Algorithms/Sorting/Insertion%20Sort/README.md)
-    - [Selection Sort](/Algorithms/Sorting/Selection%20Sort/README.md)
-    - [Bucket Sort](/Algorithms/Sorting/Bucket%20Sort/README.md)
-    - [Merge Sort](/Algorithms/Sorting/Merge%20Sort/README.md)
-    - [Quick Sort](/Algorithms/Sorting/Quick%20Sort/README.md)
-    - [Counting Sort](/Algorithms/Sorting/Counting%20Sort/README.md)
-    - [Radix Sort](Algorithms/Sorting/Radix%20Sort/README.md)
-    - [Topological Sort](Algorithms/Sorting/Topological%20Sort/README.md)
+    - [Bubble Sort](/Algorithms/Sorting/Bubble%20Sort/README.md) [code]
+    - [Insertion Sort](/Algorithms/Sorting/Insertion%20Sort/README.md) [code]
+    - [Selection Sort](/Algorithms/Sorting/Selection%20Sort/README.md) [code]
+    - [Bucket Sort](/Algorithms/Sorting/Bucket%20Sort/README.md) [code]
+    - [Merge Sort](/Algorithms/Sorting/Merge%20Sort/README.md) [code]
+    - [Quick Sort](/Algorithms/Sorting/Quick%20Sort/README.md) [code]
+    - [Counting Sort](/Algorithms/Sorting/Counting%20Sort/README.md) [code]
+    - [Radix Sort](Algorithms/Sorting/Radix%20Sort/README.md) [theory + code]
+    - [Topological Sort](Algorithms/Sorting/Topological%20Sort/README.md) [theory + code]
   - Searching
-    - Binary Search
-    - [Breadth First Search (BFS)](Algorithms/Searching/Breadth%20First%20Search/README.md)
-    - [Depth First Search (DFS)](Algorithms/Searching/Depth%20First%20Search/README.md)
+    - [Binary Search](/Algorithms/Searching/Binary%20Search/README.md) [code]
+    - [Breadth First Search (BFS)](Algorithms/Searching/Breadth%20First%20Search/README.md) [theory + code]
+    - [Depth First Search (DFS)](Algorithms/Searching/Depth%20First%20Search/README.md) [theory + code]
   - Single Source Shortest Path (SSSP)
-    - [Breadth First Search (BFS)](Algorithms/Shortest%20Path/Breadth%20First%20Search/README.md)
-    - [Dijkstra](Algorithms/Shortest%20Path/Dijkstra/README.md)
-    - [Bellman-Ford](Algorithms/Shortest%20Path/Bellman%20Ford/README.md)
+    - [Breadth First Search (BFS)](Algorithms/Shortest%20Path/Breadth%20First%20Search/README.md) [code]
+    - [Dijkstra](Algorithms/Shortest%20Path/Dijkstra/README.md) [theory + code]
+    - [Bellman-Ford](Algorithms/Shortest%20Path/Bellman%20Ford/README.md) [theory + code]
   - All Pairs Shortest Path (APSP)
-    - [Floyd-Warshall](Algorithms/Shortest%20Path/Floyd-Warshall/README.md)
+    - [Floyd-Warshall](Algorithms/Shortest%20Path/Floyd-Warshall/README.md) [theory + code]
   - Minimum Spanning Tree - MST
     - [Kruskal](/Algorithms/Minimum%20Spanning%20Tree/Kruskal/README.md)
     - [Prim](/Algorithms/Minimum%20Spanning%20Tree/Prim/README.md)
