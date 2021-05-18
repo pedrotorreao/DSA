@@ -6,8 +6,6 @@ function bellmanFord(graph, source, destination) {
   let predecessor = [];
   let distance = [];
 
-  let numberOfVertices = graph.length;
-
   // get all the vertices from the edge list:
   let allKeys = {};
   graph.forEach((edge) => {
@@ -22,6 +20,7 @@ function bellmanFord(graph, source, destination) {
     }
   });
   allKeys = Object.keys(allKeys);
+  let numberOfVertices = allKeys.length;
 
   // initialize the distance and predecessor arrays:
   allKeys.forEach((key) => {
