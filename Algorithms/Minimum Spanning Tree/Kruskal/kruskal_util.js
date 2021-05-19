@@ -172,7 +172,6 @@ class dsu {
 }
 /****************************************************************/
 
-//export { dsu, quickSort, partition };
+// export modules for DSU and QuickSort:
 module.exports.dsu = dsu;
 module.exports.quickSort = quickSort;
-module.exports.partition = partition;

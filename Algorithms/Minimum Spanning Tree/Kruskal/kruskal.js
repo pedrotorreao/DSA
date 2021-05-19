@@ -2,14 +2,15 @@
 /* Kruskal - Finding the Minimum Spanning Tree (MST) ********/
 /****************************************************************/
 
-const { dsu, quickSort, partition } = require("./kruskal_util");
+// import modules for DSU and Quicksort:
+const { dsu, quickSort } = require("./kruskal_util");
 
 function kruskal(graph) {
   let disjoint_set = new dsu();
   let total_cost = 0;
   let mst = [];
 
-  /* get vertices from edge list (slow, look for better way later) */
+  // get vertices from edge list (slow, look for better way later):
   let allKeys = {};
   graph.forEach((edge) => {
     let from = edge[0];
@@ -24,6 +25,7 @@ function kruskal(graph) {
   });
   allKeys = Object.keys(allKeys);
 
+  // make a set for each vertex:
   allKeys.forEach((key) => {
     disjoint_set.make_set(key);
   });
@@ -43,13 +45,14 @@ function kruskal(graph) {
     }
   });
 
-  // console.log(total_cost);
-  // console.log(mst);
-
   return [mst, total_cost];
 }
 
-let edgeList = [
+// test #1:
+// expected output:
+//    - MST: B-C, C-E, D-E, A-C, E-F
+//    - Cost: 17
+let edgeList1 = [
   ["A", "B", 9],
   ["A", "C", 4],
   ["B", "C", 1],
@@ -61,6 +64,24 @@ let edgeList = [
   ["E", "F", 7]
 ];
 
-let [mst, min_cost] = kruskal(edgeList);
-console.log(mst);
-console.log(min_cost);
+let [mst1, min_cost1] = kruskal(edgeList1);
+console.log("----\nMinimum Spanning Tree:\n", mst1);
+console.log("Cost: ", min_cost1);
+
+// test #2:
+// expected output:
+//    - MST: B-D, C-E, D-E, A-B
+//    - Cost: 34
+let edgeList2 = [
+  ["A", "B", 15],
+  ["A", "C", 20],
+  ["B", "C", 13],
+  ["B", "D", 5],
+  ["C", "D", 10],
+  ["C", "E", 6],
+  ["D", "E", 8]
+];
+
+let [mst2, min_cost2] = kruskal(edgeList2);
+console.log("----\nMinimum Spanning Tree:\n", mst2);
+console.log("Cost: ", min_cost2);
