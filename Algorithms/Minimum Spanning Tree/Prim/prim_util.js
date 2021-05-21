@@ -114,3 +114,6 @@ class priorityQueue extends minHeap {
     this.priorityQ = new minHeap();
   }
 }
+
+// export modules for Piority Queue:
+module.exports.priorityQueue = priorityQueue;
