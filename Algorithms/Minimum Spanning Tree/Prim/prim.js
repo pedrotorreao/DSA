@@ -8,13 +8,14 @@ const { priorityQueue } = require("./prim_util");
 function prim(graph) {
   let mst = []; // array for storing the MST
   let totalCost = 0; // MST total cost
+  let distance = [];
   let visitedMap = new Map(); // map to keep track of the visited vertices
   let pq = new priorityQueue();
 
   let allKeys = Object.keys(graph); // get all vertices keys
   let source = allKeys[0]; // it could be any vertex.
-  let numOfVertices = allKeys.length;
-  let numOfEdgesMST = numOfVertices - 1;
+  const numOfVertices = allKeys.length;
+  const numOfEdgesMST = numOfVertices - 1;
   let countOfEdges = 0;
 
   // initialize all vertices as unvisited:
@@ -22,11 +23,37 @@ function prim(graph) {
     visitedMap.set(node, false);
   });
 
-  graph[source].forEach((neighbor) => {
-    visitedMap.set(source, true);
-  });
+  addToPQ(graph, source, visitedMap, pq);
 
-  /* ..... */
+  while (pq.peek() && countOfEdges !== numOfEdgesMST) {
+    //let [vertexTo, weightTo] = pq.remove();
+    let [vertexPair, weightTo] = pq.remove();
+    let [vertexFrom, vertexTo] = vertexPair;
+    if (!visitedMap.get(vertexTo)) {
+      //mst.push([vertexTo, weightTo]);
+      mst.push([vertexFrom, vertexTo, weightTo]);
+      countOfEdges++;
+      totalCost += weightTo;
+
+      addToPQ(graph, vertexTo, visitedMap, pq);
+    }
+  }
+
+  return [mst, totalCost];
+}
+
+function addToPQ(graph, vertex, map, queue) {
+  map.set(vertex, true);
+
+  let neighbors = graph[vertex];
+
+  neighbors.forEach((neighbor) => {
+    let [vertexTo, weightTo] = neighbor;
+    if (!map.get(vertexTo)) {
+      //queue.insert([vertexTo, weightTo]);
+      queue.insert([[vertex, vertexTo], weightTo]);
+    }
+  });
 }
 
 // test #1:
@@ -66,3 +93,42 @@ let adjList1 = {
     ["E", 7]
   ]
 };
+
+let [mst1, min_cost1] = prim(adjList1);
+console.log("----\nMinimum Spanning Tree:\n", mst1);
+console.log("Cost: ", min_cost1);
+
+// test #2:
+// expected output:
+//    - MST: B-D, C-E, D-E, A-B
+//    - Cost: 34
+let adjList2 = {
+  A: [
+    ["B", 15],
+    ["C", 20]
+  ],
+  B: [
+    ["A", 15],
+    ["C", 13],
+    ["D", 5]
+  ],
+  C: [
+    ["A", 20],
+    ["B", 13],
+    ["D", 10],
+    ["E", 6]
+  ],
+  D: [
+    ["B", 5],
+    ["C", 10],
+    ["E", 8]
+  ],
+  E: [
+    ["C", 6],
+    ["D", 8]
+  ]
+};
+
+let [mst2, min_cost2] = prim(adjList2);
+console.log("----\nMinimum Spanning Tree:\n", mst2);
+console.log("Cost: ", min_cost2);
