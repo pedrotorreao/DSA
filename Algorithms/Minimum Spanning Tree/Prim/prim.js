@@ -26,11 +26,9 @@ function prim(graph) {
   addToPQ(graph, source, visitedMap, pq);
 
   while (pq.peek() && countOfEdges !== numOfEdgesMST) {
-    //let [vertexTo, weightTo] = pq.remove();
     let [vertexPair, weightTo] = pq.remove();
     let [vertexFrom, vertexTo] = vertexPair;
     if (!visitedMap.get(vertexTo)) {
-      //mst.push([vertexTo, weightTo]);
       mst.push([vertexFrom, vertexTo, weightTo]);
       countOfEdges++;
       totalCost += weightTo;
@@ -42,6 +40,13 @@ function prim(graph) {
   return [mst, totalCost];
 }
 
+/**
+ * Method for iterating over the edges of a vertex and add them to the priority queue.
+ * @param {Object} graph adjacency list which represents the graph.
+ * @param {string} vertex string representing an individual vertex.
+ * @param {Map} map Map for keeping track of visited vertices.
+ * @param {Priority Queue} queue reference for a priority queue which sorts the edges based on their weight.
+ */
 function addToPQ(graph, vertex, map, queue) {
   map.set(vertex, true);
 
