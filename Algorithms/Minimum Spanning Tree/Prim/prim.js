@@ -8,7 +8,6 @@ const { priorityQueue } = require("./prim_util");
 function prim(graph) {
   let mst = []; // array for storing the MST
   let totalCost = 0; // MST total cost
-  let distance = [];
   let visitedMap = new Map(); // map to keep track of the visited vertices
   let pq = new priorityQueue();
 
@@ -28,6 +27,7 @@ function prim(graph) {
   while (pq.peek() && countOfEdges !== numOfEdgesMST) {
     let [vertexPair, weightTo] = pq.remove();
     let [vertexFrom, vertexTo] = vertexPair;
+
     if (!visitedMap.get(vertexTo)) {
       mst.push([vertexFrom, vertexTo, weightTo]);
       countOfEdges++;
