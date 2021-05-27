@@ -44,4 +44,8 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
   - Minimum Spanning Tree - MST
     - [Kruskal](/Algorithms/Minimum%20Spanning%20Tree/Kruskal/README.md)
     - [Prim](/Algorithms/Minimum%20Spanning%20Tree/Prim/README.md)
+  - [Greedy](/Algorithms/Greedy/README.md)
+    - [Activity Selection](/Algorithms/Greedy/Activity%20Selection/README.md)
+    - [Coin Change](/Algorithms/Greedy/Coin%20Change/README.md)
+    - [Fractional Knapsack](/Algorithms/Greedy/Fractional%20Knapsack/README.md)
 - #### Problems
