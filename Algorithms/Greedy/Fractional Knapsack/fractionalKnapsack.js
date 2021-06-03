@@ -5,6 +5,11 @@
 const { quickSort } = require("./fractionalKnapsack_util");
 
 function fractionalKnapsack(loots, maxWeight) {
+  if (!loots.length) {
+    console.log("\n... there is nothing to loot :(");
+    return;
+  }
+
   let ratio = [];
   let totalWeight = 0;
   let totalValue = 0;
@@ -59,3 +64,7 @@ let loot_2 = [
 ];
 
 fractionalKnapsack(loot_2, 50);
+
+let loot_3 = [];
+
+fractionalKnapsack(loot_3, 50);
