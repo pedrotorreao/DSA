@@ -41,7 +41,7 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
     - [Bellman-Ford](Algorithms/Shortest%20Path/Bellman%20Ford/README.md) [theory + code]
   - All Pairs Shortest Path (APSP)
     - [Floyd-Warshall](Algorithms/Shortest%20Path/Floyd-Warshall/README.md) [theory + code]
-  - Minimum Spanning Tree - MST
+  - [Minimum Spanning Tree - MST](/DataStructures/Graphs/Minimum%20Spanning%20Tree/README.md)
     - [Kruskal](/Algorithms/Minimum%20Spanning%20Tree/Kruskal/README.md)
     - [Prim](/Algorithms/Minimum%20Spanning%20Tree/Prim/README.md)
   - [Greedy](/Algorithms/Greedy/README.md)
