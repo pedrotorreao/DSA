@@ -43,8 +43,44 @@ We now have `20kg` (`Wmax-Wt = 50kg-30kg`) of weight left that can be added to t
 
 Summarizing this approach we have the following steps:
 
+1. Calculate the ratio (`value/weight`) for each item.
+2. Sort the items based on their ratios in non-ascending order.
+3. Select the items with highest ratios and add them to the solution without exceeding the maximum capacity, `Wmax`.
+4. At the end, add as much fractional part of the next item as it is possible without exceeding `Wmax`.
+
 ### Pseudocode
+
+```
+fractionalKnapsack(items[], Wmax):
+    > create a new empty array for storing the ratios:
+        ratio = []
+    > calculate the ratio for each item:
+        for each item in items[]:
+            ratio[item] = (item value)/(item weight)
+        end for
+    > sort items based on their ratios:
+        sort(ratio)
+    > go over sorted ratio[] adding the items w/ highest ratio to the solution:
+        for i=0 to i=(number of items-1) and Wmax is not exceeded:
+          > check if max. weight Wmax is not being exceeded:
+            if (totalWeight + currentWeight) < Wmax:
+                solution += item value
+                totalWeight += currentWeight
+          > break item down in case Wmax is exceeded:
+            else:
+                solution += fractional item value
+                totalWeight += fractional currentWeight
+            end
+        end for
+    > return solution total value:
+        return solution
+end function
+```
 
 ### Time complexity
 
+- O(n\*log(n)), `n` being the number of items to be sorted based on their ratios.
+
 ### Space complexity
+
+- O(n), `n` being the size of the `ratio` array.
