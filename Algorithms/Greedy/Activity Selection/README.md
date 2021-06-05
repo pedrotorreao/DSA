@@ -56,3 +56,5 @@ end function
 ### Space Complexity
 
 - O(n) - due to the sorted array, if we don't want to modify the input.
+
+### [Data Structures & Algorithms - Index](../../../README.md)

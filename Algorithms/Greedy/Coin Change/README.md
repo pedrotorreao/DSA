@@ -109,3 +109,5 @@ However, not being greedy and not taking the best option at the first step ends 
 ### Space complexity
 
 - O(R) - where `R` is the length of the result array.
+
+### [Data Structures & Algorithms - Index](../../../README.md)
