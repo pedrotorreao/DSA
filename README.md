@@ -6,6 +6,7 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
 
 ### Contents
 
+- #### [Big-O: Time and Space complexities](/Big-O/README.md)
 - #### Data Structures
   - [Arrays](DataStructures/Array/README.md) [theory + code]
   - [Linked Lists](DataStructures/Linked%20List/README.md) [theory + code]
