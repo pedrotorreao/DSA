@@ -1,6 +1,6 @@
 ## Binary Search Tree - BST
 
-See code examples by clicking [here](/DataStructures/Binary%20Search%20Tree/tree1-BST.js), [here](tree2-BST.js) and [here](tree3-BST.js).
+See source code examples in JavaScript [here](/DataStructures/Binary%20Search%20Tree/src/js/tree1-BST.js), [here](/DataStructures/Binary%20Search%20Tree/src/js/tree2-BST.js) and [here](/DataStructures/Binary%20Search%20Tree/src/js/tree3-BST.js), and in C++ [here](/DataStructures/Binary%20Search%20Tree/src/cpp/tree-BST.cpp).
 
 ### Definition
 
