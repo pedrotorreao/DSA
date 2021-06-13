@@ -104,6 +104,12 @@ void SinglyLinkedList::insertNode(std::string s, int position) // insert s at a 
 
 void SinglyLinkedList::deleteNode(std::string s) // remove s from the LL
 {
+  if (this->head->data == s)
+  {
+    this->head = this->head->next;
+    return;
+  }
+
   Node *temp = this->head;
 
   while (temp->next->data != s)
@@ -193,6 +199,9 @@ int main()
   sll.search("RIO");
 
   sll.reverse();
+  sll.displayLinkedList();
+
+  sll.deleteNode("CAMPINA");
   sll.displayLinkedList();
 
   return 0;
