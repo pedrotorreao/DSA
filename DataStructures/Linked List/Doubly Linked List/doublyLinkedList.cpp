@@ -33,6 +33,7 @@ public:
   void deleteNode(std::string s);               // remove s from the LL
   void search(std::string s);                   // search for s in the LL
   void reverse(void);
+  void getSize(void);
   void displayLinkedList(void);
 
   DoublyLinkedList()
@@ -129,8 +130,10 @@ void DoublyLinkedList::deleteNode(std::string s) // remove s from the LL
     this->tail->next = nullptr;
     return;
   }
+
   temp->next = temp->next->next;
   temp->next->prev = temp;
+  --this->length;
 }
 
 void DoublyLinkedList::search(std::string s) // search for s in the LL
@@ -151,6 +154,12 @@ void DoublyLinkedList::search(std::string s) // search for s in the LL
   std::cout << s << " is not stored."
             << "\n";
 }
+
+void DoublyLinkedList::getSize(void)
+{
+  std::cout << "Linked List size: " << this->length << "\n";
+}
+
 void DoublyLinkedList::reverse(void)
 {
   if (!this->head->next)
@@ -217,6 +226,8 @@ int main()
 
   dll.reverse();
   dll.displayLinkedList();
+
+  dll.getSize();
 
   return 0;
 }

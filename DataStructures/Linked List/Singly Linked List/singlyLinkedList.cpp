@@ -31,6 +31,7 @@ public:
   void deleteNode(std::string s);               // remove s from the LL
   void search(std::string s);                   // search for s in the LL
   void reverse(void);
+  void getSize(void);
   void displayLinkedList(void);
 
   SinglyLinkedList()
@@ -118,6 +119,7 @@ void SinglyLinkedList::deleteNode(std::string s) // remove s from the LL
   }
 
   temp->next = temp->next->next;
+  --this->length;
 }
 
 void SinglyLinkedList::search(std::string s) // search for s in the LL
@@ -138,6 +140,7 @@ void SinglyLinkedList::search(std::string s) // search for s in the LL
   std::cout << s << " is not stored."
             << "\n";
 }
+
 void SinglyLinkedList::reverse(void)
 {
   if (!this->head->next)
@@ -158,6 +161,12 @@ void SinglyLinkedList::reverse(void)
   this->tail = this->head;
   this->head = first;
 }
+
+void SinglyLinkedList::getSize(void)
+{
+  std::cout << "Linked List size: " << this->length << "\n";
+}
+
 void SinglyLinkedList::displayLinkedList(void)
 {
   Node *temp = this->head;
@@ -203,6 +212,8 @@ int main()
 
   sll.deleteNode("CAMPINA");
   sll.displayLinkedList();
+
+  sll.getSize();
 
   return 0;
 }
