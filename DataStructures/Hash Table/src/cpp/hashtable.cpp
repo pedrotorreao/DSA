@@ -1,5 +1,5 @@
 /******************************************************************************
-Hash Table CPP
+-- DS: Hash Table CPP - Using STL lists to handle collisions w/ chaining
 *******************************************************************************/
 #include <iostream>
 #include <list>
