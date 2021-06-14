@@ -1,5 +1,7 @@
 ## Stacks
 
+See code for this data structure [here](/DataStructures/Stack/src).
+
 ### Definition
 
 A stack is an abstract data type (ADT)\* that serves as a collection of elements with restriction on where it is possible to add and remove elements. We can think of a stack as a stack of plates; if you want to remove a plate, you can remove only the top plate (the last plate inserted), and you can only add a new plate on the top. A stack can be implemented using both linked lists or arrays, with a few tradeoffs between them.
@@ -25,13 +27,15 @@ Arrays are usually created with fixed size (_static arrays_), so it may not be p
 
 Linked lists, on the other hand, are neither created with fixed size nor stored in contiguous memory spaces, so its size can be increased without problems. However, it is worth mentioning that LLs use an extra variable which stores the reference to the next node, which increases memory consumption. Also, as linked lists aren't necessarily stored in contiguous blocks of memory, this could lead to more cache misses when trying to access further elements, increasing the time it takes to access them.
 
-_Example_: If we wanted to loop through an array, the first access would require us to go to memory to retrieve it (a slow operation in CPU cycles). However, after the first access, the rest (or at leat a good portion) of the array would be stored in the cache, and subsequent accesses would be much quicker. With linked lists, the first access would require us to go to memory as well, but as the processor will cache memory directly surrounding the location of the element being accessed, it won't necessarily capture any of the other elements in the list, meaning that when trying to access the next element in the list, we will probably have to go to memory again.
+_Example_: If we wanted to loop through an array, the first access would require us to go to memory to retrieve it (a slow operation in CPU cycles). However, after the first access, the rest (or at least a good portion) of the array would be stored in the cache, and subsequent accesses would be much quicker. With linked lists, the first access would require us to go to memory as well, but as the processor will cache memory directly surrounding the location of the element being accessed, it won't necessarily capture any of the other elements in the list, meaning that when trying to access the next element in the list, we will probably have to go to memory again.
 
 ### Time Complexity
 
-| Access | Search | Insertion | Deletion |
-| :----: | :----: | :-------: | :------: |
-|  O(n)  |  O(n)  |   O(1)    |   O(1)   |
+| Access\* | Search | Insertion | Deletion | Peek |
+| :------: | :----: | :-------: | :------: | :--: |
+|   O(n)   |  O(n)  |   O(1)    |   O(1)   | O(1) |
+
+\*In case you want to access the first stack item.
 
 ### Space Complexity
 
