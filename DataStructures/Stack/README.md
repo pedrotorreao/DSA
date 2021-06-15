@@ -35,7 +35,7 @@ _Example_: If we wanted to loop through an array, the first access would require
 | :------: | :----: | :-------: | :------: | :--: |
 |   O(n)   |  O(n)  |   O(1)    |   O(1)   | O(1) |
 
-\*In case you want to access the first stack item.
+\*In case you want to access the bottom stack item.
 
 ### Space Complexity
 
