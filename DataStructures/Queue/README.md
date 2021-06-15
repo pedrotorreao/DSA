@@ -1,5 +1,7 @@
 ## Queues
 
+See code for this data structure [here](/DataStructures/Queue/src).
+
 ### Definition
 
 Collection of elements that are maintained in a sequence and can be modified by the addition of entities at one end (back/tail) of the sequence and the removal of entities from the other end of the sequence (front/head).
@@ -25,9 +27,11 @@ Adjustments can be made in case we still want to use an array as building block.
 
 ### Time Complexity
 
-| Access | Search | Insertion | Deletion |
-| :----: | :----: | :-------: | :------: |
-|  O(n)  |  O(n)  |   O(1)    |   O(1)   |
+| Access\* | Search | Insertion | Deletion | Peek |
+| :------: | :----: | :-------: | :------: | :--: |
+|   O(n)   |  O(n)  |   O(1)    |   O(1)   | O(1) |
+
+\*In case you want to access the second to last queue element.
 
 ### Space Complexity
 
