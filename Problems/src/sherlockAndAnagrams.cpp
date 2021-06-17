@@ -3,12 +3,11 @@
 /****************************************************************/
 /*
 -- Summary:
-
+Two strings are anagrams of each other if the letters of one string can be rearranged to form the other string. Given a string, find the number of pairs of substrings of the string that are anagrams of each other. 
 -- Input(s):
-
+string s: a string 
 -- Expected output(s):
-
--- Constraints:
+int: the number of unordered anagrammatic pairs of substrings in s.
 */
 
 #include <iostream>
@@ -73,8 +72,7 @@ int sherlockAndAnagrams(std::string s)
   {
     if (it->second > 1)
     {
-      //std::cout << it->first << " ";
-      count += (it->second - 1);
+      count += ((it->second) * (it->second - 1)) / 2;
     }
     it++;
   }
@@ -84,11 +82,17 @@ int sherlockAndAnagrams(std::string s)
 
 int main()
 {
-  std::string s = "kkkk";
+  std::string s1 = "cdcd";
+  std::string s2 = "kkkk";
+  std::string s3 = "mom";
+  std::string s4 = "abba";
 
-  //std::vector<std::string> subs = getAllSubstrings(s);
-
-  std::cout << sherlockAndAnagrams(s) << "\n";
+  std::cout << "String --> number of anagrammatic pairs"
+            << "\n";
+  std::cout << s1 << " --> " << sherlockAndAnagrams(s1) << "\n";
+  std::cout << s2 << " --> " << sherlockAndAnagrams(s2) << "\n";
+  std::cout << s3 << " --> " << sherlockAndAnagrams(s3) << "\n";
+  std::cout << s4 << " --> " << sherlockAndAnagrams(s4) << "\n";
 
   return 0;
 }
