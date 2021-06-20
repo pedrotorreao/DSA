@@ -8,8 +8,7 @@
 class TrieNode
 {
 public:
-  //TrieNode * children[26];
-  std::vector<TrieNode *> children;
+  TrieNode *children[26];
   bool endOfWord;
   int count;
 
@@ -17,10 +16,10 @@ public:
   {
     endOfWord = false;
     count = 0;
-    children.reserve(26);
-    for (auto it = children.begin(); it != children.end(); it++)
+
+    for (size_t i{0}; i < 26; i++)
     {
-      *it = nullptr;
+      children[i] = nullptr;
     }
   }
 };
@@ -58,16 +57,16 @@ void Trie::insertWord(std::string word)
 
     // check if there is already a word which uses the letter word[i],
     // if not, initialize a new node at that position:
-    if (current->children.at(j) == nullptr)
+    if (current->children[j] == nullptr)
     {
-      current->children.at(j) = new TrieNode();
+      current->children[j] = new TrieNode();
     }
 
     // increment the word count for node children[j] since a new word is being added which whis node is part of:
-    ++current->children.at(j)->count;
+    ++current->children[j]->count;
 
     // advance to the next character in the word:
-    current = current->children.at(j);
+    current = current->children[j];
   }
 
   current->endOfWord = true;
@@ -89,12 +88,12 @@ bool Trie::searchWord(std::string word)
   {
     auto j = int(word.at(i)) - 97;
 
-    if (current->children.at(j) == nullptr)
+    if (current->children[j] == nullptr)
     {
       return false;
     }
 
-    current = current->children.at(j);
+    current = current->children[j];
   }
 
   return (current->endOfWord);
@@ -103,12 +102,15 @@ bool Trie::searchWord(std::string word)
 bool Trie::deleteHelper(std::string word, TrieNode *parent, int idx)
 {
   char currentCharac = word.at(idx);
-  TrieNode *current = parent->children.at(int(currentCharac) - 97);
+  TrieNode *current = parent->children[int(currentCharac) - 97];
   bool removable = false;
 
-  if (current->count)
+  if (current->count && idx + 1 < word.size())
   {
     deleteHelper(word, current, idx + 1);
+
+    parent->children[int(currentCharac) - 97]->count--;
+
     return false;
   }
 
@@ -116,17 +118,21 @@ bool Trie::deleteHelper(std::string word, TrieNode *parent, int idx)
   {
     if (current->count)
     {
+      parent->children[int(currentCharac) - 97]->count--;
       current->endOfWord = false;
+
       return false;
     }
     else
     {
+      parent->children[int(currentCharac) - 97]->count--;
       current = nullptr;
+
       return true;
     }
   }
 
-  if (current->endOfWord)
+  if (current->endOfWord && idx + 1 < word.size())
   {
     deleteHelper(word, current, idx + 1);
     return false;
@@ -136,8 +142,11 @@ bool Trie::deleteHelper(std::string word, TrieNode *parent, int idx)
 
   if (removable)
   {
+    parent->children[int(currentCharac) - 97]->count--;
     current = nullptr;
   }
+
+  return false;
 }
 
 int Trie::searchPrefix(std::string word)
@@ -147,18 +156,41 @@ int Trie::searchPrefix(std::string word)
   for (size_t i{0}; i < word.length(); i++)
   {
     size_t j = int(word.at(i)) - 97;
-    if (current->children.at(j) == nullptr)
+    if (current->children[j] == nullptr)
     {
       return 0;
     }
-    current = current->children.at(j);
+    current = current->children[j];
   }
   return current->count;
 }
 
 int main()
 {
-  Trie trieDS;
+  std::cout.setf(std::ios::boolalpha);
+
+  Trie myTrie;
+
+  myTrie.insertWord("trial");
+  myTrie.insertWord("tree");
+  myTrie.insertWord("man");
+  myTrie.insertWord("mind");
+  myTrie.insertWord("mid");
+  myTrie.insertWord("apple");
+  myTrie.insertWord("middle");
+
+  std::cout << "'trial' is on Trie: " << myTrie.searchWord("trial") << "\n";
+  std::cout << "'time' is on Trie: " << myTrie.searchWord("time") << "\n";
+
+  std::cout << "prefix 'tr': " << myTrie.searchPrefix("tr") << "\n";
+  std::cout << "prefix 'mi': " << myTrie.searchPrefix("mi") << "\n";
+
+  myTrie.deleteWord("trial");
+  std::cout << "'trial' is on Trie: " << myTrie.searchWord("trial") << "\n";
+
+  myTrie.deleteWord("mind");
+  std::cout << "'mind' is on Trie: " << myTrie.searchWord("mind") << "\n";
+  std::cout << "prefix 'mi': " << myTrie.searchPrefix("mi") << "\n";
 
   return 0;
 }
