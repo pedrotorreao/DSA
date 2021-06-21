@@ -1,6 +1,6 @@
 ## Graphs
 
-Check out the code for this data structure [here](/DataStructures/Graph/src).
+Check out the code for this data structure [here](/DataStructures/Graphs/src).
 
 ### Definition
 
