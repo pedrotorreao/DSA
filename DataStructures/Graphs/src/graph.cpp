@@ -91,8 +91,6 @@ void Graph::bfs(int src)
   std::unordered_map<int, bool> visited;
   std::queue<int> q;
 
-  std::string traversal;
-
   auto it = this->adjList.begin();
   while (it != this->adjList.end())
   {
