@@ -3,8 +3,11 @@
 /***************************************************************************/
 #include <iostream>
 #include <vector>
+#include <string>
 #include <unordered_map>
 #include <stdexcept>
+#include <queue>
+#include <stack>
 
 class Graph
 {
@@ -16,6 +19,9 @@ public:
   void addEdge(int src, int dest);
   void removeVertex(int v);
   void removeEdge(int src, int dest);
+
+  void bfs(int src);
+  void dfs(int src);
 
   void printGraph(void);
 
@@ -75,6 +81,94 @@ void Graph::removeEdge(int src, int dest)
   throw std::invalid_argument("Make sure both src and dest are graph vertices.");
 }
 
+void Graph::bfs(int src)
+{
+  if (!this->adjList.count(src))
+  {
+    throw std::invalid_argument("src is not a vertex!");
+  }
+
+  std::unordered_map<int, bool> visited;
+  std::queue<int> q;
+
+  std::string traversal;
+
+  auto it = this->adjList.begin();
+  while (it != this->adjList.end())
+  {
+    visited[it->first] = false;
+    it++;
+  }
+
+  q.push(src);
+  visited[src] = true;
+
+  std::cout << "bfs: ";
+
+  while (!q.empty())
+  {
+    int currentVertex = q.front();
+    q.pop();
+
+    std::cout << currentVertex << " ";
+
+    std::vector<int> neighbors = this->adjList[currentVertex];
+
+    for (auto i{0}; i < neighbors.size(); i++)
+    {
+      if (!visited[neighbors.at(i)])
+      {
+        visited[neighbors.at(i)] = true;
+        q.push(neighbors.at(i));
+      }
+    }
+  }
+
+  std::cout << "\n";
+}
+
+void Graph::dfs(int src)
+{
+  if (!this->adjList.count(src))
+  {
+    throw std::invalid_argument("src is not a vertex!");
+  }
+
+  std::unordered_map<int, bool> visited;
+  std::stack<int> s;
+
+  auto it = this->adjList.begin();
+  while (it != this->adjList.end())
+  {
+    visited[it->first] = false;
+    it++;
+  }
+
+  s.push(src);
+  visited[src] = true;
+
+  std::cout << "dfs: ";
+
+  while (!s.empty())
+  {
+    int currentVertex = s.top();
+    s.pop();
+
+    std::cout << currentVertex << " ";
+
+    std::vector<int> neighbors = this->adjList[currentVertex];
+
+    for (auto i{0}; i < neighbors.size(); i++)
+    {
+      if (!visited[neighbors.at(i)])
+      {
+        visited[neighbors.at(i)] = true;
+        s.push(neighbors.at(i));
+      }
+    }
+  }
+}
+
 void Graph::printGraph(void)
 {
   auto it = this->adjList.begin();
@@ -115,8 +209,10 @@ int main()
 
   g.printGraph();
 
-  g.removeVertex(4);
-  g.printGraph();
+  g.bfs(1);
+  g.dfs(1);
+  // g.removeVertex(4);
+  // g.printGraph();
 
   return 0;
 }
