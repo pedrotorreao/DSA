@@ -10,7 +10,6 @@ class Graph
 {
 private:
   std::unordered_map<int, std::vector<int>> adjList;
-  int numOfVertices;
 
 public:
   void addVertex(int v);
@@ -20,17 +19,13 @@ public:
 
   void printGraph(void);
 
-  Graph()
-  {
-    this->numOfVertices = 0;
-  }
+  Graph() {}
   ~Graph() {}
 };
 
 void Graph::addVertex(int v)
 {
   this->adjList[v] = {};
-  ++this->numOfVertices;
 }
 
 void Graph::addEdge(int src, int dest)
