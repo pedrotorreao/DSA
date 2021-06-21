@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <queue>
 #include <stdexcept>
 #include <queue>
 #include <stack>
@@ -22,6 +23,8 @@ public:
 
   void bfs(int src);
   void dfs(int src);
+
+  void shortestPathBFS(int src, int dest);
 
   void printGraph(void);
 
@@ -167,6 +170,76 @@ void Graph::dfs(int src)
   }
 }
 
+void Graph::shortestPathBFS(int src, int dest)
+{
+  if (!this->adjList.count(src) || !this->adjList.count(dest))
+  {
+    throw std::invalid_argument("src/dest is not a vertex!");
+  }
+
+  std::unordered_map<int, bool> visited;
+  std::queue<int> q;
+  std::unordered_map<int, int> predecessor;
+  std::unordered_map<int, int> distance;
+
+  auto it = this->adjList.begin();
+  while (it != this->adjList.end())
+  {
+    visited[it->first] = false;
+    predecessor[it->first] = -1;
+    distance[it->first] = 0;
+
+    it++;
+  }
+
+  q.push(src);
+  visited[src] = true;
+
+  while (!q.empty())
+  {
+    int currentVertex = q.front();
+    q.pop();
+
+    std::cout << currentVertex << " ";
+
+    std::vector<int> neighbors = this->adjList[currentVertex];
+
+    for (auto i{0}; i < neighbors.size(); i++)
+    {
+      if (!visited[neighbors.at(i)])
+      {
+        visited[neighbors.at(i)] = true;
+        q.push(neighbors.at(i));
+
+        predecessor[neighbors.at(i)] = currentVertex;
+        distance[neighbors.at(i)] = distance[currentVertex] + 1;
+      }
+    }
+  }
+
+  if (!visited[dest])
+  {
+    throw std::out_of_range("dest is unreachable from src.");
+  }
+
+  // display path and path length:
+  std::vector<int> path;
+  for (int node = dest; node != -1; node = predecessor[node])
+  {
+    path.push_back(node);
+  }
+  std::cout << "\nShortest path length from " << src << " to " << dest << " : " << distance[dest] << "\n";
+
+  std::cout << "Path: ";
+  auto i = path.size() - 1;
+  while (i != 0)
+  {
+    std::cout << path.at(i) << " ";
+    i--;
+  }
+  std::cout << "\n";
+}
+
 void Graph::printGraph(void)
 {
   auto it = this->adjList.begin();
@@ -197,6 +270,7 @@ int main()
   g.addVertex(3);
   g.addVertex(4);
   g.addVertex(5);
+  g.addVertex(6);
 
   g.addEdge(1, 2);
   g.addEdge(1, 4);
@@ -204,11 +278,13 @@ int main()
   g.addEdge(2, 3);
   g.addEdge(4, 3);
   g.addEdge(4, 5);
+  g.addEdge(3, 6);
 
   g.printGraph();
 
   g.bfs(1);
   g.dfs(1);
+  g.shortestPathBFS(1, 6);
   // g.removeVertex(4);
   // g.printGraph();
 
