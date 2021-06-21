@@ -200,8 +200,6 @@ void Graph::shortestPathBFS(int src, int dest)
     int currentVertex = q.front();
     q.pop();
 
-    std::cout << currentVertex << " ";
-
     std::vector<int> neighbors = this->adjList[currentVertex];
 
     for (auto i{0}; i < neighbors.size(); i++)
