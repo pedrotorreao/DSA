@@ -26,7 +26,9 @@ An undirected graph is one in which its edges have no orientations, i.e., edges 
 
 A graph can be classified as cyclic if there is any path `{A1, …, An}` such that the edges `A1→A2`, `A2→A3`​, `…`, and `An→A1`​ all exist, thus forming a loop.
 
-A few variations of graph types can be seen in the image below: ![graphtypes](../../resources/img/graphtypes.png)
+A few variations of graph types can be seen in the image below:
+
+![graphtypes](../../resources/img/graphtypes.png)
 
 ### Graph Representation
 
