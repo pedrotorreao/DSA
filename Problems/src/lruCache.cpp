@@ -17,3 +17,42 @@ values count as recently accessed.)
     key: integer
     value: string
 */
+
+#include <iostream>
+#include <unordered_map>
+#include <string>
+#include <list>
+
+class Cache
+{
+private:
+  std::unordered_map<int, std::string> cacheMap;
+  std::list<int> cacheKeys;
+  int cacheSize;
+  int cacheCount;
+
+public:
+  std::string get(int key);
+  void put(int key, std::string value);
+
+  Cache(int size);
+  ~Cache() {}
+};
+
+Cache::Cache(int size)
+{
+  this->cacheSize = size;
+  this->cacheCount = 0;
+}
+
+std::string Cache::get(int key) {}
+
+void Cache::put(int key, std::string value) {}
+
+int main()
+{
+
+  Cache lrucache(100);
+
+  return 0;
+}
