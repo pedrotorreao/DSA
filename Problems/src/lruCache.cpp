@@ -19,6 +19,7 @@ values count as recently accessed.)
 */
 
 #include <iostream>
+#include <stdexcept>
 #include <unordered_map>
 #include <string>
 #include <list>
@@ -34,6 +35,8 @@ private:
 public:
   std::string get(int key);
   void put(int key, std::string value);
+  void updateKeyList(int key);
+  void evictFromCache(void);
 
   Cache(int size);
   ~Cache() {}
@@ -45,9 +48,36 @@ Cache::Cache(int size)
   this->cacheCount = 0;
 }
 
-std::string Cache::get(int key) {}
+std::string Cache::get(int key)
+{
+  if (!this->cacheMap.count(key))
+  {
+    throw std::invalid_argument("key not present!");
+  }
+  updateKeyList(key);
+  return this->cacheMap[key];
+}
 
-void Cache::put(int key, std::string value) {}
+void Cache::put(int key, std::string value)
+{
+  if (this->cacheCount + 1 > this->cacheSize)
+  {
+    evictFromCache();
+    cacheCount--;
+  }
+
+  this->cacheMap[key] = value;
+  cacheCount++;
+  updateKeyList(key);
+}
+
+void Cache::updateKeyList(int key)
+{
+}
+
+void Cache::evictFromCache(void)
+{
+}
 
 int main()
 {
