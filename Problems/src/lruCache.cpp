@@ -27,19 +27,24 @@ values count as recently accessed.)
 class Cache
 {
 private:
-  std::unordered_map<int, std::string> cacheMap;
-  std::list<int> cacheKeys;
+  // hashmap: key (int), value (iterator to a list containing key pair values):
+  std::unordered_map<int, std::list<std::pair<int, std::string>>::iterator> cacheMap;
+  // list containing key pair values:
+  std::list<std::pair<int, std::string>> cacheKeys;
   int cacheSize;
-  int cacheCount;
 
 public:
   std::string get(int key);
   void put(int key, std::string value);
-  void updateKeyList(int key);
-  void evictFromCache(int key);
+
+  // helper methods:
+  void addToCache(int key, std::string value);
+  void updateCache(std::list<std::pair<int, std::string>>::iterator it, int key, std::string new_value);
+  void evictFromCache(void);
   int cacheOccupancy(void);
   void displayCacheElements(void);
 
+  // constructors/destructors:
   Cache(int size);
   ~Cache() {}
 };
@@ -47,75 +52,99 @@ public:
 Cache::Cache(int size)
 {
   this->cacheSize = size;
-  this->cacheCount = 0;
 }
 
 std::string Cache::get(int key)
 {
-  if (this->cacheMap.count(key))
+  // look for key on the hashmap:
+  auto it = this->cacheMap.find(key);
+
+  // if key is not present on cache (cache miss), throw error:
+  if (it == this->cacheMap.end())
   {
-    updateKeyList(key);
-    return this->cacheMap[key];
+    throw std::invalid_argument(" >> Key NOT present on cache! << ");
   }
-  return "Key does not exist!";
+
+  //  if key is on cache (cache hit), update cache and return value:
+  updateCache(it->second, it->second->first, it->second->second);
+
+  return it->second->second;
 }
 
 void Cache::put(int key, std::string value)
 {
-  if ((this->cacheCount + 1 > this->cacheSize) && !this->cacheMap.count(key))
+  // look for key on the hashmap:
+  auto it = this->cacheMap.find(key);
+
+  // if key is not yet present on cache (cache miss):
+  if (it == this->cacheMap.end())
   {
-    evictFromCache(key);
-  }
-
-  updateKeyList(key);
-  this->cacheMap[key] = value;
-
-  cacheCount++;
-}
-
-void Cache::updateKeyList(int key)
-{
-  // in case it's just a get operation, remove repeated:
-  if (this->cacheMap.count(key))
-  {
-    this->cacheKeys.remove(key);
-  }
-
-  // push key to the front:
-  this->cacheKeys.push_front(key);
-}
-
-void Cache::evictFromCache(int key)
-{
-  if (!this->cacheMap.count(key))
-  {
-    int keyToEvict = this->cacheKeys.back();
-    auto it = this->cacheMap.begin();
-
-    while (it != cacheMap.end())
+    // check if the new addition exceeds cache capacity,
+    // if it does, evict least recently used (lru) pair:
+    if ((this->cacheMap.size() + 1) > this->cacheSize)
     {
-      if (it->first == keyToEvict)
-      {
-        break;
-      }
-      it++;
+      evictFromCache();
     }
-    this->cacheMap.erase(it);
+
+    // add new pair to the cache:
+    addToCache(key, value);
+    return;
   }
 
+  // if key is already present on cache (cache hit),
+  // update its value and move it to the front of the cache:
+  updateCache(it->second, key, value);
+}
+
+void Cache::addToCache(int key, std::string value)
+{
+
+  std::pair<int, std::string> new_pair = std::make_pair(key, value);
+
+  this->cacheKeys.push_front(new_pair);
+  this->cacheMap[key] = this->cacheKeys.begin();
+}
+
+void Cache::updateCache(std::list<std::pair<int, std::string>>::iterator it, int key, std::string new_value)
+{
+  // update key value:
+  it->second = new_value;
+
+  // store pair into a temp variable:
+  std::pair<int, std::string> temp_pair = *it;
+
+  // remove pair from original location:
+  this->cacheKeys.erase(it);
+
+  // add updated pair to the front:
+  this->cacheKeys.push_front(temp_pair);
+
+  // update hashmap:
+  this->cacheMap[key] = this->cacheKeys.begin();
+}
+
+void Cache::evictFromCache(void)
+{
+  // get iterator to last cache element, the last element of the list:
+  auto leastUsedElement = this->cacheKeys.rbegin();
+
+  // remove the key from the hashmap:
+  this->cacheMap.erase(leastUsedElement->first);
+
+  // evict least recently used element from cache:
   this->cacheKeys.pop_back();
-  this->cacheCount--;
 }
 
 int Cache::cacheOccupancy(void)
 {
-  return this->cacheCount;
+  return this->cacheMap.size();
 }
 
 void Cache::displayCacheElements(void)
 {
-  auto it = this->cacheMap.begin();
-  while (it != this->cacheMap.end())
+  auto it = this->cacheKeys.begin();
+  std::cout << "\n-----\n";
+  while (it != this->cacheKeys.end())
   {
     std::cout << "Time: " << it->first << "   Task: " << it->second << "\n";
     it++;
@@ -134,191 +163,21 @@ int main()
 
   lrucache.displayCacheElements();
 
-  std::cout << "Schedule 09:00AM: " << lrucache.get(900) << "\n";
-  std::cout << "Schedule 04:00PM: " << lrucache.get(1600) << "\n";
+  std::cout << "\nSchedule 09:00AM: " << lrucache.get(900) << "\n";
+  lrucache.displayCacheElements();
+
+  std::cout << "\nSchedule 04:00PM: " << lrucache.get(1600) << "\n";
+  lrucache.displayCacheElements();
 
   lrucache.put(1600, "break");
-  std::cout << "Schedule 04:00PM: " << lrucache.get(1600) << "\n";
+  lrucache.displayCacheElements();
+
+  std::cout << "\nSchedule 04:00PM: " << lrucache.get(1600) << "\n";
 
   lrucache.put(1800, "dinner");
-  std::cout << "Schedule 05:48PM: " << lrucache.get(1800) << "\n";
+  std::cout << "\nSchedule 05:48PM: " << lrucache.get(1748) << "\n";
 
   lrucache.displayCacheElements();
 
   return 0;
 }
-
-/*
---Input:
-["LRUCache","put","put","put","put","put","get","put","get","get","put","get","put","put","put","get","put","get","get","get","get","put","put","get","get","get","put","put","get","put","get","put","get","get","get","put","put","put","get","put","get","get","put","put","get","put","put","put","put","get","put","put","get","put","put","get","put","put","put","put","put","get","put","put","get","put","get","get","get","put","get","get","put","put","put","put","get","put","put","put","put","get","get","get","put","put","put","get","put","put","put","get","put","put","put","get","get","get","put","put","put","put","get","put","put","put","put","put","put","put"]
-
-[,,,,,,,,,,]
-
---Output:
-[,,,,,,,,,,,]
-
---Expected:
-[,,,,,,,,,,,,,,,,,,,,]
-
---
-"LRUCache":[10]
-"put":[10,13]
-"put":[3,17]
-"put":[6,11]
-"put":[10,5]
-"put":[9,10]
-
-"get":[13]  Output: -1    Expected: -1
-
-"put":[2,19]
-
-"get":[2]   Output: 19    Expected: 19
-"get":[3]   Output: 17    Expected: 17
-
-"put":[5,25]
-
-"get":[8]   Output: -1    Expected: -1
-
-"put":[9,22]
-"put":[5,5]
-"put":[1,30]
-
-"get":[11]    Output: -1  Expected: -1
-
-"put":[9,12]
-
-"get":[7]     Output: -1    Expected: -1
-"get":[5]     Output: 5     Expected: 5
-"get":[8]     Output: -1    Expected: -1
-"get":[9]     Output: 12    Expected: 12
-
-"put":[4,30]
-"put":[9,3]
-
-"get":[9]     Output: 3     Expected: 3
-"get":[10]    Output: 5     Expected: 5
-"get":[10]    Output: 5     Expected: 5
-
-"put":[6,14]
-"put":[3,1]
-
-"get":[3]     Output: 1     Expected: 1
-
-"put":[10,11]
-
-"get":[8]     Output: -1    Expected: -1
-
-"put":[2,14]
-
-"get":[1]     Output: -1    Expected: 30
-"get":[5]     Output: 5     Expected: 5
-"get":[4]     Output: 30    Expected: 30
-
-"put":[11,4]
-"put":[12,24]
-"put":[5,18]
-
-"get":[13]    Output: -1    Expected: -1
-
-"put":[7,23]
-
-"get":[8]     Output: -1    Expected: -1
-"get":[12]    Output: 24    Expected: 24
-
-"put":[3,27]
-"put":[2,12]
-
-"get":[5]     Output: 18    Expected: 18
-
-"put":[2,9]
-"put":[13,4]
-"put":[8,18]
-"put":[1,7]
-
-"get":[6]     Output: -1    Expected: -1
-
-"put":[9,29]
-"put":[8,21]
-
-"get":[5]     Output: 18    Expected: 18
-
-"put":[6,30]
-"put":[1,12]
-
-"get":[10]    Output: -1    Expected: -1
-
-"put":[4,15]
-"put":[7,22]
-"put":[11,26]
-"put":[8,17]
-"put":[9,29]
-
-"get":[5]     Output: -1    Expected: 18
-
-"put":[3,4]
-"put":[11,30]
-
-"get":[12]    Output: -1    Expected: -1
-
-"put":[4,29]
-
-"get":[3]      Output: 4     Expected: 4
-"get":[9]      Output: 29    Expected: 29
-"get":[6]      Output: -1    Expected: 30
-
-"put":[3,4]
-
-"get":[1]      Output: 12    Expected: 12
-"get":[10]     Output: -1    Expected: -1
-
-"put":[3,29]
-"put":[10,28]
-"put":[1,20]
-"put":[11,13]
-
-"get":[3]     Output: 29    Expected: 29
-
-"put":[3,12]
-"put":[3,8]
-"put":[10,9]
-"put":[3,26]
-
-"get":[8]     Output: 17    Expected: 17
-"get":[7]     Output: -1    Expected: 22
-"get":[5]     Output: -1    Expected: 18
-
-"put":[13,17]
-"put":[2,27]
-"put":[11,15]
-
-"get":[12]    Output: -1    Expected: -1
-
-"put":[9,19]
-"put":[2,15]
-"put":[3,16]
-
-"get":[1]     Output: -1    Expected: 20
-
-"put":[12,17]
-"put":[9,1]
-"put":[6,19]
-
-"get":[4]     Output: -1    Expected: -1
-"get":[5]     Output: -1    Expected: 18
-"get":[5]     Output: -1    Expected: 18
-
-"put":[8,1]
-"put":[11,7]
-"put":[5,2]
-"put":[9,28]
-
-"get":[1]     Output: -1    Expected: 20
-
-"put":[2,2]
-"put":[7,4]
-"put":[4,22]
-"put":[7,24]
-"put":[9,26]
-"put":[13,28]
-"put":[11,26]
-*/
