@@ -8,4 +8,6 @@ _Abbreviations:_
 - LC: Leetcode
 - CW: CodeWars
 
-### List
+Check out all the solutions [here](https://github.com/pedrotorreao/DSA/tree/master/Problems/src).
+
+### [Data Structures & Algorithms - Index](../README.md)
