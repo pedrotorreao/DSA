@@ -20,9 +20,12 @@ int nfHelper(int n, std::vector<int> &mem)
   if (n < 1)
     return 0;
 
+  // in case the number factor for n has already been calculated,
+  // just return it, avoiding unnecessary recursive calls:
   if (mem.at(n) != 0)
     return mem.at(n);
 
+  // otherwise, calculate its number factor and store the result:
   mem.at(n) = nfHelper(n - 1, mem) + nfHelper(n - 3, mem) + nfHelper(n - 4, mem);
 
   return mem.at(n);

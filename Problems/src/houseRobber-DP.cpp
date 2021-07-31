@@ -23,16 +23,24 @@ Example 1:
 // ---- Top Down Approach - Memoization ----:
 int robHelper(std::vector<int> &nums, std::vector<int> &dp, int houseIdx)
 {
+  // if there are no houses to rob or if we got to the end of them, return 0:
   if (nums.size() == 0 || houseIdx >= nums.size())
   {
     return 0;
   }
-
+  // if there is only one house, it is the max we can get, return its value:
   if (nums.size() == 1)
   {
     return nums.at(0);
   }
-
+  // as dp[] will be initially zero for all the houseIdxs, it will try to calculate
+  // the values for robCurrentHouse and robNextHouse by making recursive calls
+  // to the next houseIdxs until we get to the end of the houses array (nums)
+  // and (houseIdx >= nums.size()) when will have to return 0 since houses[7] and
+  // houses[8] do not exist so their values are zero. Then, it is just a matter of
+  // stack unwinding where at each finished call the max loot value is calculated,
+  // stored at dp[houseIdx] and returned, so when we get to the first call made,
+  // the value stored at its id will be the maximum:
   if (dp.at(houseIdx) == 0)
   {
     int robCurrentHouse = nums.at(houseIdx) + robHelper(nums, dp, houseIdx + 2);
@@ -54,8 +62,15 @@ int robTD(std::vector<int> &nums)
 // ---- Bottom Up Approach - Tabulation ----:
 int robBU(std::vector<int> &nums)
 {
+  // create an array with size 2 positions bigger than our
+  // number of houses since we will need to consider the case
+  // where we've reached the last element and a we'll check
+  // (currentHouseID+2):
   std::vector<int> dp(nums.size() + 2);
 
+  // iterate backwards from the last house and at each iteration
+  // we store the current max loot at dp[i], so when we exit the
+  // for loop, the maximum value will be stored at dp[0]:
   for (int i = nums.size() - 1; i >= 0; i--)
   {
     dp.at(i) = std::max(nums.at(i) + dp.at(i + 2), dp.at(i + 1));
