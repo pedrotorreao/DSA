@@ -1,6 +1,13 @@
 /***********************************************************************************/
 /* Problem: Longest Common Subsequence - Divide & Conquer Approach           *******/
 /***********************************************************************************/
+/*
+Problem statement:
+  Given two strings s1 and s2, find the length of the longest subsequence which is
+  common to both strings. A subsequence is a sequence that can be derived from another
+  sequence by deleting some of the elements as long as the order of the remaining
+  elements is not changed.
+*/
 
 #include <iostream>
 #include <string>
