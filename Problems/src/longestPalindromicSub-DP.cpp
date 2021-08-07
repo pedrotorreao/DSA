@@ -78,6 +78,41 @@ int lpsTD(std::string s)
 
 int lpsBU(std::string s)
 {
+  std::vector<std::vector<int>> dp(s.size(), std::vector<int>(s.size()));
+
+  for (int col = 0; col < s.size(); col++)
+  {
+    for (int row = (s.size() - 1); row >= 0; row--)
+    {
+      // BASE CASE: if the indices cross each other, there are no more
+      // characters to check, return 0:
+      // std::cout << row << "--" << col << "\n";
+      if (row > col)
+      {
+        dp.at(row).at(col) = 0;
+      }
+      // BASE CASE: if the indices are equal, then this is a palindrome
+      // of 1 character, return 1:
+      else if (row == col)
+      {
+        dp.at(row).at(col) = 1;
+      }
+      else
+      {
+        // CASE 1: current characters match, advance both indices:
+        if (s.at(row) == s.at(col))
+        {
+          dp.at(row).at(col) = std::max(2 + dp.at(row + 1).at(col - 1), std::max(dp.at(row).at(col - 1), dp.at(row + 1).at(col)));
+        }
+        // CASE 2: current characters don't match, advance each index separately and get the max value betrween the two:
+        else
+        {
+          dp.at(row).at(col) = std::max(dp.at(row).at(col - 1), dp.at(row + 1).at(col));
+        }
+      }
+    }
+  }
+  return dp.at(0).at(s.size() - 1);
 }
 
 // ---- Driver code: ----:
@@ -86,11 +121,15 @@ int main()
 {
   std::string str = "ELRMENMET";
 
-  std::cout << "Longest Palindromic Subsequence length for " << str << ": " << lpsTD(str) << "\n";
+  std::cout << "Longest Palindromic Subsequence length for " << str << ":\n"
+            << "\tTop Down: " << lpsTD(str) << "\n"
+            << "\tBottom Up: " << lpsBU(str) << "\n";
 
   str = "AMEEWMEA";
 
-  std::cout << "Longest Palindromic Subsequence length for " << str << ": " << lpsTD(str) << "\n";
+  std::cout << "Longest Palindromic Subsequence length for " << str << ":\n"
+            << "\tTop Down: " << lpsTD(str) << "\n"
+            << "\tBottom Up: " << lpsBU(str) << "\n";
 
   return 0;
 }
