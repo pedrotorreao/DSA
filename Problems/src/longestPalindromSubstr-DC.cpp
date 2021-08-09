@@ -1,5 +1,5 @@
 /***********************************************************************************/
-/* Problem: Longest Common Substring - Divide & Conquer Approach           *******/
+/* Problem: Longest Palindromic Substring - Divide & Conquer Approach           *******/
 /***********************************************************************************/
 /*
 -- Problem Statement:

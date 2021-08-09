@@ -1,5 +1,5 @@
 /***********************************************************************************/
-/* Problem: Longest Common Subsequence - Divide & Conquer Approach           *******/
+/* Problem: Longest Palindromic Subsequence - Divide & Conquer Approach           *******/
 /***********************************************************************************/
 /*
 -- Problem Statement:

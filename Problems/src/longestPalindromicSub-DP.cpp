@@ -1,5 +1,5 @@
 /***********************************************************************************/
-/* Problem: Longest Common Subsequence - Divide & Conquer Approach           *******/
+/* Problem: Longest Palindromic Subsequence - Dynamic Programming Approach   *******/
 /***********************************************************************************/
 /*
 -- Problem Statement:
@@ -45,8 +45,6 @@ int lcsHelper(std::string str, std::vector<std::vector<int>> &dp, int i_start, i
 
   if (!dp.at(i_start).at(i_end))
   {
-    int lps_res1 = 0;
-
     // CASE 1: current characters match, advance both indices:
     if (str.at(i_start) == str.at(i_end))
     {
