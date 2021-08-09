@@ -1,7 +1,20 @@
 /***********************************************************************************/
 /* Problem: Min. Cost to Find End of 2D Matrix - Divide & Conquer Approach   *******/
 /***********************************************************************************/
-
+/*
+-- Proble Statement:
+  Given a 2D array M where each cell represents the cost associated with going through
+  this cell, what is the minimum cost possible in which we can go from the first cell
+  M[0][0] to the last cell M[m-1][n-1] in the array considering that traversal is only 
+  possible in the down and right directions?
+-- Reasoning:
+  We'll begin from the end of the array, cell M[m-1][n-1], where m is the number of rows
+  and n is the number os columns. Since we are beginning from the last cell, our movements
+  now are restricted to the up and left directions. For each cell, we calculate the cost of
+  going both possible ways, recurring until we get to the first cell M[0][0], which 
+  represents our base case and we just return its value. The end result will be the minimum
+  value between both directions.
+*/
 #include <iostream>
 #include <vector>
 #include <cmath>
