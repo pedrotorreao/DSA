@@ -12,6 +12,7 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
   - [Linked Lists](DataStructures/Linked%20List/README.md) [theory + code]
   - [Stacks](DataStructures/Stack/README.md) [theory + code]
   - [Queues](DataStructures/Queue/README.md) [theory + code]
+  - [Hash Tables](DataStructures/Hash%20Table/README.md)
   - [Binary Search Tree](/DataStructures/Binary%20Search%20Tree/README.md) [code]
   - [AVL Tree](/DataStructures/AVL%20Tree/README.md) [code]
   - [Red-Black Tree](/DataStructures/Red-Black%20Tree/README.md) [code]
