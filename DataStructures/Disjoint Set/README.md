@@ -123,7 +123,7 @@ find_set(A):
   return parent[A] = find_set(parent[A])
 ```
 
-This data structure is commonly used in the Kruskal algorithm to find the inimum Spanning Tree (MST) of a graph.
+This data structure is commonly used in Kruskal's algorithm to find the Minimum Spanning Tree (MST) of a graph.
 
 - [Kruskal's Algorithm](/Algorithms/Minimum%20Spanning%20Tree/Kruskal/README.md)
 - [Minimum Spanning Tree](/DataStructures/Graphs/Minimum%20Spanning%20Tree/README.md)
