@@ -6,8 +6,8 @@
   Given two strings, write a method to decide if one is a permutation of the other.
 --Reasoning:
 
---Time complexity: 
---Space complexity: 
+--Time complexity: O(s), where s is the length of the string
+--Space complexity: O(s), in case we have a valid permutation and got to store all characters.
 */
 
 #include <iostream>
