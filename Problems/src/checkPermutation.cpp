@@ -5,8 +5,12 @@
 --Problem statement:
   Given two strings, write a method to decide if one is a permutation of the other.
 --Reasoning:
+  Map all characters in one of the strings to a hash table accounting for the frequence that each
+  character appears. After that, iterate through the other string checking if all the characters
+  in the second string are present at the hash table in the same frequence. If so, it is a valid
+  permutation.
 
---Time complexity: O(s), where s is the length of the string
+--Time complexity: O(s), where s is the length of the largest string
 --Space complexity: O(s), in case we have a valid permutation and got to store all characters.
 */
 
