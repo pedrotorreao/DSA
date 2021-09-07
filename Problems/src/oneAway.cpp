@@ -20,53 +20,52 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include <unordered_map>
+#include <cstdlib>
 
 bool isOneAway(const std::string &str1, const std::string &str2)
 {
-  std::unordered_map<char, int> str_map;
-  int diffs{0};
+  // if size difference is > 1, more than 1 edit is needed, return false:
+  if (abs(str1.size() - str2.size()) > 1)
+    return false;
 
-  // map string characters and their frequency:
-  for (auto s : str1)
+  // determine the smaller and larger strings:
+  std::string bigger = (str1.size() >= str2.size()) ? str1 : str2;
+  std::string smaller = (str1.size() < str2.size()) ? str1 : str2;
+
+  int ids{0}, idb{0};
+  bool oneEditDone{false};
+
+  while (ids < smaller.size() && idb < bigger.size())
   {
-    char c = std::tolower(s);
+    // characters differ:
+    if (smaller.at(ids) != bigger.at(idb))
+    {
+      // check if 1 edit was already accounted for, if so, return false:
+      if (oneEditDone)
+      {
+        return false;
+      }
+      // if not, set the flag to TRUE:
+      oneEditDone = true;
 
-    if ((!str_map[c]))
-    { // if character was not mapped yet, add it to the table
-      str_map[c] = 1;
+      // if the strings are the same size, the edit is a replacement,
+      // increment both pointers (idb is incremented outside if checks):
+      if (bigger.size() == smaller.size())
+      {
+        ids++;
+      }
     }
+    // characters match:
+    // increment both pointers (idb is incremented outside if checks):
     else
     {
-      str_map[c]++; // if character is repeated, update frequence
+      ids++; // not incremented for first edit when string sizes differ (delete, insert)
     }
+
+    idb++;
   }
 
-  // update map by crossing it w/ characters from str2:
-  for (auto s : str2)
-  {
-    char c = std::tolower(s);
-
-    if (!str_map[c] && (str_map[c] != 0) /*str_map.find(c) == str_map.end()*/)
-    { // s is not in str1, not a permutation
-      //str_map[s] = 1;
-      diffs++;
-    }
-    str_map[s]--; // update character frequence
-  }
-
-  auto it = str_map.begin();
-
-  while (it != str_map.end())
-  {
-    if (it->second != 0)
-    {
-      diffs++;
-    }
-    it++;
-  }
-
-  return ((diffs > 1) ? false : true);
+  return true;
 }
 
 int main()
