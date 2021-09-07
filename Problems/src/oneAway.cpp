@@ -12,9 +12,19 @@
     pale  - bale  ->    true
     pale  - bake  ->    false
 --Reasoning:
-   
---Time complexity: 
---Space complexity: 
+  Keep track of 2 pointers, one for the smaller and one for the larger string,
+  as well as a flag to indicate whether the first edit was already accounted for.
+  At each step check if characters match, if they do, move both pointers.
+  If there is a mismatch, check if the flag flag indicating that 1 edit was "done"
+  is set, if it is, the current edit is not the first one, so the string are not
+  one edit away, return false. If the flag was not set yet, set it. Next, check if
+  the strings are of the same size, if they are, the edit to be performed is a 
+  replacement and both pointers should be incremented. If the string sizes differ,
+  the edit is either the insertion of bigger[idb] to the smaller string or the 
+  removal of bigger[idb] in the bigger string, either way the smaller pointer
+  should be kept in the current position and only idb should be incremented.
+--Time complexity: O(s), where is the size of the larger string.
+--Space complexity: O(s), since we created two new strings.
 */
 
 #include <iostream>
