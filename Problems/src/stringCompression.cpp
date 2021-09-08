@@ -10,9 +10,13 @@
   Example:
     aabcccccaaa    ->    a2b1c5a3
 --Reasoning:
-  
---Time complexity: 
---Space complexity: 
+  Iterate through the string incrementing the char count while the current character is
+  the same as the next one (i.e. repeated). Once they differ, append the current character
+  as well as its frequency to the compressed string and restart the counter. Finally, check
+  if next iteration is the last one, if it is, append current character and its frequency.
+
+--Time complexity: O(s), where s is the length of the original string.
+--Space complexity: O(s), sue to the compressed string length.
 */
 
 #include <iostream>
@@ -21,8 +25,31 @@
 std::string stringCompression(const std::string &str)
 {
   std::string compressedString{""};
+  unsigned int char_count{1};
 
-  // ... code
+  for (int i{0}; i < str.size() - 1; i++)
+  {
+    char current_char = str.at(i);
+    char next_char = str.at(i + 1);
+
+    if (current_char == next_char)
+    {
+      char_count++;
+    }
+    else
+    {
+      compressedString.push_back(current_char);
+      compressedString.push_back(std::to_string(char_count).at(0));
+
+      char_count = 1;
+    }
+
+    if (i + 1 == (str.size() - 1))
+    {
+      compressedString.push_back(next_char);
+      compressedString.push_back(std::to_string(char_count).at(0));
+    }
+  }
 
   return (compressedString.size() < str.size()) ? compressedString : str;
 }
