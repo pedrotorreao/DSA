@@ -13,7 +13,7 @@
   Iterate through the string incrementing the char count while the current character is
   the same as the next one (i.e. repeated). Once they differ, append the current character
   as well as its frequency to the compressed string and restart the counter. Finally, check
-  if next iteration is the last one, if it is, append current character and its frequency.
+  if next iteration is the last one, if it is, append next character and its frequency.
 
 --Time complexity: O(s), where s is the length of the original string.
 --Space complexity: O(s), sue to the compressed string length.
