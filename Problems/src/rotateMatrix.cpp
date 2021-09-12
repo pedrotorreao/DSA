@@ -43,6 +43,17 @@ int main()
   std::cout << "matrix rotated 90deg: \n";
   displayMatrix(rotateMatrix_Copy(matrix));
 
+  matrix = {{1, 2, 3, 4},
+            {5, 6, 7, 8},
+            {9, 10, 11, 12},
+            {13, 14, 15, 16}};
+
+  std::cout << "original matrix: \n";
+  displayMatrix(matrix);
+
+  std::cout << "matrix rotated 90deg: \n";
+  displayMatrix(rotateMatrix_Copy(matrix));
+
   return 0;
 }
 
