@@ -16,7 +16,6 @@
 */
 
 #include <iostream>
-#include <list>
 #include <unordered_map>
 #include "singlyLinkedList/singlyLinkedList.h"
 
@@ -32,33 +31,23 @@ void removeDups(SinglyLinkedList &sll)
     if (!map_duplicates[current_node->data])
     {
       map_duplicates[current_node->data] = true;
+      prev_node = current_node;
     }
     else
     {
       prev_node->next = current_node->next;
+      sll.decLength();
     }
 
-    prev_node = current_node;
     current_node = current_node->next;
   }
-
-  sll.decLength();
 }
 
 int main()
 {
   SinglyLinkedList sll;
 
-  sll.append(2);
-  sll.append(0);
-  sll.append(2);
-  sll.append(5);
-  sll.append(1);
-  sll.append(3);
-  sll.append(6);
-  sll.append(9);
-  sll.append(5);
-  sll.append(7);
+  sll.feedList(10, 1, 10);
 
   std::cout << "--original linked list: ";
   sll.display();
