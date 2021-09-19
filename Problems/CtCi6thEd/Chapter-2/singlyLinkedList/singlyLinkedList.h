@@ -25,6 +25,7 @@ public:
 
   void feedList(int numOfNodes, int min, int max);
   Node *getH(void);
+  int getLength(void);
 
   SinglyLinkedList();
   ~SinglyLinkedList();

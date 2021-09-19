@@ -2,6 +2,7 @@
 - Data Structure: Singly Linked List (SLL)
 *******************************************************************************/
 #include <iostream>
+#include <random>
 #include "singlyLinkedList.h"
 
 Node::Node(int d)
@@ -64,6 +65,11 @@ Node *SinglyLinkedList::getH()
   return this->head;
 }
 
+int SinglyLinkedList::getLength()
+{
+  return this->length;
+}
+
 void SinglyLinkedList::incLength()
 {
   this->length++;
@@ -76,5 +82,12 @@ void SinglyLinkedList::decLength()
 
 void SinglyLinkedList::feedList(int numOfNodes, int min, int max)
 {
-  //..feed random elements to the list
+  std::random_device rndm;
+  std::mt19937 mt(rndm());
+  std::uniform_int_distribution<int> distribution(min, max);
+
+  for (int i{0}; i < numOfNodes; i++)
+  {
+    this->append(distribution(mt));
+  }
 }
