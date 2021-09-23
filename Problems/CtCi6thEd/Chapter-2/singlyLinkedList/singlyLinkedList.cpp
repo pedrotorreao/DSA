@@ -60,7 +60,7 @@ void SinglyLinkedList::display()
   std::cout << "\n";
 }
 
-Node *SinglyLinkedList::getH()
+Node *SinglyLinkedList::getH() const
 {
   return this->head;
 }
