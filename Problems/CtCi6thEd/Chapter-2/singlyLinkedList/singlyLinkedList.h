@@ -19,6 +19,7 @@ private:
 
 public:
   void append(int d);
+  void prepend(int d);
   void display(void);
   void incLength(void);
   void decLength(void);
