@@ -38,6 +38,24 @@ void SinglyLinkedList::append(int d)
   ++this->length;
 }
 
+void SinglyLinkedList::appendNode(Node *new_node)
+{
+  if (new_node != nullptr)
+  {
+    if (this->head == nullptr)
+    {
+      this->head = new_node;
+      this->tail = this->head;
+    }
+    else
+    {
+      this->tail->next = new_node;
+      this->tail = new_node;
+    }
+    ++this->length;
+  }
+}
+
 void SinglyLinkedList::prepend(int d)
 {
   Node *new_node = new Node(d);
@@ -53,6 +71,13 @@ void SinglyLinkedList::prepend(int d)
     this->head = new_node;
   }
   ++this->length;
+}
+
+void SinglyLinkedList::clearList()
+{
+  this->head->next = nullptr;
+  this->head = nullptr;
+  this->length = 0;
 }
 
 void SinglyLinkedList::display()
