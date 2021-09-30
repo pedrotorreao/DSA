@@ -12,23 +12,47 @@
     Output: C*
 
 --Reasoning:
+  Traverse the list while mapping the nodes and their positions to a hash map until we find a 
+  node that was already mapped, which indicates the presence of a cycle, since the only way we
+  visit the same node again is if there is another node further down the list whose next 
+  pointer is  pointing back to this node. Then we return this node and update the position to
+  this node's position. In case we reach the end of the linked list without coming across a 
+  repeated node, we return the nullptr to indicate that a cycle was not found.
 
 --Time complexity: 
+  O(L), where L is the length of the linked list.
  
 --Space complexity: 
+  O(L), where L is the length of the linked list, since we need to store L nodes in the hash map.
 */
 
 #include <iostream>
-#include <iomanip>
 #include <unordered_map>
 #include "singlyLinkedList/singlyLinkedList.h"
 
 Node *loopDetection(Node *ll_head, int &pos)
 {
-  Node *cycle_first = nullptr;
-  // ..
+  Node *current_node = ll_head;
+  std::unordered_map<Node *, int> map_sll;
 
-  return cycle_first;
+  while (current_node != nullptr)
+  {
+    if (!map_sll[current_node])
+    {
+      map_sll[current_node] = pos;
+    }
+    else
+    {
+      pos = map_sll[current_node];
+
+      return current_node;
+    }
+
+    current_node = current_node->next;
+    ++pos;
+  }
+
+  return nullptr;
 }
 
 int main()
