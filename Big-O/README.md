@@ -18,6 +18,17 @@ A **constant** running time means that no matter the size of the input, the perf
 
 It is good to mention, however, that a constant running time does not mean that something happens instantaneously, but that the running time will always be the same no matter how large is the dataset.
 
+> Example: In the function `getMax` below, no matter the values of `a` and `b`, `getMax` always performs the same amount of operations.
+
+```javascript
+function getMax(a, b) {
+  if (a > b) {
+    return a;
+  }
+  return b;
+}
+```
+
 1. Logarithmic - `O(log n)`:
 
 2. Linear - `O(n)`:
