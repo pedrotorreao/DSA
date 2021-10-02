@@ -18,17 +18,26 @@ public:
     this->top = new_element;
   }
 
-  T pop(void)
+  void pop(void)
   {
     if (this->stack.size() != 0)
     {
       this->stack.pop_back();
-      this->top = this->stack.at(this->stack.size() - 1);
+    }
+    else
+    {
+      std::cout << "Stack is already Empty\n";
     }
 
-    T emptyErr{};
-    std::cout << "Stack is Empty\n";
-    return emptyErr;
+    if (this->stack.size() > 0)
+    {
+      this->top = this->stack.at(this->stack.size() - 1);
+    }
+    else
+    {
+      T emptyErr{};
+      this->top = emptyErr;
+    }
   }
 
   T peek(void)
@@ -37,7 +46,7 @@ public:
       return this->top;
 
     T emptyErr{};
-    std::cout << "Stack is Empty\n";
+    std::cout << "Stack is Empty" << std::endl;
     return emptyErr;
   }
 
