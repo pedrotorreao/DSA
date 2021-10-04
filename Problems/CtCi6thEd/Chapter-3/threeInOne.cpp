@@ -35,12 +35,15 @@
 */
 
 #include <iostream>
+#include <iomanip>
+#include <climits>
 
+// class for implementing 3 stacks of fixed size using one single array:
 class ThreeFixedStacksInOne
 {
 private:
   const int numberOfStacks = 3;
-  int stackCapacity;
+  int stackCapacity;  // individual stack capacity
   int *stackElements; // this'll point to an array containing the stack elments themselves
   int *stackSizes;    // this'll point to an array which will store the number of elements in each stack
 public:
@@ -48,8 +51,8 @@ public:
   ThreeFixedStacksInOne(int oneStackSize)
   {
     this->stackCapacity = oneStackSize;
-    stackElements = new int[numberOfStacks * stackCapacity]();
-    stackSizes = new int[numberOfStacks]();
+    stackElements = new int[numberOfStacks * stackCapacity](); // array of size (numberOfStacks * stackCapacity) to store all 3 stacks
+    stackSizes = new int[numberOfStacks]();                    // store each stack's current load
   }
 
   // helper - check if the selected stack is already full:
@@ -71,6 +74,12 @@ public:
     int currentStackSize = stackSizes[whichStack];
 
     return (stackStartIndex + currentStackSize - 1);
+  }
+
+  // helper - return selected stack's current occupancy:
+  int stackOccupancy(int whichStack)
+  {
+    return (stackSizes[whichStack]);
   }
 
   // push a new element to the stack:
@@ -101,7 +110,7 @@ public:
     }
     if (isStackEmpty(whichStack))
     {
-      std::cout << "This is stack is empty.\n";
+      std::cout << "Stack " << whichStack << " is already empty.\n";
       return;
     }
 
@@ -114,13 +123,13 @@ public:
   {
     if (whichStack > (numberOfStacks - 1))
     {
-      std::cout << "This stack does not exist. Please, try one of the 3 stacks available\n";
-      return;
+      std::cout << "This stack does not exist. Please, try one of the 3 stacks available -- ";
+      return INT_MIN;
     }
     if (isStackEmpty(whichStack))
     {
-      std::cout << "This is stack is empty.\n";
-      return;
+      std::cout << "This is stack is empty -- ";
+      return INT_MIN;
     }
 
     return stackElements[indexOfTop(whichStack)];
@@ -133,3 +142,34 @@ public:
     delete[] stackSizes;
   }
 };
+
+// driver code:
+int main()
+{
+  std::cout << std::boolalpha;
+
+  ThreeFixedStacksInOne stacks = ThreeFixedStacksInOne(4);
+
+  stacks.push(0, 3);
+  stacks.push(0, 55);
+  stacks.push(0, 3);
+  stacks.push(0, 11);
+  std::cout << "Stack 0 Top Element: " << stacks.peek(0) << "\n";                 // should output 11.
+  stacks.push(0, 9);                                                              // should output an error message for full capacity reached.
+  std::cout << "Stack 0 is full: " << stacks.isStackFull(0) << "\n";              // should output 'true'
+  stacks.pop(0);                                                                  // pops 11 out of the stack 0
+  stacks.pop(0);                                                                  // pops 11 out of the stack 3
+  std::cout << "Stack 0 Top Element: " << stacks.peek(0) << "\n";                 // should output 55.
+  std::cout << "Stack 0 current occupancy: " << stacks.stackOccupancy(0) << "\n"; // should output 2.
+  stacks.pop(0);                                                                  // pops 55 out of the stack 0
+  stacks.pop(0);                                                                  // pops 3 out of the stack 0
+  std::cout << "Stack 0 Top Element: " << stacks.peek(0) << "\n";                 // should output an error message for empty stack.
+  stacks.pop(0);                                                                  // should output an error message for empty stack.
+
+  stacks.push(3, 99); // should ouput an error message indicating that this stack does not exist (stacks go from 0 to 2).
+
+  std::cout << "Stack 1 is empty: " << stacks.isStackEmpty(1) << "\n"; // should output 'true'.
+  std::cout << "Stack 2 is empty: " << stacks.isStackEmpty(2) << "\n"; // should output 'true'.
+
+  return 0;
+}
