@@ -33,11 +33,6 @@ public:
     {
       this->top = this->stack.at(this->stack.size() - 1);
     }
-    else
-    {
-      T emptyErr{};
-      this->top = emptyErr;
-    }
   }
 
   T peek(void)
@@ -45,9 +40,8 @@ public:
     if (this->stack.size() != 0)
       return this->top;
 
-    T emptyErr{};
     std::cout << "Stack is Empty" << std::endl;
-    return emptyErr;
+    exit(1);
   }
 
   int getSize(void)
