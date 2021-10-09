@@ -84,7 +84,14 @@ public:
 
   void pop_at(int stack_id)
   {
-    this->all_stacks[stack_id]->pop();
+    if ((stack_id < this->stack_count) && (stack_id >= 0))
+    {
+      this->all_stacks[stack_id]->pop();
+    }
+    else
+    {
+      std::cout << "Stacks IDs go from 0 to " << (this->stack_count - 1) << "\n";
+    }
   }
 
   int how_many_stacks(void)
@@ -114,6 +121,7 @@ public:
   ~SetOfStacks()
   {
     auto it = all_stacks.begin();
+
     while (it != all_stacks.end())
     {
       auto stack_ptr = it->second;
@@ -153,11 +161,13 @@ int main()
   st->pop();
   st->pop_at(0);
 
-  // stack: [0 1 2 3 4]
+  // stack: [0 1 2 3]
   std::cout << "Num. of stacks: " << st->how_many_stacks() << "\n"
             << "Current stack: " << st->which_stack() << "\n"
             << "Stack occupancy: " << st->stack_occupancy() << "\n"
             << "Top: " << st->peek() << "\n-----\n";
+
+  st->pop_at(3);
 
   delete st;
 
