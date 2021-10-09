@@ -78,6 +78,11 @@ public:
     return current_stack->peek();
   }
 
+  void pop_at(int stack_id)
+  {
+    this->all_stacks[stack_id]->pop();
+  }
+
   int how_many_stacks(void)
   {
     return this->stack_count;
@@ -142,6 +147,7 @@ int main()
             << "Top: " << st->peek() << "\n-----\n";
 
   st->pop();
+  st->pop_at(0);
 
   // stack: [0 1 2 3 4]
   std::cout << "Num. of stacks: " << st->how_many_stacks() << "\n"
