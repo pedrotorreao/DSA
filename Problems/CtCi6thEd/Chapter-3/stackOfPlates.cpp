@@ -14,10 +14,14 @@
   sub-stack.
 
 --Reasoning:
+  We'll use the user-defined Stack class for the individual stacks and a hash table to map all
+  the stacks. Each stack will be mapped using a key (stack_index) which corresponds to the 
+  order in which it was added. As soon as the current stack reaches its max_capacity, a new 
+  one is created and mapped to the hash table.
 
---Time complexity: 
+--Time complexity: O(1) for all methods.
  
---Space complexity: 
+--Space complexity: O(max_capacity * n), where n is the number of stacks.
   
 */
 
