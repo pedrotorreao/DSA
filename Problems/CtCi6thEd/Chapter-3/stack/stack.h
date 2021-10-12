@@ -27,6 +27,7 @@ public:
     else
     {
       std::cout << "Stack is already Empty\n";
+      exit(1);
     }
 
     if (this->stack.size() > 0)
