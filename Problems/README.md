@@ -4,7 +4,7 @@ This section of the repository is intended for listing solutions for problems fr
 
 _Abbreviations:_
 
-- HR: [Hackerrank](<[/Hackerrank](https://github.com/pedrotorreao/DSA/tree/master/Problems/Hackerrank)>)
+- HR: [Hackerrank](https://github.com/pedrotorreao/DSA/tree/master/Problems/Hackerrank)
 - LC: [Leetcode](https://github.com/pedrotorreao/DSA/tree/master/Problems/Leetcode)
 - CtCi: [Cracking the Code Interview](https://github.com/pedrotorreao/DSA/tree/master/Problems/CtCi6thEd)
 - [Others](https://github.com/pedrotorreao/DSA/tree/master/Problems/CtCi6thEd/Other)
