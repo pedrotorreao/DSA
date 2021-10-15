@@ -4,10 +4,9 @@ This section of the repository is intended for listing solutions for problems fr
 
 _Abbreviations:_
 
-- HR: Hackerrank
-- LC: Leetcode
-- CW: CodeWars
-
-Check out all the solutions [here](https://github.com/pedrotorreao/DSA/tree/master/Problems/src).
+- HR: [Hackerrank](<[/Hackerrank](https://github.com/pedrotorreao/DSA/tree/master/Problems/Hackerrank)>)
+- LC: [Leetcode](https://github.com/pedrotorreao/DSA/tree/master/Problems/Leetcode)
+- CtCi: [Cracking the Code Interview](https://github.com/pedrotorreao/DSA/tree/master/Problems/CtCi6thEd)
+- [Others](https://github.com/pedrotorreao/DSA/tree/master/Problems/CtCi6thEd/Other)
 
 ### [Data Structures & Algorithms - Index](../README.md)
