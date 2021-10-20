@@ -31,23 +31,102 @@ function getMax(a, b) {
 
 2. Linear - `O(n)`:
 
+In the worst case scenario, the maximum number of operations will be equal to the input size.
+
 ```javascript
-function printArrayElements(array) {
+function searchArray(array, target) {
   let n = array.length;
 
   for (let i = 0; i < n; ++i) {
-    console.log(array[i]);
+    if (array[i] == target) {
+      return i;
+    }
   }
+  return -1;
 }
 ```
 
-2. Logarithmic - `O(log n)`:
+3. Logarithmic - `O(log n)`:
 
-If an algorithm has a time complexity of `O(log n)`, the bigger its input size, the smaller proportion of the actual input your program has to go through. A logarithmic algorithm is the opposite of an exponential one. When something grows exponentially, it means that, at each step, the number of operations is multiplied by a factor. Whereas, when an algorithm grows logarithmically, the number of operations needed is being divided by this factor at each step. Assuming the base of the logarithm as being `2`, this means that the size of the input' subset that the algorithm has to go through gets divided by `2` at each step.
+If an algorithm has a time complexity of `O(log n)`, the bigger its input size, the smaller proportion of the actual input your program has to go through. A logarithmic algorithm is the opposite of an exponential one. When something grows exponentially, it means that, at each step, the number of operations is multiplied by a factor. Whereas, when an algorithm grows logarithmically, the number of operations needed is being divided by this factor at each step. Assuming the base of the logarithm as being `2`, this means that the size of the dataset that the algorithm has to go through gets divided by `2` at each step.
+
+A traditional example for `O(log n)` running time is binary search. Consider an **ordered** `array` on size `n` and a `target` value. If we were to use linear search to find `target` in `array`, in the worst case scenario that we begin at the first position in `array` and `target` is the last element, we'd have to search the entire `array`, thus performing `n` comparisons. However, using a binary search algorithm like the one below, since at each step we half the the amount of elements to be searched, the total number of operations necessary is at most `log (input_size)` or `log n`.
+
+> Binary search algorithm:
 
 ```javascript
-//
+function binarySearch(array, target) {
+  let start = 0;
+  let end = array.length - 1;
+
+  while (start <= end) {
+    if (array[start] === target) return start;
+    if (array[end] === target) return end;
+
+    let mid = Math.round((start + end) / 2);
+
+    if (target == array[mid]) return mid;
+
+    if (target > array[mid]) start = mid + 1;
+    else if (target < array[mid]) end = mid - 1;
+  }
+
+  return -1;
+}
 ```
+
+> Example:
+
+```
+array = [11, 23, 30, 45, 51, 62, 70, 89, 95, 100, 110]
+target = 100
+
+start = 0
+end = array.length - 1 = 10
+
+step 1 - dataset searched [11, 23, 30, 45, 51, 62, 70, 89, 95, 100, 110]
+  array[start] != target
+  array[end] != target
+
+  mid = (start + end) / 2 = 10 / 2 = 5
+
+  target > array[mid] -- 100 > 62:
+    start = mid + 1 = 6
+
+step 2 - dataset searched [x x x x x x 70, 89, 95, 100, 110]
+  array[start] != target
+  array[end] != target
+
+  mid = (start + end) / 2 = (6+10) / 2 = 8
+  target > array[mid] -- 100 > 95:
+    start = mid + 1 = 9
+
+step 3 - dataset searched [x x x x x x x x x 100, 110]
+  array[start] == target: return start -- return 9
+```
+
+As we can see, we begin with an `n` sized array to search. After the first step, we're searching through only `n/2` elements. One more step and we're down to `n/4` elements to search. We are done when we either find `target` or we're down to only one element.
+
+The total runtime can be expressed as how many steps, dividing `n` by two each time, we need too take until `n` becomes 1. For the example above, where `n = 11`:
+
+> \# of steps: `log(n) = log(11) = ~3`, which matches our example.
+
+Let's apply this reasonig to a larger dataset. Consider now that we want to find a person by searching for his registered unique `ID` in an ordered database containing fifty million registered `ID`s. If we decide to use linear search here, in the event that our target `ID` is the last in the database or does not exist, we'd have to look and compare all the fifty million elements in the database elements. However, we were to use binary search to find the person, that would take:
+
+```
+step 1: 50000000 / 2 = 25000000
+step 2: 25000000 / 2 = 12500000
+step 3: 12500000 / 2 = 6250000
+step 4: 6250000 / 2 = 3125000
+step 5: 3125000 / 2 = 1562500
+step 6: 1562500 / 2 = 781250
+...
+step 25: 2.98 / 2 = ~1
+
+or simply, log(50000000) = ~25
+```
+
+25 steps at worst, which is a huge improvement over the linear search. We can see that the growth rate of the runtime for both algorithms is very different, while linear search follows the size of the dataset, binary search gets faster in proportion as the size of the dataset grows.
 
 1. Quadratic - `O(n^2)`:
 
@@ -62,6 +141,8 @@ function printMatrixElements(matrix) {
   }
 }
 ```
+
+Other common running times:
 
 1. Linearithmic - `O(n * log n)`:
 
