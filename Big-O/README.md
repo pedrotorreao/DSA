@@ -29,17 +29,45 @@ function getMax(a, b) {
 }
 ```
 
-1. Logarithmic - `O(log n)`:
-
 2. Linear - `O(n)`:
 
-3. Linearithmic - `O(n * log n)`:
+```javascript
+function printArrayElements(array) {
+  let n = array.length;
 
-4. Quadratic - `O(n^2)`:
+  for (let i = 0; i < n; ++i) {
+    console.log(array[i]);
+  }
+}
+```
 
-5. Exponential - `O(b^n)`, where b > 1:
+2. Logarithmic - `O(log n)`:
 
-6. Factorial - `O(n!)`:
+If an algorithm has a time complexity of `O(log n)`, the bigger its input size, the smaller proportion of the actual input your program has to go through. A logarithmic algorithm is the opposite of an exponential one. When something grows exponentially, it means that, at each step, the number of operations is multiplied by a factor. Whereas, when an algorithm grows logarithmically, the number of operations needed is being divided by this factor at each step. Assuming the base of the logarithm as being `2`, this means that the size of the input' subset that the algorithm has to go through gets divided by `2` at each step.
+
+```javascript
+//
+```
+
+1. Quadratic - `O(n^2)`:
+
+```javascript
+function printMatrixElements(matrix) {
+  let n = matrix.length;
+
+  for (let i = 0; i < n; ++i) {
+    for (let j = 0; j < n; ++j) {
+      console.log(matrix[i]);
+    }
+  }
+}
+```
+
+1. Linearithmic - `O(n * log n)`:
+
+2. Exponential - `O(b^n)`, where b > 1:
+
+3. Factorial - `O(n!)`:
 
 ### Determining the Big-O notation
 
