@@ -6,8 +6,7 @@ Please, keep in mind that, as I am also a student, the code may not (probably no
 
 ### Contents
 
-- #### [Big-O: Time and Space complexities](/Big-O/README.md)
-  ... in progress
+- #### [Big-O: Time and Space complexities](/Big-O/README.md) :white_check_mark:
 - #### Data Structures
   - [Arrays](DataStructures/Array/README.md) :white_check_mark:
   - [Linked Lists](DataStructures/Linked%20List/README.md) :white_check_mark:
