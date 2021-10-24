@@ -32,10 +32,22 @@
     - 1<=cost[i]<=10^9
 
 --Reasoning:
+  Iterate through the cost array, mapping the elements and at each step (i.e., each ice cream
+  flavor id) calculate how much money the other flavor would have to cost if we'd take the
+  current flavor.
+    Example:
+      current flavor ID = 1 costs 3: cost[1]=3, and the money available is money=5
+      In order to spend exactly 5, we'd need another cost[i]=(money-cost[1])=(5-3)=2 to exist. So,
+      we ckeck if we've seen cost[i]=2 already. If so, we print both flavors IDs: i 1
+      If not, we add cost[1]=3 to the map in the format [cost:id], and keep iterating.
 
 --Time complexity:
+  O(n) in the worst case that we don't find a exact cost match or the match is the last element in
+  the cost array.
 
 --Space complexity:
+  O(n) in the event that we need to add all the costs to the map, i.e., when we don't find a exact
+  cost match.
 
 */
 
