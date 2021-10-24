@@ -30,6 +30,7 @@
     - 2<=money<=10^9
     - 2<=n<=5*10^9
     - 1<=cost[i]<=10^9
+
 --Reasoning:
 
 --Time complexity:
@@ -40,15 +41,49 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 
 void whatFlavors(std::vector<int> cost, int money)
 {
-  // .. code
+  std::unordered_map<int, int> cost_map;
+  int diff{0};
+
+  for (int i{1}; i < cost.size(); ++i)
+  {
+    diff = money - cost.at(i - 1);
+
+    if (cost_map.find(diff) != cost_map.end())
+    {
+      std::cout << cost_map[diff] << " " << i << "\n";
+      return;
+    }
+
+    if (cost_map.find(cost.at(i - 1)) == cost_map.end())
+    {
+      cost_map[cost.at(i - 1)] = i;
+    }
+  }
 }
 
 int main()
 {
-  // .. test code
+  std::vector<int> cost{2, 1, 3, 5, 6};
+  int money{5};
+
+  whatFlavors(cost, money);
+  std::cout << "\n";
+
+  cost = {1, 4, 5, 3, 2};
+  money = 4;
+
+  whatFlavors(cost, money);
+  std::cout << "\n";
+
+  cost = {2, 2, 4, 3};
+  money = 4;
+
+  whatFlavors(cost, money);
+  std::cout << "\n";
 
   return 0;
 }
