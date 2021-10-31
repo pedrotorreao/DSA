@@ -26,37 +26,59 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <limits.h>
 
-void buildMatrix(std::vector<std::string> &gridVec, std::vector<std::vector<std::string>> &gridMat);
+// --------------- HELPERS: FORWARD DECLARATIONS -----------------:
 
-void displayMatrix(std::vector<std::vector<std::string>> &gridMat);
+void buildAdjMatrix(std::vector<std::string> &gridVec, std::vector<std::vector<int>> &gridMat);
 
-int minimumMoves(std::vector<std::string> grid, int startX, int startY, int goalX, int goalY)
+void displayMatrix(std::vector<std::vector<int>> &gridMat);
+
+// ---------------------------------------------------------------
+
+// --------------------------- SOLUTION --------------------------:
+void minimumMoves(std::vector<std::string> grid, int startX, int startY, int goalX, int goalY)
 {
   // build matrix from grid:
-  std::vector<std::vector<std::string>> mat(grid.size(), std::vector<std::string>(grid.size()));
-  buildMatrix(grid, mat);
+  std::vector<std::vector<int>> mat(grid.size(), std::vector<int>(grid.size()));
+
+  buildAdjMatrix(grid, mat);
+
+  displayMatrix(mat);
 
   // .. code
 }
+// ---------------------------------------------------------------
 
+// ----------------------- DRIVER CODE ---------------------------:
 int main()
 {
   std::vector<std::string> grid{"...", ".X.", "..."};
   int sx{0}, sy{0}, gx{1}, gy{2};
 
-  std::vector<std::vector<std::string>> mat(grid.size(), std::vector<std::string>(grid.size()));
+  // std::vector<std::vector<std::string>> mat(grid.size(), std::vector<std::string>(grid.size()));
 
-  std::cout << "grid:\n";
-  displayMatrix(mat);
-  std::cout << "min. number of moves from ["
-            << sx << "," << sy << "] to ["
-            << gx << "," << gy << "]: " << minimumMoves(grid, sx, sy, gx, gy);
+  // std::cout << "grid:\n";
+  // displayMatrix(mat);
+  // std::cout << "min. number of moves from ["
+  //           << sx << "," << sy << "] to ["
+  //           << gx << "," << gy << "]: " << minimumMoves(grid, sx, sy, gx, gy);
+  minimumMoves(grid, sx, sy, gx, gy);
 
   return 0;
 }
+// ---------------------------------------------------------------:
 
-void buildMatrix(std::vector<std::string> &gridVec, std::vector<std::vector<std::string>> &gridMat)
+// -------------------- HELPERS: DEFINITIONS ---------------------:
+
+/**
+ * @brief buildMatrix: processes the input vector and lays its
+ * data on a adjacency matrix format/grid.
+ *
+ * @param gridVec
+ * @param gridMat
+ */
+void buildAdjMatrix(std::vector<std::string> &gridVec, std::vector<std::vector<int>> &gridMat)
 {
   int n = gridVec.size();
   int i{0};
@@ -68,12 +90,18 @@ void buildMatrix(std::vector<std::string> &gridVec, std::vector<std::vector<std:
       std::string currentLine = gridVec.at(i);
       char currentStep = currentLine.at(j);
 
-      gridMat.at(i).at(j) = currentStep;
+      // gridMat.at(i).at(j) = (currentStep == '.') ? 1 : INT_MAX;
+      gridMat.at(i).at(j) = gridVec.at(i).at(j);
     }
   }
 }
 
-void displayMatrix(std::vector<std::vector<std::string>> &gridMat)
+/**
+ * @brief displayMatrix: simple helper for printing out matrices to the console
+ *
+ * @param gridMat
+ */
+void displayMatrix(std::vector<std::vector<int>> &gridMat)
 {
   auto rows = gridMat.size();
   auto cols = gridMat.at(0).size();
