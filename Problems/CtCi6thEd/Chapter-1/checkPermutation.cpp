@@ -22,6 +22,12 @@ bool isPermutation(std::string &str1, std::string &str2)
 {
   std::unordered_map<char, int> map;
 
+  // strings of different lengths cannot be permutaions of each other:
+  if (str1.size() != str2.size())
+  {
+    return false;
+  }
+
   // map string str1 characters:
   for (auto s : str1)
   {
