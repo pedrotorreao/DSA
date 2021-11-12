@@ -3,21 +3,31 @@
 /*********************************************************************************************/
 /*
 --Problem statement:
+  A space explorer's ship crashed on Mars! They send a series of SOS messages to Earth for help.
+  Letters in some of the SOS messages are altered by cosmic radiation during transmission. Given
+  the signal received by Earth as a string, s, determine how many letters of the SOS message
+  have been changed by radiation.
 
   > Example:
+    s = "SOSTOT"    -->   2 letters changed
 
-  > Input:
+  > Input: string s - the string as received on Earth
 
-  > Output:
+  > Output: int - the number of letters changed during transmission
 
   > Constraints:
-
+      1 <= s.length() <= 99
+      s.length() % 3 = 0
+      s contains only uppercase letters
 
 --Reasoning:
+  Iterate over the input string in increments of three (length of 'SOS'), at each step compare if
+  the current 3-character substring matches 'SOS'. If it does, evaluate the next three; otherwise,
+  count how many characters differ and the count to the result.
 
---Time complexity:
+--Time complexity: O(n/3) -> O(n), where n is the length of the string.
 
---Space complexity:
+--Space complexity: O(1), no additional space dependent on the input size is needed.
 
 */
 
@@ -26,7 +36,6 @@
 
 int marsExploration(std::string s)
 {
-  int numOfMessages = s.size() / 3;
   int changes{0};
 
   for (size_t i{0}; i < s.size(); i += 3)
