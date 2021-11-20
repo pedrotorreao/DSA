@@ -13,24 +13,25 @@ Print an integer denoting the minimum number of pages Brie must turn to get to p
 */
 function pageCount(n, p) {
   let minimum = 0;
-  if ((p > Math.round(n/2)) && (p % 2 !== 0)) {
-    minimum = Math.ceil((n-p)/2);
-  } else if (p >= Math.round(n/2)) {
-    minimum = Math.floor((n-p)/2);
+  if (p > Math.round(n / 2) && p % 2 !== 0) {
+    minimum = Math.ceil((n - p) / 2);
+  } else if (p >= Math.round(n / 2)) {
+    minimum = Math.floor((n - p) / 2);
   } else {
-    minimum = Math.floor(p/2);
+    minimum = Math.floor(p / 2);
   }
   //console.log(Math.round(n/2));
   return minimum;
 }
-console.log('TC 0: ', pageCount(6,2));
-console.log('TC 1: ', pageCount(5,4));
-console.log('TC 2: ', pageCount(4,4));
-console.log('TC 3: ', pageCount(5,5));
-console.log('TC 4: ', pageCount(5,1));
-console.log('TC 15: ', pageCount(15603,6957));
-console.log('TC 27: ', pageCount(2059,117));
-console.log('TC 28: ', pageCount(6,5));
-console.log('TC 29: ', pageCount(2,1));
-console.log('TC 30: ', pageCount(6,3));
-console.log('TC 31: ', pageCount(27,14));
+console.log("TC 0: ", pageCount(6, 2));
+console.log("TC 1: ", pageCount(5, 4));
+console.log("TC 2: ", pageCount(4, 4));
+console.log("TC 3: ", pageCount(5, 5));
+console.log("TC 4: ", pageCount(5, 1));
+console.log("TC 7: ", pageCount(7, 3));
+console.log("TC 15: ", pageCount(15603, 6957));
+console.log("TC 27: ", pageCount(2059, 117));
+console.log("TC 28: ", pageCount(6, 5));
+console.log("TC 29: ", pageCount(2, 1));
+console.log("TC 30: ", pageCount(6, 3));
+console.log("TC 31: ", pageCount(27, 14));
