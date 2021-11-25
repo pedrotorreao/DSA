@@ -23,15 +23,11 @@
       1<=a[i]<=10^6
 
 --Reasoning:
-  We begin by sorting the array in order to be able to easily compare adjacent elements. After
-  that, we start the comparisons, if it satisfies the condition we increment the current counter
-  'new_longest'. If it does not, we update the first value in the sequence, 'first', with the
-  current, compare the current counter with the previous largest length, stored in 'prev_longest'
-  and update its value if it's greater, and reset the value of the current counter, 'new_longest',
-  to begin counting the number of elements in ther new subarray. After we're done iterating, we
-  compare the 'new_longest' with the 'prev_longest' and return the greater value.
+  Perform 'd' iterations on the array adding all elements which would be rotated to the back of the
+  array. After that, remove these 'd' elements from their original positions. What will be left is
+  the rotated array.
 
---Time complexity: O(n)
+--Time complexity: O(d), where 'd' is the number of rotations.
 
 --Space complexity: O(1), there is no dependency on the input size.
 */
