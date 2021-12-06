@@ -26,6 +26,7 @@
   - int[]: the results of each type 2 query in the order they are presented.
 
 --Reasoning:
+  Simply follow the instructions and iterate over the the queries array processing each query.
 
 --Time complexity:
   O(N), where N is the size of the 'queries' array.
