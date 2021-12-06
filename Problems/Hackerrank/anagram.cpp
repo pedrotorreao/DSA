@@ -1,18 +1,35 @@
 /*********************************************************************************************/
-/* Problem: Strong Password (HR) ********/
+/* Problem: Anagram (HR) ********/
 /*********************************************************************************************/
 /*
 --Problem statement:
+  Two words are anagrams of one another if their letters can be rearranged to form the other word.
+  Given a string, split it into two contiguous substrings of equal length. Determine the minimum
+  number of characters to change to make the two substrings into anagrams of one another.
+  > Example:
+    s = "abccde"
+    Break 's' into two parts: 'abc' and 'cde'. Note that all letters have been used, the substrings
+    are contiguous and their lengths are equal. Now you can change 'a' and 'b' in the first substring
+    to 'd' and 'e' to have 'dec' and 'cde' which are anagrams. Two changes were necessary.
 
--- Inputs:
+--Inputs:
+  - string s: a string
 
 --Outputs:
+  - int: the minimum number of characters to change or -1.
 
 --Reasoning:
+  If the string has an odd length, we return -1 since there's no way to split it into anagrams.
+  Otherwise, split it into two strings using the C++ substr method and map the characters of one
+  of the strings to a hash table along with their frequencies. After that, iterate over the second
+  substring and check which characters are present in the same frequency, decrementing it as we
+  find the element.
 
 --Time complexity:
+  - O(N/2) --> O(N), where N is the size of the string.
 
 --Space complexity:
+  - O(N/2) --> O(N), for the space allocated into the hash table.
 
 */
 #include <iostream>
