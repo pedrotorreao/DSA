@@ -28,7 +28,7 @@
         This password is 5 characters long and has at least one of each character type. The minimum
         number of characters to add is 1.
 
--- Inputs:
+--Inputs:
   - int n: the length of the password
   - string password: the password to test
 
@@ -36,10 +36,17 @@
   - int: the minimum number of characters to add.
 
 --Reasoning:
+  Iterate over the password string checking each condition and keep boolean variables to set when the
+  conditions are met. Once a condition is met, its boolean variable is set and this condition does
+  not need to be checked again. At the end, each boolean variable that remains 'false' is a condition
+  which was not satisfied and an edit that needs to be made, add it to "minEdits". If the condition
+  for the minimum length is satisfied, we need to make "minEdits" additional edits to the password.
+  Otherwise, at least (6-n) edits will be needed, so we return the larger value between "minEdits"
+  and (6-n).
 
---Time complexity:
+--Time complexity: O(N), where N is the length of the password.
 
---Space complexity:
+--Space complexity: O(1), no additional space directly dependent on the input size needed.
 
 */
 
