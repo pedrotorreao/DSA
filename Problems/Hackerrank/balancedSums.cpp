@@ -24,7 +24,9 @@
   0<=i<n
 
 --Reasoning:
-  Solution commented below. It passes all test cases, but it's complex, can be improved.
+  Solutions commented below.
+  - Solution #1: It passes all test cases, but it's bloated, can be improved.
+  - Solution #2: Based on a sol. posted on HR discussion. Same complexity, but way cleaner.
 
 --Time complexity: O(N), where N is the size of the array.
 
@@ -33,10 +35,12 @@
 */
 
 #include <iostream>
+#include <numeric>
 #include <string>
 #include <vector>
 
-std::string balancedSums(std::vector<int> arr)
+// Solution #1:
+std::string balancedSums_1(std::vector<int> arr)
 {
   // If the array has only 1 element, its left and right sums are already balanced:
   if (arr.size() == 1)
@@ -114,34 +118,69 @@ std::string balancedSums(std::vector<int> arr)
   return "NO";
 }
 
+// Solution #2:
+std::string balancedSums_2(std::vector<int> arr)
+{
+  if (arr.size() == 1)
+  {
+    return "YES";
+  }
+
+  int total_sum = accumulate(arr.begin(), arr.end(), 0);
+
+  int sum_l{0}, sum_r{0};
+
+  for (int i = (arr.size() - 2); i >= 0; --i)
+  {
+    sum_r += arr.at(i + 1);
+    sum_l = total_sum - arr.at(i) - sum_r;
+
+    if (sum_r == sum_l)
+    {
+      return "YES";
+    }
+  }
+
+  return "NO";
+}
+
 int main()
 {
   std::vector<int> arr = {1, 2}; // NO
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   arr = {5, 6, 8, 11}; // YES - {5+6} 8 {11}
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   arr = {1}; // YES - {0} 1 {0}
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   arr = {1, 2, 3}; // NO
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   arr = {1, 2, 3, 3}; // YES - {1+2} 3 {3}
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   arr = {1, 1, 4, 1, 1}; // YES - {1+1} 4 {1+1}
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   arr = {2, 0, 0, 0}; // YES - {0} 2 {0+0+0}
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   arr = {0, 0, 2, 0}; // YES - {0+0} 2 {0}
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   arr = {0, 0, 0, 0}; // YES - {0+0} 0 {0}, {0} 0 {0+0}
-  std::cout << "Array has balanced sums: " << balancedSums(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_1(arr) << "\n";
+  std::cout << "Array has balanced sums: " << balancedSums_2(arr) << "\n\n";
 
   return 0;
 }
