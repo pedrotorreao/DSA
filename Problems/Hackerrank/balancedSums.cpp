@@ -26,7 +26,7 @@
 --Reasoning:
   Solution commented below. It passes all test cases, but it's complex, can be improved.
 
---Time complexity: O(N), where N is the size of the string.
+--Time complexity: O(N), where N is the size of the array.
 
 --Space complexity: O(1), no additional space required.
 
