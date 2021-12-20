@@ -25,16 +25,18 @@
 --Inputs:
   - int s[n]: the number of stones in each pile.
 
---Reasoning:
+--Output:
   - string: either 'First' or 'Second'.
+
+--Reasoning:
+  More about the Nim game: https://en.wikipedia.org/wiki/Nim#Mathematical_theory
 
 --Constraints:
   1<=T<=100;  1<=n<=100;  1<=s[i]<=10^9
 
---Time complexity:
+--Time complexity: O(N), where N is the length of the input array.
 
-
---Space complexity:
+--Space complexity: O(1), no input-dependent space is allocated.
 
 */
 
@@ -44,11 +46,41 @@
 
 std::string misereNim(std::vector<int> s)
 {
-  // ...code
+  int total_sum{0}, nim_sum{0};
+
+  for (const auto &pile : s)
+  {
+    total_sum += pile;
+    nim_sum ^= pile;
+  }
+
+  bool all_piles_have_one_stone = (total_sum == s.size());
+
+  if (all_piles_have_one_stone)
+  {
+    if (s.size() % 2 == 0)
+    {
+      return "First";
+    }
+    return "Second";
+  }
+  else
+  {
+    if (nim_sum == 0)
+    {
+      return "Second";
+    }
+    return "First";
+  }
 }
 
 int main()
 {
-  // ...driver code
+  std::vector<int> vec{1, 1, 1};
+  std::cout << "The winner is: " << misereNim(vec) << "\n"; // Expected: Second
+
+  vec = {1, 2, 2};
+  std::cout << "The winner is: " << misereNim(vec) << "\n"; // Expected: First
+
   return 0;
 }
