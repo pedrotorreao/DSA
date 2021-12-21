@@ -30,6 +30,9 @@
 
 --Reasoning:
   More about the Nim game: https://en.wikipedia.org/wiki/Nim#Mathematical_theory
+  (1) In case we have a single pile, if there is more than one stone, then the first player will always win by leaving the last stone for the second player.
+  (2) In case the sum of all the stones is equal to the number of piles, that means that every pile has only one stone. If this is the case, for an even number of piles the first player will win, since the last pile containing exactly one stone will be left to the second player.
+  (3) For all remaining cases, the XOR value between all the piles determines the winner. If the XOR value is 0, that means that the piles can be paired and the second player will be the winner.
 
 --Constraints:
   1<=T<=100;  1<=n<=100;  1<=s[i]<=10^9
