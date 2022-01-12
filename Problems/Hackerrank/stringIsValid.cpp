@@ -68,15 +68,23 @@ std::string isValid(std::string s)
   int min_freq = charac_map.at(firstValidPos);
   int max_freq = charac_map.at(charac_map.size() - 1);
 
-  // all characters happen with the same frequency:
+  // since we are only allowed to remove characters, we'll always remove from the characters
+  // which happen with the highest frequency unless the minimum frequency is 1 and it only
+  // happens once.
+
+  // [1]: all characters happen with the same frequency, already valid, no removals needed:
   if (min_freq == max_freq)
     return "YES";
 
-  // difference in frequencies is at most 1 and there are not more than 1 character
-  // with different frequencies:
+  // [2]: difference in frequencies is at most 1 and there are not more than 1 character
+  // with the maximum frequency; otherwise, we'd have more than one change to make in
+  // order to be able to match the lowest frequency:
   if ((max_freq - min_freq == 1) && (max_freq > charac_map.at(charac_map.size() - 2)))
     return "YES";
 
+  // [3]: if minimum and maximum frequencies are different [1] and the minimum frequency is 1,
+  // there can be only one character with this frequency, the one we'd remove in order to have
+  // all characters w/ the same frequency; otherwise, we'd have to perform more than 1 removal:
   if (min_freq == 1 && charac_map.at(firstValidPos + 1) == max_freq)
     return "YES";
 
@@ -100,6 +108,10 @@ int main()
   std::cout << "\n";
 
   str = "bbcccddd";
+  std::cout << "String '" << str << "' is valid: " << isValid(str) << "\n"; // Expected: NO
+  std::cout << "\n";
+
+  str = "bcddee";
   std::cout << "String '" << str << "' is valid: " << isValid(str) << "\n"; // Expected: NO
   std::cout << "\n";
 
