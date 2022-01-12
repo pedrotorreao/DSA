@@ -20,8 +20,8 @@
   -int[m]: the player's rank after each new score
 
 --Constraints:
-  0<=ranked[i]<=10^9 for 0<=i<n
-  0<=player[i]<=10^9 for o<=j<m
+  0<=ranked[i]<=10^9 for 0<=i<n, where n is the size of 'ranked'
+  0<=player[i]<=10^9 for o<=j<m, where m is the size of 'player'
   The existing leaderboard, 'ranked', is in descending order.
   The player's scores, 'player', are in ascending order.
 
