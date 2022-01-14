@@ -1,13 +1,42 @@
-/****************************************************************/
-/*Problem: Sherlock and Anagrams (HR)  ********/
-/****************************************************************/
+/*********************************************************************************************/
+/* Problem: Sherlock and Anagrams (HR)  ********/
+/*********************************************************************************************/
 /*
--- Summary:
-Two strings are anagrams of each other if the letters of one string can be rearranged to form the other string. Given a string, find the number of pairs of substrings of the string that are anagrams of each other. 
--- Input(s):
-string s: a string 
--- Expected output(s):
-int: the number of unordered anagrammatic pairs of substrings in s.
+--Problem statement:
+  Two strings are anagrams of each other if the letters of one string can be rearranged to form
+  the other string. Given a string, find the number of pairs of substrings of the string that are
+  anagrams of each other.
+
+--Inputs:
+  -string s: a string
+
+-- Output:
+  -int: the number of unordered anagrammatic pairs of substrings in s.
+
+--Constraints:
+  1<=q<=10
+  2<=length of s<=100
+  s contains only lowercase letters in the range ascii[a-z].
+
+--Reasoning:
+  > If there are no repeated letters, there are no anagrams.
+  > Since the problem statement specified substring, rearrangement of letters is not possible.
+  > [1]: Get all possible substrings from 's'.
+  > [2]: Sort each substring, if there are anagrams, the result from the sorting will be the same:
+      - Example: "abc" and "cba", when sorted they both become "abc".
+  > [3]: Map each sorted substring and the frequency it happens:
+      - [key,value]: [sorted substring, frequency]
+  > [4]: Now, we iterate over the map and for each substring frequency we count how many pairs
+        it is possible to form from "frequency" elements. For this, we use the formula:
+          -- number of pairs you can form from an 'n' element set: n*(n-1)/2
+          where 'n' for us is the mapped frequency for each subtring.
+
+--Time complexity: O((N^2)*logN)
+  getAllSubstrings() - O(N^2)
+  buildSubstringMap() - O(N*(N*logN)) --> O((N^2)*logN)
+
+--Space complexity: O(N^2/2)-->O(N^2), since we store all possible subtrings.
+
 */
 
 #include <iostream>
@@ -16,10 +45,8 @@ int: the number of unordered anagrammatic pairs of substrings in s.
 #include <string>
 #include <algorithm>
 
-std::vector<std::string> getAllSubstrings(std::string str)
+void getAllSubstrings(std::string str, std::vector<std::string> &allSubstrings)
 {
-  std::vector<std::string> allSubstrings;
-
   for (int i{0}; i < str.size(); i++)
   {
     std::string tempString;
@@ -30,14 +57,10 @@ std::vector<std::string> getAllSubstrings(std::string str)
       allSubstrings.push_back(tempString);
     }
   }
-
-  return allSubstrings;
 }
 
-std::map<std::string, int> buildSubstringMap(std::vector<std::string> subs)
+void buildSubstringMap(std::vector<std::string> subs, std::map<std::string, int> &stringMap)
 {
-  std::map<std::string, int> stringMap;
-
   for (int i{0}; i < subs.size(); i++)
   {
     std::string tempString = subs.at(i);
@@ -52,17 +75,17 @@ std::map<std::string, int> buildSubstringMap(std::vector<std::string> subs)
       stringMap[tempString]++;
     }
   }
-
-  return stringMap;
 }
 
 int sherlockAndAnagrams(std::string s)
 {
   // get all substrings of s:
-  std::vector<std::string> allSubstrings = getAllSubstrings(s);
+  std::vector<std::string> allSubstrings;
+  getAllSubstrings(s, allSubstrings);
 
   // map substrings sorted:
-  std::map<std::string, int> substringMap = buildSubstringMap(allSubstrings);
+  std::map<std::string, int> substringMap;
+  buildSubstringMap(allSubstrings, substringMap);
 
   // count substrings mapped more than once:
   int count{0};
