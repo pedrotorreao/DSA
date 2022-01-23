@@ -48,19 +48,6 @@ struct TreeNode {
   TreeNode() : val(0), left(nullptr), right(nullptr) {}
   TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
   TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
-
-  TreeNode *insert(TreeNode *root, int value) {
-    if (root == nullptr) {
-      return new TreeNode(value);
-    }
-
-    if (root->val < value)
-      root->left = insert(root->left, value);
-    else if (root->val > value)
-      root->right = insert(root->right, value);
-
-    return root;
-  }
 };
 
 bool isSameTree(TreeNode *p, TreeNode *q) {
