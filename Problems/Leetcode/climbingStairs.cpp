@@ -70,6 +70,14 @@ int climbStairs(int n) {
 }
 
 int main() {
+  int n{2};
+  std::cout << "Number of steps: " << n << "\tPossible ways to climb: " << climbStairs(n) << "\n";
+
+  n = 4;
+  std::cout << "Number of steps: " << n << "\tPossible ways to climb: " << climbStairs(n) << "\n";
+
+  n = 5;
+  std::cout << "Number of steps: " << n << "\tPossible ways to climb: " << climbStairs(n) << "\n";
 
   return 0;
 }
