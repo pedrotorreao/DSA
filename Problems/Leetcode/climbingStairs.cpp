@@ -81,3 +81,33 @@ int main() {
 
   return 0;
 }
+
+/*  -- DRY RUN --
+cs(4):
+    n < 2 ? F
+
+    j1 = cs(3):--------------------------: 3
+        n < 2 ? F
+        j1 = cs(2):----------------------: 2
+            n < 2 ? F
+            j1 = cs(1):------------------: 1
+                n < 2 ? T:
+                    return cache[1] = 1
+            j2 = cs(0):------------------: 1
+                n < 2 ? T:
+                    return cache[0] = 1
+            ways = j1 + j2 = 2
+            cache.push_back(2) ----------: [1,1,2]
+            return cache[2] = 2
+        j2 = cs(1):----------------------: 1
+            n < 3 ? T:
+                return cache[1] = 1
+        ways = j1 + j2 = 3
+        cache.push_back(3) --------------: [1,1,2,3]
+        return cache[3] = 3
+    j2 = cs(2):--------------------------: 2
+        n < 4 ? T:
+            return cache[2] = 2
+    ways = j1 + j2 = 5
+    cache.push_back(5) ------------------: [1,1,2,3,5]
+*/
