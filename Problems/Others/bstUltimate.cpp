@@ -211,7 +211,15 @@ void BST::inOrder(Node *root) {
     inOrder(root->right);
   }
 }
-void BST::preOrder(Node *root) {}
+void BST::preOrder(Node *root) {
+  // traversal order:
+  //     root --> left --> right
+  if (root != nullptr) {
+    std::cout << root->data << "   ";
+    inOrder(root->left);
+    inOrder(root->right);
+  }
+}
 void BST::postOrder(Node *root) {}
 void BST::levelOrder(Node *root) {}
 
