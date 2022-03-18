@@ -144,7 +144,21 @@ Node *BST::getNode(Node *root, int value) {
 
 Node *BST::deSerializeTree(std::string bst_str) {}
 
-bool BST::searchValue(Node *root, int value) {}
+bool BST::searchValue(Node *root, int value) {
+  // if root is a valid node:
+  if (root != nullptr) {
+    // target node found:
+    if (value == root->data)
+      return true;
+    // target node value is less than current node':
+    if (value < root->data)
+      return searchValue(root->left, value);
+    // target node value is greater than current node':
+    if (value > root->data)
+      return searchValue(root->right, value);
+  }
+  return false;
+}
 bool BST::isBST(Node *root) {}
 bool BST::isBalanced_1(Node *root) {}
 bool BST::isBalanced_2(Node *root) {}
