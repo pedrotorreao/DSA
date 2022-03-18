@@ -85,6 +85,47 @@ Node *BST::insertValue_Rec(Node *root, int value) {
 }
 
 Node *BST::removeValue(Node *root, int value) {
+  if (root == nullptr)
+    return nullptr;
+
+  // found target node:
+  if (root->data == value) {
+    // case #1 - node has no children:
+    //    remove it by setting it to nullptr
+    if (root->left == nullptr && root->right == nullptr)
+      return nullptr;
+
+    // case #2 - node doesn't have one of its children (subtrees):
+    //    replace it by its existent child
+    if (root->left == nullptr)
+      return root->right;
+    if (root->right == nullptr)
+      return root->left;
+
+    // case #3 - node has both children:
+    //    find its right child leftmost child (leftmost)
+    Node *leftmost = root->right;
+    while (leftmost->left != nullptr)
+      leftmost = leftmost->left;
+    //    replace target node value by leftmost's value
+    root->data = leftmost->data;
+    //    remove leftmost from its original place
+    root->right = removeValue(root->right, leftmost->data);
+    //    return updated tree:
+    return root;
+  }
+  // target node value is less than current node':
+  if (value < root->data) {
+    root->left = removeValue(root->left, value);
+    return root;
+  }
+  // target node value is greater than current node':
+  if (value > root->data) {
+    root->right = removeValue(root->right, value);
+    return root;
+  }
+
+  return nullptr;
 }
 
 Node *BST::getNode(Node *root, int value) {
