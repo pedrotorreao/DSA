@@ -202,7 +202,15 @@ int BST::getMinHeight(Node *root) {}
 int BST::getMaxHeight(Node *root) {}
 int BST::getLeafSum(Node *root) {}
 
-void BST::inOrder(Node *root) {}
+void BST::inOrder(Node *root) {
+  // traversal order:
+  //    left --> root --> right
+  if (root != nullptr) {
+    inOrder(root->left);
+    std::cout << root->data << "   ";
+    inOrder(root->right);
+  }
+}
 void BST::preOrder(Node *root) {}
 void BST::postOrder(Node *root) {}
 void BST::levelOrder(Node *root) {}
