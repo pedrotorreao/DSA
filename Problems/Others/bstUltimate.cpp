@@ -220,7 +220,15 @@ void BST::preOrder(Node *root) {
     inOrder(root->right);
   }
 }
-void BST::postOrder(Node *root) {}
+void BST::postOrder(Node *root) {
+  // traversal order:
+  //     left --> right --> root
+  if (root != nullptr) {
+    inOrder(root->left);
+    inOrder(root->right);
+    std::cout << root->data << "   ";
+  }
+}
 void BST::levelOrder(Node *root) {}
 
 std::string BST::serializeBST(Node *root) {}
