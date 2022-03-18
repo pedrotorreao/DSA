@@ -182,9 +182,9 @@ int BST::getMinValue(Node *root) {
 }
 
 int BST::getMaxValue(Node *root) {
-  // if tree is empty, return max. integer value as indicative:
+  // if tree is empty, return min. integer value as indicative:
   if (root == nullptr)
-    return INT_MAX;
+    return INT_MIN;
 
   // since this is a BST, the maximum value will the value at
   // the rightmost position, traverse the tree to it and return
