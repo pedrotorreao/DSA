@@ -162,7 +162,19 @@ bool BST::searchValue(Node *root, int value) {
   return false;
 }
 
-bool BST::isBST(Node *root) {}
+bool BST::isBST(Node *root) {
+  return isBST_Helper(root, INT_MIN, INT_MAX);
+}
+bool isBST_Helper(Node *node, int min, int max) {
+  if (node == nullptr)
+    return true;
+
+  if ((node->data <= min) || (node->data >= max))
+    return false;
+
+  return (isBST_Helper(node->left, min, node->data) && isBST_Helper(node->right, node->data, max));
+}
+
 bool BST::isBalanced_1(Node *root) {}
 bool BST::isBalanced_2(Node *root) {}
 bool BST::isLeafNode(Node *root) {}
