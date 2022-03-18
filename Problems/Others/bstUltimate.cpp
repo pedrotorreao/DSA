@@ -2,6 +2,7 @@
  -- Trees - Binary Search Tree: A complete implementation
 *******************************************************************************/
 
+#include <climits>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -159,12 +160,27 @@ bool BST::searchValue(Node *root, int value) {
   }
   return false;
 }
+
 bool BST::isBST(Node *root) {}
 bool BST::isBalanced_1(Node *root) {}
 bool BST::isBalanced_2(Node *root) {}
 bool BST::isLeafNode(Node *root) {}
 
-int BST::getMinValue(Node *root) {}
+int BST::getMinValue(Node *root) {
+  // if tree is empty, return max. integer value as indicative:
+  if (root == nullptr)
+    return INT_MAX;
+
+  // since this is a BST, the minimum value will the value at
+  // the leftmost position, traverse the tree to it and return
+  // its value:
+  Node *leftmost = root;
+  while (leftmost->left != nullptr)
+    leftmost = leftmost->left;
+
+  return leftmost->data;
+}
+
 int BST::getMaxValue(Node *root) {}
 int BST::getHeight_1(Node *root) {}
 int BST::getHeight_2(Node *root) {}
