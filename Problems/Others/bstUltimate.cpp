@@ -181,7 +181,21 @@ int BST::getMinValue(Node *root) {
   return leftmost->data;
 }
 
-int BST::getMaxValue(Node *root) {}
+int BST::getMaxValue(Node *root) {
+  // if tree is empty, return max. integer value as indicative:
+  if (root == nullptr)
+    return INT_MAX;
+
+  // since this is a BST, the maximum value will the value at
+  // the rightmost position, traverse the tree to it and return
+  // its value:
+  Node *rightmost = root;
+  while (rightmost->right != nullptr)
+    rightmost = rightmost->right;
+
+  return rightmost->data;
+}
+
 int BST::getHeight_1(Node *root) {}
 int BST::getHeight_2(Node *root) {}
 int BST::getMinHeight(Node *root) {}
