@@ -5,6 +5,7 @@
 #include <climits>
 #include <iomanip>
 #include <iostream>
+#include <queue>
 #include <string>
 
 class Node {
@@ -211,6 +212,7 @@ void BST::inOrder(Node *root) {
     inOrder(root->right);
   }
 }
+
 void BST::preOrder(Node *root) {
   // traversal order:
   //     root --> left --> right
@@ -220,6 +222,7 @@ void BST::preOrder(Node *root) {
     inOrder(root->right);
   }
 }
+
 void BST::postOrder(Node *root) {
   // traversal order:
   //     left --> right --> root
@@ -229,7 +232,35 @@ void BST::postOrder(Node *root) {
     std::cout << root->data << "   ";
   }
 }
-void BST::levelOrder(Node *root) {}
+
+void BST::levelOrder(Node *root) {
+  // traversal order:
+  //     level 0: root
+  //        --> level 1: nodes 1 edge away
+  //            --> level 2: nodes 2 edges away ...
+  if (root != nullptr) {
+    // queue to store current node' children,
+    // i.e. nodes one step away:
+    std::queue<Node *> q;
+    q.push(root);
+
+    // iterate while there are still nodes to traverse:
+    while (!q.empty()) {
+      // get the next node to traverse:
+      Node *current = q.front();
+      q.pop();
+
+      std::cout << root->data << "   ";
+
+      // push its children to the queue so they can be
+      // traversed next:
+      if (current->left != nullptr)
+        q.push(current->left);
+      if (current->right != nullptr)
+        q.push(current->right);
+    }
+  }
+}
 
 std::string BST::serializeBST(Node *root) {}
 
