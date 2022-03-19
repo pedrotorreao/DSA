@@ -27,8 +27,8 @@ public:
 
   bool searchValue(Node *root, int value);
   bool isBST(Node *root);
-  bool isBalanced_1(Node *root);
-  bool isBalanced_2(Node *root);
+  bool isBST_Helper(Node *node, int min, int max);
+  bool isBalanced(Node *root);
   bool isLeafNode(Node *root);
 
   int getMinValue(Node *root);
@@ -75,15 +75,15 @@ Node *BST::insertValue_Iter(Node *root, int value) {
 }
 
 Node *BST::insertValue_Rec(Node *root, int value) {
-  if (root == nullptr) {
+  if (root == nullptr)
     return new Node(value);
-  } else if (value < root->data) {
+
+  if (value < root->data)
     root->left = insertValue_Rec(root->left, value);
-  } else if (value > root->data) {
+  else if (value > root->data)
     root->right = insertValue_Rec(root->right, value);
-  } else {
-    return nullptr;
-  }
+
+  return root;
 }
 
 Node *BST::removeValue(Node *root, int value) {
@@ -131,20 +131,20 @@ Node *BST::removeValue(Node *root, int value) {
 }
 
 Node *BST::getNode(Node *root, int value) {
-  if (root == nullptr)
-    return nullptr;
+  if (root != nullptr) {
+    if (root->data == value)
+      return root;
 
-  if (root->data == value)
-    return root;
+    if (value < root->data)
+      return getNode(root->left, value);
 
-  if (value < root->data)
-    return getNode(root->left, value);
-
-  if (value > root->data)
-    return getNode(root->right, value);
+    if (value > root->data)
+      return getNode(root->right, value);
+  }
+  return nullptr;
 }
 
-Node *BST::deSerializeTree(std::string bst_str) {}
+// Node *BST::deSerializeTree(std::string bst_str) {}
 
 bool BST::searchValue(Node *root, int value) {
   // if root is a valid node:
@@ -165,7 +165,7 @@ bool BST::searchValue(Node *root, int value) {
 bool BST::isBST(Node *root) {
   return isBST_Helper(root, INT_MIN, INT_MAX);
 }
-bool isBST_Helper(Node *node, int min, int max) {
+bool BST::isBST_Helper(Node *node, int min, int max) {
   if (node == nullptr)
     return true;
 
@@ -175,8 +175,12 @@ bool isBST_Helper(Node *node, int min, int max) {
   return (isBST_Helper(node->left, min, node->data) && isBST_Helper(node->right, node->data, max));
 }
 
-bool BST::isBalanced_1(Node *root) {}
-bool BST::isBalanced_2(Node *root) {}
+bool BST::isBalanced(Node *root) {
+  // a tree is balanced if the difference between any of
+  // its subtrees is at most 1:
+  return (abs(getMaxHeight(root) - getMinHeight(root)) <= 1);
+}
+
 bool BST::isLeafNode(Node *root) {
   if (root == nullptr)
     return false;
@@ -288,8 +292,8 @@ void BST::preOrder(Node *root) {
   //     root --> left --> right
   if (root != nullptr) {
     std::cout << root->data << "   ";
-    inOrder(root->left);
-    inOrder(root->right);
+    preOrder(root->left);
+    preOrder(root->right);
   }
 }
 
@@ -297,8 +301,8 @@ void BST::postOrder(Node *root) {
   // traversal order:
   //     left --> right --> root
   if (root != nullptr) {
-    inOrder(root->left);
-    inOrder(root->right);
+    postOrder(root->left);
+    postOrder(root->right);
     std::cout << root->data << "   ";
   }
 }
@@ -320,7 +324,7 @@ void BST::levelOrder(Node *root) {
       Node *current = q.front();
       q.pop();
 
-      std::cout << root->data << "   ";
+      std::cout << current->data << "   ";
 
       // push its children to the queue so they can be
       // traversed next:
@@ -332,10 +336,59 @@ void BST::levelOrder(Node *root) {
   }
 }
 
-std::string BST::serializeBST(Node *root) {}
+// std::string BST::serializeBST(Node *root) {}
 
 int main() {
-  //.. test cases
+  std::cout << std::boolalpha;
+
+  BST bst_1;
+  Node *root = nullptr;
+
+  root = bst_1.insertValue_Rec(root, 10);
+  root = bst_1.insertValue_Iter(root, 5);
+  root = bst_1.insertValue_Rec(root, 15);
+  root = bst_1.insertValue_Rec(root, 3);
+  root = bst_1.insertValue_Iter(root, 8);
+  root = bst_1.insertValue_Iter(root, 11);
+  root = bst_1.insertValue_Rec(root, 23);
+
+  std::cout << "In order traversal: ";
+  bst_1.inOrder(root);
+  std::cout << "\n";
+  std::cout << "Pre order traversal: ";
+  bst_1.preOrder(root);
+  std::cout << "\n";
+  std::cout << "Post order traversal: ";
+  bst_1.postOrder(root);
+  std::cout << "\n";
+  std::cout << "Level order traversal: ";
+  bst_1.levelOrder(root);
+  std::cout << "\n";
+
+  std::cout << "Tree height: " << bst_1.getHeight_1(root) << "\n";
+  std::cout << "Leaf sum: " << bst_1.getLeafSum(root) << "\n";
+
+  root = bst_1.removeValue(root, 10);
+
+  std::cout << "In order traversal: ";
+  bst_1.inOrder(root);
+  std::cout << "\n";
+
+  root = bst_1.removeValue(root, 5);
+  std::cout << "In order traversal: ";
+  bst_1.inOrder(root);
+  std::cout << "\n";
+
+  std::cout << "Tree is balanced: " << bst_1.isBalanced(root) << "\n";
+
+  root = bst_1.removeValue(root, 3);
+  root = bst_1.insertValue_Rec(root, 29);
+
+  std::cout << "In order traversal: ";
+  bst_1.inOrder(root);
+  std::cout << "\n";
+
+  std::cout << "Tree is balanced: " << bst_1.isBalanced(root) << "\n";
 
   return 0;
 }
