@@ -177,7 +177,12 @@ bool isBST_Helper(Node *node, int min, int max) {
 
 bool BST::isBalanced_1(Node *root) {}
 bool BST::isBalanced_2(Node *root) {}
-bool BST::isLeafNode(Node *root) {}
+bool BST::isLeafNode(Node *root) {
+  if (root == nullptr)
+    return false;
+
+  return ((root->left == nullptr) && (root->right == nullptr));
+}
 
 int BST::getMinValue(Node *root) {
   // if tree is empty, return max. integer value as indicative:
@@ -209,7 +214,23 @@ int BST::getMaxValue(Node *root) {
   return rightmost->data;
 }
 
-int BST::getHeight_1(Node *root) {}
+int BST::getHeight_1(Node *root) {
+  // node can be NULL:
+  //  1. if the tree is empty, we return -1 to indicate that.
+  //  2. if the previous node is a leaf node, we return -1 so we
+  //     don't take this node into account in the height sum.
+  if (root == nullptr)
+    return -1;
+  // for each node, we recursively call getHeight() for both of
+  // its children until we get to a leaf node from where we unwind
+  // the stack building the resulting sum:
+  int l_child = getHeight_1(root->left);
+  int r_child = getHeight_1(root->right);
+  // once we get to the leaf nodes for both children of a given node,
+  // we compare their height values, get the max height between them and
+  // increment the height to account for one more level:
+  return ((l_child > r_child) ? (l_child + 1) : (r_child + 1));
+}
 int BST::getHeight_2(Node *root) {}
 int BST::getMinHeight(Node *root) {}
 int BST::getMaxHeight(Node *root) {}
