@@ -246,7 +246,21 @@ int BST::getHeight_2(Node *root) {
   // increment the height to account for one more level:
   return std::max(getHeight_2(root->left), getHeight_2(root->right)) + 1;
 }
-int BST::getMinHeight(Node *root) {}
+int BST::getMinHeight(Node *root) {
+  // node can be NULL:
+  //  1. if the tree is empty, we return -1 to indicate that.
+  //  2. if the previous node is a leaf node, we return -1 so we
+  //     don't take this node into account in the height sum.
+  if (root == nullptr)
+    return -1;
+  // for each node, we recursively call getMinHeight() for both of
+  // its children until we get to a leaf node from where we unwind
+  // the stack building the resulting sum.
+  // once we get to the leaf nodes for both children of a given node,
+  // we compare their height values, get the min height between them and
+  // increment the height to account for one more level:
+  return std::min(getMinHeight(root->left), getMinHeight(root->right)) + 1;
+}
 int BST::getMaxHeight(Node *root) {}
 int BST::getLeafSum(Node *root) {}
 
