@@ -261,7 +261,10 @@ int BST::getMinHeight(Node *root) {
   // increment the height to account for one more level:
   return std::min(getMinHeight(root->left), getMinHeight(root->right)) + 1;
 }
-int BST::getMaxHeight(Node *root) {}
+int BST::getMaxHeight(Node *root) {
+  // tree' max height = tree height:
+  return getHeight_2(root);
+}
 int BST::getLeafSum(Node *root) {}
 
 void BST::inOrder(Node *root) {
