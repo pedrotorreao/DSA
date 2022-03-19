@@ -265,7 +265,13 @@ int BST::getMaxHeight(Node *root) {
   // tree' max height = tree height:
   return getHeight_2(root);
 }
-int BST::getLeafSum(Node *root) {}
+int BST::getLeafSum(Node *root) {
+  // if the root is a leaf node, return its value:
+  if (isLeafNode(root))
+    return root->data;
+  // keep going down the tree until we get to the leaves:
+  return (getLeafSum(root->left) + getLeafSum(root->right));
+}
 
 void BST::inOrder(Node *root) {
   // traversal order:
