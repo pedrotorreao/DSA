@@ -336,7 +336,14 @@ void BST::levelOrder(Node *root) {
   }
 }
 
-// std::string BST::serializeBST(Node *root) {}
+std::string BST::serializeBST(Node *root) {
+  if (root == nullptr)
+    return "#";
+
+  std::string tree_serialized = "(" + serializeBST(root->left) + std::to_string(root->data) + serializeBST(root->right) + ")";
+
+  return tree_serialized;
+}
 
 int main() {
   std::cout << std::boolalpha;
@@ -367,6 +374,8 @@ int main() {
 
   std::cout << "Tree height: " << bst_1.getHeight_1(root) << "\n";
   std::cout << "Leaf sum: " << bst_1.getLeafSum(root) << "\n";
+
+  std::cout << "Serialized tree: " << bst_1.serializeBST(root) << "\n";
 
   root = bst_1.removeValue(root, 10);
 
