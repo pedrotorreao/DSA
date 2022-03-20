@@ -6,7 +6,10 @@
 #include <iomanip>
 #include <iostream>
 #include <queue>
+#include <sstream>
 #include <string>
+
+#define MARKER -101010
 
 class Node {
 public:
@@ -24,6 +27,7 @@ public:
   Node *removeValue(Node *root, int value);
   Node *getNode(Node *root, int value);
   Node *deSerializeTree(std::string bst_str);
+  void deSerialize_Helper(std::stringstream &ss, Node *&node);
 
   bool searchValue(Node *root, int value);
   bool isBST(Node *root);
@@ -144,7 +148,27 @@ Node *BST::getNode(Node *root, int value) {
   return nullptr;
 }
 
-// Node *BST::deSerializeTree(std::string bst_str) {}
+Node *BST::deSerializeTree(std::string bst_str) {
+  std::stringstream ss{bst_str};
+
+  Node *root;
+  deSerialize_Helper(ss, root);
+
+  return root;
+}
+
+void BST::deSerialize_Helper(std::stringstream &ss, Node *&node) {
+  std::string tk; // store current value in string format
+  std::getline(ss, tk, ' ');
+
+  int d = std::stoi(tk); // convert string value to integer
+
+  if (d != MARKER) { // if valid, add it to the tree:
+    node = new Node(std::stoi(tk));
+    deSerialize_Helper(ss, node->left);
+    deSerialize_Helper(ss, node->right);
+  }
+}
 
 bool BST::searchValue(Node *root, int value) {
   // if root is a valid node:
@@ -337,10 +361,20 @@ void BST::levelOrder(Node *root) {
 }
 
 std::string BST::serializeBST(Node *root) {
-  if (root == nullptr)
-    return "#";
+  // IMPORTANT: For regular binary trees, we cannot use in-order traversal
+  // to serialize and deserialize a binary tree because the in-order
+  // sequence may not be unique.
 
-  std::string tree_serialized = "(" + serializeBST(root->left) + std::to_string(root->data) + serializeBST(root->right) + ")";
+  // if current node is null, store the MARKER:
+  if (root == nullptr) {
+    std::string s = std::to_string(MARKER) + ' ';
+    return s;
+  }
+
+  // store current node value and recur for its children:
+  std::string tree_serialized = std::to_string(root->data) + " " + serializeBST(root->left) + serializeBST(root->right);
+  // std::string tree_serialized = "(" + serializeBST(root->left) + std::to_string(root->data) + serializeBST(root->right) + ")";
+  // std::string tree_serialized = "(" + std::to_string(root->data) + serializeBST(root->left) + serializeBST(root->right) + ")";
 
   return tree_serialized;
 }
@@ -370,12 +404,18 @@ int main() {
   std::cout << "\n";
   std::cout << "Level order traversal: ";
   bst_1.levelOrder(root);
-  std::cout << "\n";
+  std::cout << "\n\n";
 
   std::cout << "Tree height: " << bst_1.getHeight_1(root) << "\n";
   std::cout << "Leaf sum: " << bst_1.getLeafSum(root) << "\n";
 
-  std::cout << "Serialized tree: " << bst_1.serializeBST(root) << "\n";
+  std::string ser_tree = bst_1.serializeBST(root);
+  std::cout << "Serialized tree: " << ser_tree << "\n";
+
+  Node *r = bst_1.deSerializeTree(ser_tree);
+  std::cout << "In order traversal: ";
+  bst_1.inOrder(r);
+  std::cout << "\n\n";
 
   root = bst_1.removeValue(root, 10);
 
