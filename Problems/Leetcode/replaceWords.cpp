@@ -91,21 +91,31 @@ public:
   }
 
   void insertWord(std::string &str) {
+    // initialize a pointer to the root of the trie:
     TrieNode *current = root;
 
     for (char &c : str) {
+      // get the position corresponding to the current character:
       int charac_pos = int(c) - 'a';
-
+      // if there is no child node associated with the 'current' character,
+      // create a new node and add it to current node as a child associated with the letter:
       if (current->children[charac_pos] == nullptr) {
         current->children[charac_pos] = new TrieNode();
         current = current->children[charac_pos];
-      } else if (current->children[charac_pos]->endChar == true) {
+      }
+      // in case a shorter prefix for the key being added is already present, there is no
+      // need to keep going and add a longer one since we're interested only in the shortest:
+      else if (current->children[charac_pos]->endChar == true) {
         current = nullptr;
         break;
-      } else {
+      }
+      // find the child node of 'current' node associated with that letter:
+      else {
         current = current->children[charac_pos];
       }
     }
+    // in case the whole key was added to the trie, set its flag indicating the end of a prefix
+    // and store the prefix there for quick retrieval later:
     if (current != nullptr) {
       current->endChar = true;
       current->prefix = str;
@@ -113,22 +123,28 @@ public:
   }
 
   std::string replaceByPrefix(std::string str) {
+    // initialize a pointer to the 'root' of the trie:
     TrieNode *current = root;
     std::string str_res{};
 
     for (char &c : str) {
+      // get the position corresponding to the 'current' character:
       int charac_pos = int(c) - 'a';
+      // find the child node of 'current' node associated with that character:
       current = current->children[charac_pos];
-
+      // if 'current' is null, there is no matching prefix:
       if (current == nullptr)
         break;
+      // if we got to the end of the prefix, we return the key associated with it:
       if (current->endChar == true) {
         str_res = current->prefix;
         break;
       }
     }
+    // in case we found a replacement prefix, we return it:
     if (!str_res.empty())
       return str_res;
+    // otherwise, we return the original string:
     return str;
   }
 };
