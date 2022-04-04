@@ -52,17 +52,14 @@
 #include <iostream>
 #include <stack>
 
-void feedQueue(std::stack<int> &stack_1, std::stack<int> &stack_2)
-{
-  while (!stack_1.empty())
-  {
+void feedQueue(std::stack<int> &stack_1, std::stack<int> &stack_2) {
+  while (!stack_1.empty()) {
     stack_2.push(stack_1.top());
     stack_1.pop();
   }
 }
 
-int main()
-{
+int main() {
   /* Enter your code here. Read input from STDIN. Print output to STDOUT */
   int n{0}, query_type{0};
 
@@ -71,35 +68,28 @@ int main()
 
   std::cin >> n;
 
-  for (int i{0}; i < n; ++i)
-  {
+  for (int i{0}; i < n; ++i) {
     std::cin >> query_type;
-    switch (query_type)
-    {
-    case 1:
-    {
+    switch (query_type) {
+    case 1: {
       int val{0};
       std::cin >> val;
       // ...enqueue
       st_1.push(val);
       break;
     }
-    case 2:
-    {
+    case 2: {
       // ...dequeue
-      if (st_2.empty())
-      {
+      if (st_2.empty()) {
         feedQueue(st_1, st_2);
       }
       if (!st_2.empty())
         st_2.pop();
       break;
     }
-    case 3:
-    {
+    case 3: {
       // ...peek
-      if (st_2.empty())
-      {
+      if (st_2.empty()) {
         feedQueue(st_1, st_2);
       }
       std::cout << st_2.top() << "\n";
