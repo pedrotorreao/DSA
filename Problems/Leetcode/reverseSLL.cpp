@@ -21,8 +21,12 @@
 --Reasoning: See comments below.
 
 --Time complexity:
+    Iterative approach: O(N), where N is the lenght of the SLL.
+    Recursive approach: O(N), where N is the lenght of the SLL.
 
 --Space complexity:
+    Iterative approach: O(1), no additional input dependent space is needed.
+    Recursive approach: O(N), due to stack space allocation, where N is the lenght of the SLL.
 */
 
 /**
@@ -71,6 +75,19 @@ ListNode *reverseList_Iter(ListNode *head) {
   return head;
 }
 
+// reverse sll - recursive solution:
+ListNode *reverseList_Rec(ListNode *head) {
+  if (head == nullptr || head->next == nullptr)
+    return head;
+
+  ListNode *temp = reverseList_Rec(head->next);
+
+  head->next->next = head;
+  head->next = nullptr;
+
+  return temp;
+}
+
 int main() {
   // generate two equal lists:
   ListNode *head_1 = new ListNode(5);
@@ -84,6 +101,8 @@ int main() {
   std::cout << "List reversed iteratively: ";
   displayList(head_1);
   head_2 = reverseList_Rec(head_2);
+  std::cout << "List reversed recursively: ";
+  displayList(head_2);
 
   return 0;
 }
