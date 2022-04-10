@@ -49,7 +49,11 @@ void fillList(ListNode *head, int size);
 void displayList(ListNode *head);
 
 int main() {
-  //..test
+  // generate two equal lists:
+  ListNode *head_1 = new ListNode(5);
+  ListNode *head_2 = new ListNode(5);
+  fillList(head_1, 5);
+  fillList(head_2, 5);
 
   return 0;
 }
