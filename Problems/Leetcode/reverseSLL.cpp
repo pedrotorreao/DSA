@@ -48,12 +48,42 @@ struct ListNode {
 void fillList(ListNode *head, int size);
 void displayList(ListNode *head);
 
+// reverse sll - iterative solution:
+ListNode *reverseList_Iter(ListNode *head) {
+  if (head == nullptr)
+    return nullptr;
+
+  ListNode *first = head;
+  ListNode *second = first->next;
+
+  while (second != nullptr) {
+    ListNode *temp = second->next; // reference to the rest of the list
+    // rearrange pointers:
+    second->next = first;
+    first = second;
+    second = temp;
+  }
+  // set the old 'head->next' ref. to nullptr to mark the end of the list:
+  head->next = nullptr;
+  // point 'head' to the new head node:
+  head = first;
+
+  return head;
+}
+
 int main() {
   // generate two equal lists:
   ListNode *head_1 = new ListNode(5);
   ListNode *head_2 = new ListNode(5);
   fillList(head_1, 5);
   fillList(head_2, 5);
+
+  std::cout << "Original list: ";
+  displayList(head_1);
+  head_1 = reverseList_Iter(head_1);
+  std::cout << "List reversed iteratively: ";
+  displayList(head_1);
+  head_2 = reverseList_Rec(head_2);
 
   return 0;
 }
