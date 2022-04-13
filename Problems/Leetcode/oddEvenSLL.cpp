@@ -58,6 +58,10 @@ struct ListNode {
   ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+// helper methods - forward declarations:
+void fillList(ListNode *head, int size);
+void displayList(ListNode *head);
+
 ListNode *oddEvenList(ListNode *head) {
   if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
     return head;
@@ -90,4 +94,30 @@ int main() {
   // .. add test cases
 
   return 0;
+}
+
+// helper methods - definitions:
+void fillList(ListNode *head, int size) {
+  ListNode *curr = head;
+  int seed = head->val;
+
+  while (--size) {
+    curr->next = new ListNode(seed * 3);
+
+    curr = curr->next;
+    ++seed;
+  }
+}
+
+void displayList(ListNode *head) {
+  ListNode *curr = head;
+
+  while (curr != nullptr) {
+    std::cout << curr->val;
+    if (curr->next != nullptr)
+      std::cout << " -> ";
+
+    curr = curr->next;
+  }
+  std::cout << "\n";
 }
