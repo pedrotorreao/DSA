@@ -59,7 +59,29 @@ struct ListNode {
 };
 
 ListNode *oddEvenList(ListNode *head) {
-  // .. add solution
+  if (head == nullptr || head->next == nullptr || head->next->next == nullptr)
+    return head;
+
+  ListNode *odds = head;        // head of the odd indexed list
+  ListNode *evens = head->next; // head of the even indexed list
+
+  ListNode *curr_odd = odds;   // pointer to the current odd indexed node
+  ListNode *curr_even = evens; // pointer to the current even indexed node
+
+  while (curr_even != nullptr) {
+    // skip even node and set the 'next' ref. to the next odd node:
+    curr_odd->next = curr_even->next;
+    // advance in case we haven't got to the end of the odd nodes list:
+    if (curr_odd->next)
+      curr_odd = curr_odd->next;
+
+    // skip odd node and set the 'next' ref. to the next even node:
+    curr_even->next = curr_odd->next;
+    // advance until we get to the end of the even nodes list:
+    curr_even = curr_even->next;
+  }
+  // curr_odd now is the last node in the odd list, point it to the head of the even list:
+  curr_odd->next = evens;
 
   return head;
 }
