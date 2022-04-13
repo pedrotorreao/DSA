@@ -91,7 +91,16 @@ ListNode *oddEvenList(ListNode *head) {
 }
 
 int main() {
-  // .. add test cases
+  // generate and fill sll:
+  ListNode *head_1 = new ListNode(5);
+  fillList(head_1, 5);
+
+  std::cout << "Original list: ";
+  displayList(head_1);
+
+  head_1 = oddEvenList(head_1);
+  std::cout << "Rearranged List: ";
+  displayList(head_1);
 
   return 0;
 }
