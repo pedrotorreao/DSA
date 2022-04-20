@@ -37,12 +37,21 @@
     1 <= n <= 30
     1 <= k <= 2^(n - 1)
 
-
 --Reasoning:
+  It is possible to visualize this problem as a binary tree. If a node is 0, its left child is 0
+  and its right child is 1. Similarly, if a node is 1, its left child is 1 and its right child is 0.
+  To know if the node at the Kth position is a left child or right child, we check the parity if K
+  dividing it by 2. If K is even, current node at the Kth position is a right child, and its parent
+  is the (K/2)th node in previous row. Otherwise, if K is odd, current node is left child and its
+  parent is the ((K+1)/2)th node in previous row. Until now we know whether the value at the Kth
+  position is a left or right child, now its value will depend on whether its parent node is 0 or 1.
+  Without this information, we are not able to determine whether the value at the Kth position is.
+  In order to find this out, we use recursion to keep going up the previous rows (binary tree), to
+  find the parent node until we reach the first row.
 
---Time complexity:
+--Time complexity: O(log(K)), since at every step K is halved until it reaches 1.
 
---Space complexity:
+--Space complexity: O(log(K)), due to the stack frames required for the recursive calls.
 
 */
 
