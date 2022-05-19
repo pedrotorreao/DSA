@@ -40,7 +40,38 @@
   nums is an ascending array that is possibly rotated.
   -104 <= target <= 104
 
---Reasoning: See comments below.
+--Reasoning:
+  As the array is rotated around a pivot, we cannot run a standard binary search because  we may come across
+  the situation where the 'mid' position and the 'target' value are in different halves of the array (sides
+  here refers to the values before and after the pivot). If both 'mid' and 'target' are in the same half,
+  we can simply continue with a regular binary search because we'll eventually converge towards the 'target'.
+  However, if we have 'mid' and 'target' at different halves, we'll "invalidate" the elements that do not
+  matter to our search by setting them to its max/min possible value dependending on the side it is.
+    Ex.: nums=[4, 5, 6, 7, 0, 1, 2]
+      - If 'target' is in the left half, then when searching we'll make the numbers nums[mid] at the right half
+      to be INT_MAX:
+            --> [4, 5, 6, 7, INT_MAX, INT_MAX, INT_MAX]
+
+      - If 'target' is in the right half, then when searching we'll make the numbers nums[mid] at the left half
+      to be INT_MIN:
+            --> [INT_MIN, INT_MIN, INT_MIN, INT_MIN, 0, 1, 2]
+
+      In this way, the array is kinda of "sorted" as we go. We don't actually modify the array, but make the mid
+      point value to be INT_MAX/INT_MIN instead of nums[mid] in the current iteration based on which side the
+      'target' is and which side the mid point number is.
+
+      - If 'target' and nums[mid] are on the same half side (left or right half). The mid point and 'target' are
+      on the same half and you are converging towards the 'target', so mid point will be nums[mid] and we perform
+      a regular binary search.
+
+      In order to check if both 'nums[mid]' and 'target' are on the same half, we check if they're both greater
+      than the pivot number (the number where the rotation began, nums[0]) or both smaller than pivot number:
+          if(   ((nums[mid] > nums[0]) && (target > nums[0]))
+            || ((nums[mid] <= nums[0]) && (target <= nums[0]))
+            )
+
+      Then, if 'nums[mid]' and 'target' are on different halves, we don't use 'nums[mid]' as mid point, and we use
+      INT_MIN or INT_MAX for comparing with 'target' value in order to find out in which half 'target' is.
 
 --Time complexity: O(Log(N)), where N is the size of the input array.
 
@@ -59,11 +90,18 @@ int binSearchRotatedSortedArray(std::vector<int> &nums, int target) {
   int l = 0, r = nums.size() - 1;
 
   while (l <= r) {
-    int m = l + (r - l) / 2;
+    // m: mid position
+    int m = l + (r - l) / 2; // prevent (l + r) overflow
 
-    auto n = ((nums.at(m) < nums.at(0)) == (target < nums.at(0)))
-                 ? nums.at(m)
-                 : (target < nums.at(0) ? std::numeric_limits<int>::min() : std::numeric_limits<int>::max());
+    /* same as
+          if(    ((nums[mid] > nums[0]) && (target > nums[0])) --> same half, i.e, left
+              || ((nums[mid] <= nums[0]) && (target <= nums[0])) --> same half, i.e, right
+            )
+    */
+    // n: mid point/value
+    auto n = ((nums.at(m) < nums.at(0)) == (target < nums.at(0)))                                             // nums[m] and target are on the same half?
+                 ? nums.at(m)                                                                                 // yes, regular binary search
+                 : (target < nums.at(0) ? std::numeric_limits<int>::min() : std::numeric_limits<int>::max()); // no, find out 'target's half
 
     if (n < target)
       l = m + 1;
@@ -86,3 +124,9 @@ int main() {
 
   return 0;
 }
+
+/*
+
+
+
+*/
