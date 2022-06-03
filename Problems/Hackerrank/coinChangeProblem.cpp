@@ -37,11 +37,16 @@
 #include <vector>
 
 long coinChanges(int n, std::vector<long> c) {
+  // array to store the total count of combinations
+  // for the different amounts from 0 to n:
   std::vector<long> dp(n + 1, 0);
+  // initialize the array to 1 at position 0:
   dp.at(0) = 1;
 
   for (const auto &coin : c) {
     for (int amount{1}; amount < dp.size(); ++amount) {
+      // if the amount can be payed with the current coin denomination,
+      // add the value stored in dp[amount-coin] to the result:
       if (amount >= coin) {
         dp.at(amount) += dp.at(amount - coin);
       }
@@ -76,7 +81,7 @@ int main() {
   amount = 219;
   coins = {36, 10, 42, 7, 50, 1, 49, 24, 37, 12, 34, 13, 39, 18, 8, 29, 19, 43, 5, 44, 28, 23, 35, 26};
   std::cout << "Total number of ways to make change for " << amount
-            << ": " << coinChanges(amount, coins) << "\n"; // 16694
+            << ": " << coinChanges(amount, coins) << "\n"; // 168312708
 
   return 0;
 }
