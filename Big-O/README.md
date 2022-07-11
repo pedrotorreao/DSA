@@ -16,7 +16,7 @@ Common time complexities ordered from best to worst:
 
 A **constant** runtime means that no matter the size of the input, the performance of the algorithm will be the same. Since this algorithm runtime does not depend on the size of the input, the number of operations remains constant and does not increase as the input size grows.
 
-It is good to mention, however, that a constant runtime does not mean that something happens instantaneously, but that the runtime will always be the same no matter how large is the dataset.
+It is good to mention, however, that a constant runtime does not mean that something happens instantaneously, but that the runtime will always be the same no matter how large the dataset is.
 
 > Example: In the function `getMax` below, no matter the values of `a` and `b`, `getMax` always performs the same amount of operations.
 
@@ -33,7 +33,7 @@ function getMax(a, b) {
 
 If the total number of operations that an algorithm performs is directly proportional to the size of the input, it is said to have a linear runtime because, in the worst case scenario, the maximum number of operations will be equal to the input size.
 
-Suppose we're searching for a `target` element in an array of size `n` using a simple linear search. The algorithm checks each array element and compares it to `target` to see if it's a match. If there's a match, we return the position of `target` in the array. In the event that `target` is not present in the array, the algorithm will keep running until it gets to the end of the array. Since that, for the worst case, the number of times the algorithm will run is equal to the size of the input, `n`, it is said to have a linear runtime or `O(n)`.
+Suppose we're searching for a `target` element in an array of size `n` using a simple linear search. The algorithm checks each array element and compares it to `target` to see if there is a match. If there's a match, we return the position of `target` in the array. In the event that `target` is not present in the array, the algorithm will keep running until it gets to the end of the array. Since that, for the worst case, the number of times the algorithm will run is equal to the size of the input, `n`, it is said to have a linear runtime or `O(n)`.
 
 > Example - Linear search:
 
@@ -42,7 +42,7 @@ function searchArray(array, target) {
   let n = array.length;
 
   for (let i = 0; i < n; ++i) {
-    if (array[i] == target) {
+    if (array[i] === target) {
       return i;
     }
   }
@@ -54,7 +54,7 @@ function searchArray(array, target) {
 
 If an algorithm has a time complexity of `O(log n)`, the bigger its input size, the smaller proportion of the actual input your program has to go through. A logarithmic algorithm is the opposite of an exponential one. When something grows exponentially, it means that, at each step, the number of operations is multiplied by a factor. Whereas, when an algorithm grows logarithmically, the number of operations needed is being divided by this factor at each step. Assuming the base of the logarithm as being `2`, this means that the size of the dataset that the algorithm has to go through gets divided by `2` at each step.
 
-A traditional example for `O(log n)` runtime is binary search. Consider an **ordered** `array` on size `n` and a `target` value. If we were to use linear search to find `target` in `array`, in the worst case scenario that we begin at the first position in `array` and `target` is the last element, we'd have to search the entire `array`, thus performing `n` comparisons. However, using a binary search algorithm like the one below, since at each step we half the the amount of elements to be searched, the total number of operations necessary is at most `log (input_size)` or `log n`.
+A traditional example for `O(log n)` runtime is binary search. Consider an **ordered** `array` of size `n` and a `target` value. If we were to use linear search to find `target` in `array`, in the worst case scenario that we begin at the first position in `array` and `target` is the last element, we'd have to search the entire `array`, thus performing `n` comparisons. However, using a binary search algorithm like the one below, since at each step we half the amount of elements to be searched, the total number of operations necessary is at most `log (input_size)` or `log n`.
 
 > Example - Binary search:
 
@@ -69,7 +69,7 @@ function binarySearch(array, target) {
 
     let mid = Math.round((start + end) / 2);
 
-    if (target == array[mid]) return mid;
+    if (target === array[mid]) return mid;
 
     if (target > array[mid]) start = mid + 1;
     else if (target < array[mid]) end = mid - 1;
@@ -115,7 +115,7 @@ The total runtime can be expressed as how many steps, dividing `n` by two each t
 
 > \# of steps: `log(n) = log(11) = ~3`, which matches our example.
 
-Let's apply this reasonig to a larger dataset. Consider now that we want to find a person by searching for his registered unique `ID` in an ordered database containing fifty million registered `ID`s. If we decide to use linear search here, in the event that our target `ID` is the last in the database or does not exist, we'd have to look and compare all the fifty million elements in the database elements. However, we were to use binary search to find the person, that would take:
+Let's apply this reasonig to a larger dataset. Consider now that we want to find a person by searching for his registered unique `ID` in an ordered database containing fifty million registered `ID`s. If we decide to use linear search here, in the event that our target `ID` is the last in the dataset or does not exist, we'd have to look and compare all the fifty million elements in the dataset. However, if we were to use binary search to find the person, that would take:
 
 ```
 step 1: 50000000 / 2 = 25000000
@@ -144,7 +144,7 @@ function searchMatrix(matrix, target) {
 
   for (let i = 0; i < n; ++i) {
     for (let j = 0; j < n; ++j) {
-      if (matrix[i][j] == target) {
+      if (matrix[i][j] === target) {
         return [i, j];
       }
     }
@@ -231,9 +231,9 @@ Consider the size of `arr_A` as being `n`. The time complexity of this algorithm
 #### Steps:
 
 1. Identify your code
-2. Identify what `n` means (Rule #3)
+2. Identify what `n` means
 3. Count the steps in a typical run (Rule #1)
-4. Keep the most significant part (Rules #2 and #4)
+4. Keep the most significant part (Rules #2 and #3)
 
 ### Space Complexity
 
