@@ -6,13 +6,13 @@ Linked lists are linear data structures that store data in individual objects ca
 
 #### Singly Linked List - SLL
 
-Singly linked lists contain nodes which have a data field as well as 'next' field, which points to the next node in line of nodes. This means that it is only possible to navigate a singly linked list in one direction, from first node (head) to last node (tail). The last node's reference holds a null pointer, which indicates the end of the list. To better understand, please see the image below.
+Singly linked lists contain nodes which have a data field as well as `next` field, which points to the next node in the list of nodes. This means that it is only possible to navigate a singly linked list in one direction, from first node (`head`) to last node (`tail`). The last node's reference holds a null pointer, which indicates the end of the list. To better understand, please see the image below.
 
 ![SLL](../../resources/img/singly-linked-list.png)
 
 #### Doubly Linked List - DLL
 
-Doubly linked lists contain, besides the reference to the next node, a second reference field pointing to the previous node in the sequence.
+Doubly linked lists contain, besides the reference to the next node, a second reference field pointing to the previous node in the sequence. Thus, doubly linked lists can be traversed in both directions.
 
 ![DLL](../../resources/img/doubly-linked-list.png)
 
@@ -22,10 +22,10 @@ Code for both types of Linked Lists discussed (SLL and DLL) as well as other var
 
 - Traversal: O(n)
 - Search: O(n)
-- Append (insert at the end of the list): O(1)
-- Prepend (insert at the start of the list):
+- Append (insert at the end of the list):
   - O(1) if the last element is known, i.e., if a variable holds the tail node
   - O(n) if the last element is unknown and searching the list is needed
+- Prepend (insert at the start of the list): O(1)
 - Insert at any position: search time + O(1)
 - Delete:
   - head node: O(1)
@@ -39,7 +39,7 @@ Code for both types of Linked Lists discussed (SLL and DLL) as well as other var
 
 - Elements can be easily inserted or removed without having to reallocate or reorganize the entire structure since the data items don't need to be stored contiguously in memory, while restructuring an array at run-time is a much more expensive operation.
 
-- Insertion/removal of nodes at any point in the list can be a constant time operation, O(1), assuming that there is a pointer to the node before the one to be removed, or before the insertion point; otherwise, without this reference it is a liner time operation, O(n). On the other hand, insertion/deletion in a dynamic array at random locations either requires moving the elements or resizing the array, which can be O(n) in the worst case that the position being modified is the first one.
+- Insertion/removal of nodes at any point in the list can be a constant time operation, `O(1)`, assuming that there is a pointer to the node before the one to be removed, or before the insertion point; otherwise, without this reference it is a linear time operation, `O(n)`. On the other hand, insertion/deletion in a dynamic array at random locations either requires moving the elements or resizing the array, which can be O(n) in the worst case that the position being modified is the first one.
 
 #### Disadvantages
 
