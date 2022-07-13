@@ -1,4 +1,6 @@
+#include <cassert>
 #include <iostream>
+#include <string>
 
 template <typename T>
 class Node {
@@ -177,6 +179,7 @@ public:
    * @brief Reverse SLL iteratively.
    *
    */
+
   void reverse_ite(void) {
     if (this->head == nullptr || this->head->next == nullptr)
       return;
@@ -201,25 +204,114 @@ public:
    * @brief Reverse SLL recursively.
    *
    */
-  // void reverse_rec(void) {}
+  void reverse_rec(void) {
+    this->head = reverse_rec_helper(this->head);
+  }
+  Node<T> *reverse_rec_helper(Node<T> *cur_head) {
+    if (cur_head == nullptr || cur_head->next == nullptr)
+      return cur_head;
 
+    Node<T> *temp = reverse_rec_helper(cur_head->next);
+
+    cur_head->next->next = cur_head;
+    cur_head->next = nullptr;
+
+    this->tail = cur_head;
+
+    return temp;
+  }
+
+  /**
+   * @brief Get value stored in the first of the list.
+   *
+   * @return T
+   */
+  T front(void) {
+    assert(this->head != nullptr);
+
+    return this->head->data;
+  }
+
+  /**
+   * @brief Get value stored in the back of the list.
+   *
+   * @return T
+   */
+  T back(void) {
+    assert(this->head != nullptr);
+
+    return this->tail->data;
+  }
   /**
    * @brief Get the 1st occurence of a node which has the given value.
    *
    * @param value
    * @return Node*
    */
-  // Node *get_node(T value) {}
+  Node<T> *get_node(T value) {
+    if (this->head == nullptr) {
+      std::cout << "List is empty\n";
+      return nullptr;
+    }
+
+    Node<T> *cur_node = this->head;
+
+    while (cur_node != nullptr) {
+      if (cur_node->data == value) {
+        return cur_node;
+      }
+
+      cur_node = cur_node->next;
+    }
+
+    return nullptr;
+  }
+
   /**
    * @brief Get the number of occurences for a given value.
    *
    * @param value
    * @return int
    */
-  // int get_freq(T value) {}
+  int get_freq(T value) {
+    if (this->head == nullptr) {
+      return 0;
+    }
 
-  // bool isEmpty(T value) {}
-  // bool hasNode(T value) {}
+    Node<T> *cur_node = this->head;
+    int freq{0};
+
+    while (cur_node != nullptr) {
+      if (cur_node->data == value)
+        ++freq;
+
+      cur_node = cur_node->next;
+    }
+
+    return freq;
+  }
+
+  /**
+   * @brief Return whether the list is empty or not.
+   *
+   * @param value
+   * @return true
+   * @return false
+   */
+  bool isEmpty() {
+    return (this->head == nullptr);
+  }
+
+  /**
+   * @brief Check if a given node value is present.
+   *
+   * @param value
+   * @return true
+   * @return false
+   */
+  bool hasNode(T value) {
+    return (this->get_node(value) != nullptr);
+  }
 
   /**
    * @brief Get the length of the list.
@@ -250,6 +342,8 @@ public:
 };
 
 int main() {
+  std::cout << std::boolalpha;
+
   SLL<std::string> sll;
 
   sll.append("Brazil");   // Brazil
@@ -306,6 +400,33 @@ int main() {
 
   sll.reverse_ite(); // Panama -> Chile -> Sweden -> Marrocos -> Laos
   sll.displayList();
+  std::cout << "\n";
+
+  sll.reverse_rec();
+  sll.displayList(); // Laos -> Marrocos -> Sweden -> Chile -> Panama
+  std::cout << "\n";
+
+  Node<std::string> *node = sll.get_node("Chile");
+  std::cout << "Found it? " << (node != nullptr) << "\n"; // TRUE
+  node = sll.get_node("Colombia");
+  std::cout << "Found it? " << (node != nullptr) << "\n"; // FALSE
+  std::cout << "\n";
+
+  std::cout << "Count: " << sll.get_freq("Brazil") << "\n"; // 0
+  std::cout << "Count: " << sll.get_freq("Sweden") << "\n"; // 1
+  sll.insert("Brazil", 3);
+  std::cout << "Count: " << sll.get_freq("Brazil") << "\n"; // 1
+  sll.prepend("Chile");
+  std::cout << "Count: " << sll.get_freq("Chile") << "\n"; // 2
+  sll.displayList();                                       // Chile -> Laos -> Marrocos -> Brazil -> Sweden -> Chile -> Panama
+  std::cout << "\n";
+
+  std::cout << "Front: " << sll.front() << "\n";
+  std::cout << "Back: " << sll.back() << "\n";
+  std::cout << "\n";
+
+  std::cout << "List is empty? " << sll.isEmpty() << "\n";
+  std::cout << "\"Denmark\" is present? " << sll.hasNode("Denmark") << "\n";
 
   return 0;
 }
