@@ -11,60 +11,101 @@ private:
   int max_capacity;
 
 public:
+  /**
+   * @brief Construct a new Stack object with a fixed max. capacity.
+   *
+   * @param max_size
+   */
   Stack(int max_size) {
     this->st = {};
     this->max_capacity = max_size;
   }
-
+  /**
+   * @brief Construct a new Stack object. Default constructor, no max capacity set.
+   *
+   */
   Stack() {
     this->st = {};
     this->max_capacity = std::numeric_limits<int>::max();
   }
-
+  /**
+   * @brief Destroy the Stack object.
+   *
+   */
   ~Stack() = default;
 
+  /**
+   * @brief Insert new element at the top of the stack.
+   *
+   * @param value
+   */
   void push(T value) {
     if (this->get_size() == this->max_capacity) {
       std::cout << "** Max. capacity reached, remove an element or increase capacity **\n";
       return;
     }
-    // assert((this->get_size() == this->max_capacity) && "** Max. capacity reached, remove an element or increase capacity**\n");
 
     this->top = value;
     this->st.push_back(value);
   }
 
+  /**
+   * @brief Remove top element from the top of the stack.
+   *
+   */
   void pop(void) {
     if (!this->get_size()) {
       std::cout << "** Stack is empty **\n";
       return;
     }
-    // assert((this->get_size()) && "** Stack is empty **\n");
 
     this->st.pop_back();
     this->top = this->st.back();
   }
 
+  /**
+   * @brief Get the top element from the stack.
+   *
+   * @return T
+   */
   T peek(void) {
     if (!this->get_size()) {
       T err{};
       std::cout << "** Stack is empty **";
       return err;
     }
-    // assert((this->get_size()) && "** Stack is empty **\n");
 
     return this->top;
   }
 
+  /**
+   * @brief Get the number of elements on the stack.
+   *
+   * @return int
+   */
   int get_size(void) {
     return st.size();
   }
 
+  /**
+   * @brief Check whether the stack is empty or not.
+   *
+   * @return true
+   * @return false
+   */
   bool is_empty(void) {
     return st.size() == 0;
   }
 
+  /**
+   * @brief Increase max stack capacity in case the overloaded constructor has been used to set an initial max capacity.
+   *
+   */
   void grow_capacity(void) {
+    if (this->max_capacity == std::numeric_limits<int>::max()) {
+      std::cout << "** This stack is dynamic by default **\n";
+      return;
+    }
     this->max_capacity *= 2;
   }
 };
