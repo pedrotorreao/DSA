@@ -70,7 +70,7 @@ void inOrderTrav(TreeNode *root) {
 
 // #1: My dumb solution:
 // time complexity: O(N), since we visit all the nodes
-// space complexity: O(N), since we allocated space all the node in the bst.
+// space complexity: O(N), since we allocate space for all the node in the bst.
 
 void inOrder(TreeNode *root, std::vector<int> &res) {
   if (root != nullptr) {
@@ -112,8 +112,10 @@ TreeNode *increasingBST_1(TreeNode *root) {
 }
 
 // #2: Improved short recursive solution, based on LC's Discussion section:
-// time complexity: O(N), since we visit all the nodes
-// space complexity: O(height), since we allocated space all the node in the bst.
+// time complexity:
+//    O(N), since we visit all the nodes.
+// space complexity:
+//    O(height), since we have at most 'height' recursive calls simultaneously in the call stack.
 
 TreeNode *increasingBST_2(TreeNode *root, TreeNode *next = nullptr) {
   if (root == nullptr)
