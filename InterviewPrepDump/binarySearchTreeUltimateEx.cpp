@@ -6,6 +6,7 @@
 #include <string>
 
 #define MARKER -919293
+
 class TreeNode {
 public:
   int value;
@@ -22,7 +23,7 @@ public:
   /**
    * @brief Add a new value 'val' to the binary search tree iteratively.
    *
-   * @param root
+   * @param TreeNode*
    * @param val
    * @return TreeNode*
    */
@@ -67,7 +68,7 @@ public:
   /**
    * @brief Add a new value 'val' to the binary search tree recursively.
    *
-   * @param root
+   * @param TreeNode*
    * @param val
    * @return TreeNode*
    */
@@ -86,7 +87,7 @@ public:
   /**
    * @brief Delete a value 'val' from the binary search tree.
    *
-   * @param root
+   * @param TreeNode*
    * @param val
    * @return TreeNode*
    */
@@ -138,7 +139,7 @@ public:
   /**
    * @brief Retrive node with a given value. Search iteratively.
    *
-   * @param root
+   * @param TreeNode*
    * @param val
    * @return TreeNode*
    */
@@ -162,7 +163,7 @@ public:
   /**
    * @brief Retrive node with a given value. Search recursively.
    *
-   * @param root
+   * @param TreeNode*
    * @param val
    * @return TreeNode*
    */
@@ -181,7 +182,7 @@ public:
   /**
    * @brief Get the min node value present in the tree.
    *
-   * @param root
+   * @param TreeNode*
    * @return int
    */
   int get_min_val(TreeNode *root) {
@@ -198,7 +199,7 @@ public:
   /**
    * @brief Get the max node value present in the tree.
    *
-   * @param root
+   * @param TreeNode*
    * @return int
    */
   int get_max_val(TreeNode *root) {
@@ -215,7 +216,7 @@ public:
   /**
    * @brief Get the height of the tree.
    *
-   * @param root
+   * @param TreeNode*
    * @return int
    */
   int get_height_1(TreeNode *root) {
@@ -239,7 +240,7 @@ public:
   /**
    * @brief Get the height of the tree. Simplification of get_height_1.
    *
-   * @param root
+   * @param TreeNode*
    * @return int
    */
   int get_height_2(TreeNode *root) {
@@ -260,7 +261,7 @@ public:
   /**
    * @brief Get the min tree height.
    *
-   * @param root
+   * @param TreeNode*
    * @return int
    */
   int get_min_height(TreeNode *root) {
@@ -276,13 +277,20 @@ public:
   /**
    * @brief Get the max tree height. Same as get_height_1 and get_height_2.
    *
-   * @param root
+   * @param TreeNode*
    * @return int
    */
   int get_max_height(TreeNode *root) {
     return get_height_2(root);
   }
 
+  /**
+   * @brief Check whether a node is a leaf node, i.e has no children.
+   *
+   * @param TreeNode*
+   * @return true
+   * @return false
+   */
   bool is_leaf(TreeNode *root) {
     if (root == nullptr)
       return false;
@@ -290,6 +298,12 @@ public:
     return ((root->left == nullptr) && (root->right == nullptr));
   }
 
+  /**
+   * @brief Get the total sum of all the leaf nodes.
+   *
+   * @param TreeNode*
+   * @return int
+   */
   int get_leaf_sum(TreeNode *root) {
     if (root == nullptr)
       return 0;
@@ -305,22 +319,57 @@ public:
     // return (get_leaf_sum(root->left) + get_leaf_sum(root->right));
   }
 
+  /**
+   * @brief Get whether a given value is present in the tree or not.
+   *
+   * @param TreeNode*
+   * @param val
+   * @return true
+   * @return false
+   */
   bool is_present(TreeNode *root, int val) {
     TreeNode *found = get_node_ite(root, val);
 
     return (found != nullptr);
   }
+
+  /**
+   * @brief Get whether the tree is empty or not.
+   *
+   * @param TreeNode*
+   * @return true
+   * @return false
+   */
   bool is_empty(TreeNode *root) {
     return (root == nullptr);
   }
+
+  /**
+   * @brief Check if the tree is balanced (|max_height - min_height| <= 1).
+   *
+   * @param TreeNode*
+   * @return true
+   * @return false
+   */
   bool is_balanced_1(TreeNode *root) {
+    // a tree is balanced if the difference between any of its subtrees
+    // is at most 1:
     if (root == nullptr)
       return true;
 
     return (abs(get_min_height(root) - get_max_height(root)) <= 1);
   }
 
+  /**
+   * @brief Check if the tree is balanced (|max_height - min_height| <= 1).
+   *
+   * @param TreeNode*
+   * @return true
+   * @return false
+   */
   bool is_balanced_2(TreeNode *root) {
+    // a tree is balanced if the difference between any of its subtrees
+    // is at most 1:
     if (root == nullptr)
       return true;
 
@@ -329,10 +378,23 @@ public:
     return (balance_factor <= 1);
   }
 
+  /**
+   * @brief Method [1/2] for checking if tree follows the BST properties, i.e left < root < right.
+   *
+   * @param TreeNode*
+   * @return true
+   * @return false
+   */
   bool is_bst(TreeNode *root) {
     return is_bst_helper(root, INT_MIN, INT_MAX);
   }
-
+  /**
+   * @brief Method [2/2] for checking if tree follows the BST properties, i.e left < root < right.
+   *
+   * @param TreeNode*
+   * @return true
+   * @return false
+   */
   bool is_bst_helper(TreeNode *root, int min, int max) {
     if (root == nullptr)
       return true;
@@ -349,7 +411,7 @@ public:
   /**
    * @brief In-order traversal: left subtree -> root -> right subtree
    *
-   * @param root
+   * @param TreeNode*
    */
   void in_order_traversal(TreeNode *root) {
     if (root != nullptr) {
@@ -362,7 +424,7 @@ public:
   /**
    * @brief Pre-order traversal: root -> left subtree -> right subtree
    *
-   * @param root
+   * @param TreeNode*
    */
   void pre_order_traversal(TreeNode *root) {
     if (root != nullptr) {
@@ -375,7 +437,7 @@ public:
   /**
    * @brief Post-order traversal: left subtree -> right subtree -> root
    *
-   * @param root
+   * @param TreeNode*
    */
   void post_order_traversal(TreeNode *root) {
     if (root != nullptr) {
@@ -388,7 +450,7 @@ public:
   /**
    * @brief Level-order traversal: root level -> 1st children level -> 2nd children level ..
    *
-   * @param root
+   * @param TreeNode*
    */
   void level_order_traversal(TreeNode *root) {
     if (root != nullptr) {
@@ -410,17 +472,35 @@ public:
     }
   }
 
+  /**
+   * @brief Method for serializing (tree-->string) the tree.
+   *
+   * @param TreeNode*
+   * @return std::string
+   */
   std::string serialize_bst(TreeNode *root) {
+    // IMPORTANT: For regular binary trees, we cannot use in-order traversal
+    // to serialize and deserialize a binary tree because the in-order
+    // sequence may not be unique.
+
+    // if we've reached a NULL node, store the MARKER in its place to indicate that:
     if (root == nullptr) {
       std::string s = std::to_string(MARKER) + ' ';
       return s;
     }
 
+    // store current node value and recur for its children:
     std::string serialized_tree = (std::to_string(root->value) + " " + serialize_bst(root->left) + serialize_bst(root->right));
 
     return serialized_tree;
   }
 
+  /**
+   * @brief Method [1/2] for deserializing (string-->tree) a string.
+   *
+   * @param std::string
+   * @return TreeNode*
+   */
   TreeNode *deserialize_bst(std::string bst_str) {
     std::stringstream ss{bst_str};
 
@@ -430,7 +510,12 @@ public:
 
     return root;
   }
-
+  /**
+   * @brief Method [2/2] for deserializing (string-->tree) a string.
+   *
+   * @param std::string
+   * @return TreeNode*
+   */
   void deserialize_bst_helper(std::stringstream &ss, TreeNode *&root) {
     std::string tk;
     std::getline(ss, tk, ' ');
