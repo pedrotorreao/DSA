@@ -41,8 +41,16 @@
 --Reasoning: See comments below.
 
 --Time complexity:
+  O(N), because in the worst case we'll traverse the same cell 5 times (once while processing the
+  current cell itself and 4 times adjacent cell calls)
 
 --Space complexity:
+  O(1), considering that the recursive calls will not take any additional space. However, recursive
+  calls require stack memory, so if stack memory is sufficient and it is possible to neglect it, then
+  the space complexity is O(1). However, in this case, the memory used will be:
+    number of recursive calls: O(R*C), for the worst case where all cells have '1'
+    memory used for each rec. call, i.e. arguments, mem_used_each_call
+      => O(R*C * mem_used_each_call)
 
 */
 
@@ -51,32 +59,43 @@
 #include <utility>
 #include <vector>
 
+void exploreDFS(std::vector<std::vector<char>> &grid, int row, int col, int R, int C) {
+  // base case - out of bounds, i.e. water:
+  if (row < 0 || row >= R || col < 0 || col >= C)
+    return;
+  // base case - cell is already visited:
+  if (grid.at(row).at(col) == '2')
+    return;
+  // base case - cell is water, skip it:
+  if (grid.at(row).at(col) == '0')
+    return;
+
+  // mark current cell as visited:
+  grid.at(row).at(col) = '2';
+
+  exploreDFS(grid, row - 1, col, R, C); // go up
+  exploreDFS(grid, row + 1, col, R, C); // go down
+  exploreDFS(grid, row, col - 1, R, C); // go left
+  exploreDFS(grid, row, col + 1, R, C); // go right
+}
+
 int numIslands(std::vector<std::vector<char>> &grid) {
-  if (grid.size() == 1)
-    return (grid.at(0).at(0) == '1');
+  // check for an empty grid:
+  if (!grid.size())
+    return 0;
 
   const int ROWS = grid.size();       // number of ROWS
   const int COLS = grid.at(0).size(); // number of COLS
 
-  std::queue<std::pair<int, int>> q_pos; // queue to store the positions to be processed
-  q_pos.push(std::make_pair(0, 0));      // start position: [row,col] = [0,0]
-
   int num_of_islands{0}; // result: number of islands found
 
-  bool water_up{false}, water_down{false}, water_right{false}, water_left{false};
-  std::vector<std::pair<int, int>> neighbors;
-
-  while (!q_pos.empty()) {
-    std::pair<int, int> curr_pos = q_pos.front();
-    q_pos.pop();
-
-    int curr_row_id = curr_pos.first;
-    int curr_col_id = curr_pos.second;
-
-    if ((curr_row_id == ROWS - 1) && (curr_col_id == COLS - 1))
-      break;
-
-    // ...
+  for (int r{0}; r < ROWS; ++r) {
+    for (int c{0}; c < COLS; ++c) {
+      if (grid.at(r).at(c) == '1') {
+        ++num_of_islands;
+        exploreDFS(grid, r, c, ROWS, COLS);
+      }
+    }
   }
 
   return num_of_islands;
@@ -136,12 +155,19 @@ int main() {
   std::cout << ":: Test case #5: " << res << " islands found\t-Expected " << exp
             << ((exp == res) ? "\t[PASSED]" : "\t[FAILED]") << "\n";
 
-  // test case #1:
+  // test case #6:
   grid = {{'0', '0', '0', '0', '0'},
           {'0', '0', '0', '0', '0'},
           {'0', '0', '0', '0', '0'},
           {'0', '0', '0', '0', '1'}};
   exp = 1;
+  res = numIslands(grid);
+  std::cout << ":: Test case #6: " << res << " islands found\t-Expected " << exp
+            << ((exp == res) ? "\t[PASSED]" : "\t[FAILED]") << "\n";
+
+  // test case #7:
+  grid = {{'1', '0', '1', '1', '0', '1', '1'}};
+  exp = 3;
   res = numIslands(grid);
   std::cout << ":: Test case #6: " << res << " islands found\t-Expected " << exp
             << ((exp == res) ? "\t[PASSED]" : "\t[FAILED]") << "\n";
