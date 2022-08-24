@@ -43,30 +43,40 @@
 #include <unordered_map>
 
 int countGoodSubstrings(std::string s) {
-  const int windowSize = 3;
-  const int stringSize = s.size();
+  const int windowSize = 3;        // fixed window/substring size
+  const int stringSize = s.size(); // get string size
 
-  std::unordered_map<char, int> hm;
-  int numOfGoodStrings{0};
+  std::unordered_map<char, int> hm; // hashmap to map characters to their frequencies
+  int numOfGoodStrings{0};          // variable to be returned
 
-  if (stringSize < windowSize)
+  if (stringSize < windowSize) // string is smaller than the substring size, result is zero
     return 0;
 
-  for (int i{0}; i < windowSize; ++i)
-    ++hm[s.at(i)];
+  for (int i{0}; i < windowSize; ++i) // setup window for the first k-sized substring
+    ++hm[s.at(i)];                    // count the frequency each character appears
 
-  if (hm.size() == 3)
-    ++numOfGoodStrings;
+  if (hm.size() == 3)   // if all characters were unique, k elements will have been added to the hashmap
+    ++numOfGoodStrings; // add 1 to the result to account for the first good substring
 
+  // Iterate over the remaining elements while sliding the window. Since the window size is fixed,
+  // at each step we need to remove the previous left window border, i.e. character s[i-k], and add
+  // the new right window border, i.e. character s[i].
   for (int i{windowSize}; i < stringSize; ++i) {
-    char prevLeftBorderChar = s.at(i - windowSize);
-    char newRightBorderChar = s.at(i);
+    char prevLeftBorderChar = s.at(i - windowSize); // previous left window border
+    char newRightBorderChar = s.at(i);              // new right window border
 
+    // Decrement the frequency for the removed character, i.e. s.at(i - windowSize).
+    // If it reaches zero, this character is not part of the current window/substring
+    // and we must remove it from the hashmap:
     if (!--hm[prevLeftBorderChar])
       hm.erase(prevLeftBorderChar);
 
+    // Add/increment frequency of the newly added character, i.e. element s[i]:
     ++hm[newRightBorderChar];
 
+    // If all characters in the current window/substring are unique, k elements
+    // will have been added to the hashmap, so add 1 to the result to account for
+    // another good substring:
     if (hm.size() == 3)
       ++numOfGoodStrings;
   }
