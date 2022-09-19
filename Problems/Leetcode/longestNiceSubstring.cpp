@@ -40,62 +40,46 @@
 --Reasoning: Sliding window approach.
 
 --Time complexity:
+    ::Best case - O(N): for a string containing only matching characters, only one pass
+  would be needed and no recursive calls would be made.
+    ::Worst case - O(N^2): for a string made completely of distinct characters, we'd need
+  to make recursive calls or the right partition until we reach the base case, r_str.size() < 2.
 
---Space complexity:
+--Space complexity: O(N), where N is the length of the original string.
 
 */
 
 #include <iostream>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
 
 std::string longestNiceSubstring(std::string s) {
+  // string is to small to be nice:
   if (s.size() <= 1)
     return "";
 
   const int S = s.size();
-  std::unordered_map<char, int> charFreq;
-  std::string goodStr{}, temp{};
-  int l{0}, r{0}, maxLength{0};
+  // create an unordered_set and initialize it with the string characters:
+  std::unordered_set<char> charSet(s.begin(), s.end());
 
-  for (; r < S; ++r)
-    ++charFreq[s.at(r)];
+  for (int i{0}; i < S; ++i) {
+    char lower = tolower(s.at(i));
+    char upper = toupper(s.at(i));
 
-  for (r = 0; r < S; ++r) {
-    char lower = tolower(s.at(r));
-    char upper = toupper(s.at(r));
+    // if current character has its matching lowercase/uppercase character,
+    // continue traversing the string:
+    if (charSet.count(lower) && charSet.count(upper))
+      continue;
 
-    if (!(charFreq[lower] && charFreq[upper])) {
-      if (!--charFreq[s.at(r)])
-        charFreq.erase(s.at(r));
-      l = r + 1;
+    // otherwise, split the string at the unmatched character and evaluate both
+    // substrings to find out which substring has the longest nice substring:
+    std::string l_str = longestNiceSubstring(s.substr(0, i));
+    std::string r_str = longestNiceSubstring(s.substr(i + 1));
 
-      // temp = s.substr(l,r-l); //?
-    }
-    // else {
-    //     temp.push_back(s.at(r)); //?
-    // }
-
-    if (r - l > goodStr.size())
-      goodStr = s.substr(l, r - l);
-    else
-      goodStr.push_back(s.at(r));
-
-    // goodStr = (temp.size() > goodStr.size()) ? temp : goodStr;
-
-    // if(maxLength < (r-l)){
-
-    //     goodStr = s.substr(l,r-l+1);
-    //     std::cout << "Xirombs\n";
-    // }
-    // else{
-    //     goodStr.push_back(s.at(r));
-    // }
-
-    // maxLength = std::max(maxLength, r-l);
+    return ((l_str.size() >= r_str.size()) ? l_str : r_str);
   }
 
-  return goodStr;
+  return s;
 }
 
 int main() {
