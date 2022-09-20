@@ -36,12 +36,9 @@
   O(N), in the worst case in which all the characters are unique.
 
 *******************************************************************************/
-#include <algorithm>
 #include <iostream>
 #include <string>
-#include <unordered_map>
 #include <unordered_set>
-#include <vector>
 
 int lengthOfLongestSubstring(std::string &s) {
   // initialize variables:
@@ -71,7 +68,6 @@ int lengthOfLongestSubstring(std::string &s) {
     }
     // case #2 - current character is a repeated character:
     else {
-      char firstSeen = s.at(start);
       // advance the left border by one position decreasing the current window size:
       seen.erase(currChar);
       ++start;
