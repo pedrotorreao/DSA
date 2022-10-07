@@ -56,20 +56,35 @@ Problem: Number of Arithmetic Triplets
 int arithmeticTriplets(std::vector<int> &nums, int diff) {
   std::unordered_map<int, int> hm;
 
-  int num_of_triplets{0}, l{0}, r{0};
+  int num_of_triplets{0}, r{0};
 
   while (r < nums.size()) {
+    // calculate the value that would satisfy the condition for the current element:
     int rel_diff = nums[r] - diff;
-
+    // check in the hashmap if we've encountered this element before, i.e. it has already been mapped:
     if (hm[rel_diff] > 0) {
+      // if so, increment the 'count' mapped to it and map it to our current element:
       hm[nums[r]] = hm[rel_diff] + 1;
-
+      // if the count reaches 3, it means we have a triplet:
       if (hm[nums[r]] >= 3)
         ++num_of_triplets;
-    } else
+    }
+    // otherwise, add current element to the hashmap:
+    else
       hm[nums[r]] = 1;
 
     ++r;
+
+    /*
+    hashmap usage:
+      key: val
+      --> key = num[i]
+      --> val:
+          = 1:  num[i] has been mapped
+          = 2:  a number 'num[i]' such that 'num[j] - num[i] = diff' has been found before
+          >= 3: a number 'num[j]' such that 'num[k] - num[j] = diff' has been found before
+                and 'num[j]' also has its matching 'num[i]', so we form a triplet.
+    */
   }
 
   return num_of_triplets;
