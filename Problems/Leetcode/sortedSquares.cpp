@@ -16,30 +16,16 @@ Problem: Squares of a Sorted Array
   Input: nums = [-7,-3,2,3,11]
   Output: [4,9,9,49,121]
 
-
-
-
-
-Constraints:
-
-    1 <= nums.length <= 104
-    -104 <= nums[i] <= 104
-    nums is sorted in non-decreasing order.
-
-
-Follow up: Squaring each element and sorting the new array is very trivial, could you find an O(n) solution using a different approach?
-
 --Inputs:
-  int[]: integer array nums of even length
+  int[]: integer array nums 
 
 --Output:
-  int[]: modified array after rearranging the elements
+  int[]: array of the squares of each number sorted in non-decreasing order
 
 --Constraints:
-    :: 2 <= nums.length <= 2 * 105
-    :: nums.length is even
-    :: 1 <= |nums[i]| <= 105
-    :: nums consists of equal number of positive and negative integers.
+    :: 1 <= nums.length <= 104
+    :: -104 <= nums[i] <= 104
+    :: nums is sorted in non-decreasing order.
 
 --Reasoning: See comments below.
 
@@ -60,6 +46,7 @@ void display1D(std::vector<T> &vec) {
   std::cout << "]\n";
 }
 
+// Approach #1: Redundant solution, unnecessary square calculations:
 std::vector<int> sortedSquares_1(std::vector<int> &nums) {
   const int N = nums.size();
   std::vector<int> ans(N, 0);
@@ -86,6 +73,7 @@ std::vector<int> sortedSquares_1(std::vector<int> &nums) {
   return ans;
 }
 
+// Approach #2: Clean solution, "Two pointer" approach:
 std::vector<int> sortedSquares_2(std::vector<int> &nums) {
   const int N = nums.size();
   std::vector<int> ans(N, 0);
