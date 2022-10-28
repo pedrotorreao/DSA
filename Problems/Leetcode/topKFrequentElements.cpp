@@ -29,8 +29,8 @@ Problem: LC 347. Top K Frequent Elements
 
 --Reasoning:
   Map the elements to their frequencies with an unordered_map. After that, use
-  a map to get the frequencies mapped to their elements and extract the k most
-  frequent elements.
+  a map, to keep the elements ordered by key in descending order, to get the
+  frequencies mapped to their elements and extract the k most frequent elements.
 
 --Time complexity: O(N + k)
 
@@ -52,31 +52,33 @@ void display1D(const std::vector<int> &arr) {
 }
 
 std::vector<int> topKFrequent(std::vector<int> &nums, int k) {
+  // [key, value]: [nums[i], frequency of nums[i]]
   std::unordered_map<int, int> num_to_freq;
-  std::map<int, std::vector<int>, std::greater<int>> freq_to_num;
+  // [key, value]: [frequency, elements nums[i] w/ that frequency]
+  std::map<int, std::vector<int>, std::greater<int>> freq_to_nums;
 
+  // map frequencies:
   for (auto &n : nums)
     ++num_to_freq[n];
 
-  for (auto &nf : num_to_freq) {
-    freq_to_num[nf.second].push_back(nf.first);
-  }
+  // group elements by frequency:
+  for (auto &f : num_to_freq)
+    freq_to_nums[f.second].push_back(f.first);
 
-  std::vector<int> ans;
-  bool done{false};
-  for (auto &fn : freq_to_num) {
-    for (auto &f : fn.second) {
-      ans.push_back(f);
-      if (ans.size() == k) {
-        done = true;
-        break;
-      }
+  std::vector<int> kMostFrequent;
+  auto freq_iter = freq_to_nums.begin();
+
+  // iterate over the map 'freq_to_nums' adding the top k elements to
+  // the answer:
+  while (k > 0) {
+    for (auto it = freq_iter->second.begin(); it != freq_iter->second.end() && k > 0; ++it) {
+      kMostFrequent.push_back(*it);
+      --k;
     }
-    if (done)
-      break;
+    ++freq_iter;
   }
 
-  return ans;
+  return kMostFrequent;
 }
 
 int main() {
