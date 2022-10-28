@@ -32,7 +32,7 @@ Problem: LC 347. Top K Frequent Elements
   a map, to keep the elements ordered by key in descending order, to get the
   frequencies mapped to their elements and extract the k most frequent elements.
 
---Time complexity: O(N + k)
+--Time complexity: O(N*log(N) + k)
 
 --Space complexity: O(N), since we allocate
 
