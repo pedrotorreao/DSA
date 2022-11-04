@@ -45,11 +45,24 @@ not count as extra space for space complexity analysis.)
 
 void display1D(const std::vector<int> &arr);
 
+/*
+  # Approach 1 - Naive Approach:
+    --Reasoning: Use nested loops.
+    --Time Complexity: O(N^2)
+    --Space Complexity: O(1)
+*/
 std::vector<int> productExceptSelf(std::vector<int> &nums) {
   const int N = nums.size();
-  std::vector<int> ans{};
+  std::vector<int> ans(N, 1);
 
-  // .. solution
+  for (int i{0}; i < N; ++i) {
+    for (int j{0}; j < N; ++j) {
+      if (i == j)
+        continue;
+
+      ans.at(i) = ans.at(i) * nums.at(j);
+    }
+  }
 
   return ans;
 }
