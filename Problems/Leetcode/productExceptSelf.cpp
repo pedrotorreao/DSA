@@ -42,23 +42,22 @@ void display1D(const std::vector<int> &arr);
 
 std::vector<int> productExceptSelf_1(std::vector<int> &nums);
 
+std::vector<int> productExceptSelf_2(std::vector<int> &nums);
+
+std::vector<int> productExceptSelf_3(std::vector<int> &nums);
+
 /*
-  # Approach 2:
+  # Approach 4:
     --Reasoning:
-      First, we calculate the total product. Then, we iterate over 'nums[]' filling 'ans[]' with
-      total_product divided by self. We only need to deal with the special cases in which 'nums[i]=0'.
-      For these cases, we know the following:
-          [I]. If there are more than 1 zero, then no matter which element is excluded during the product,
-        there will always be a product by zero, so all the elements in the output array are zero.
-          [II]. If there is only 1 zero in the array, all the elements in the output array will be zero,
-        except for the position where the zero is present in nums[], since all the other elements except
-        itself will be multiplied by this zero.
-          [III]. If there are no zeros, then the element at position 'i' in the output array, 'ans[]', will
-        be the total product divided by self, i.e.:
-              ans[i] = total_product / nums[i].
-      This approach is an improvement over the "# Approach 1" since there are no nested loops involved;
-      however, it's not a valid solution to the problem according to the problem description since it
-      uses the division operator.
+      Instead of using two arrays for storing the products of all the elements before and after
+      a given index 'i', we can store these product in two integer variables and update the output
+      array as we go. We iterate from start and keep calculating 'left' product and updating the
+      corresponding 'ans[i]' and, at the same time, we calculate the 'right' product from the end
+      and update 'ans[n-1-i]'. When these products cross each other at the middle, we begin calculating
+      the product
+          'ans[i] = left[i] * right[i]',
+      which, by the time 'i' reaches the end, is the same as the product of all the array elements
+      except self at each index.
 
     --Time Complexity: O(N)
 
@@ -67,29 +66,22 @@ std::vector<int> productExceptSelf_1(std::vector<int> &nums);
 std::vector<int> productExceptSelf(std::vector<int> &nums) {
   const int SIZE = nums.size();
 
-  // count zeros:
-  int zeros = std::count(nums.begin(), nums.end(), 0);
-
-  // [I] we have more than 1 zero present in nums[]:
-  if (zeros > 1)
-    return std::vector<int>(SIZE, 0);
-
-  // calculate total product:
-  int total_product{1};
-  for (const auto &n : nums)
-    if (n)
-      total_product *= n;
-
   std::vector<int> ans(SIZE, 1);
 
-  for (int i{0}; i < SIZE; ++i) {
-    // [II] there is only 1 zero:
-    if (zeros) {
-      ans.at(i) = (nums.at(i) != 0) ? 0 : total_product;
-      continue;
-    }
-    // [III] there are no zeros:
-    ans.at(i) = total_product / nums.at(i);
+  int left = 1, right = 1, i = 0;
+
+  while (i < SIZE) {
+    // product of the elements before nums[i]:
+    ans.at(i) *= left;
+    // update 'left' to include nums[i] in the next iteration:
+    left *= nums.at(i);
+
+    // product of the elements before nums[i]:
+    ans.at(SIZE - i - 1) *= right;
+    // update 'right' to include nums[SIZE-i-1] in the next iteration:
+    right *= nums.at(SIZE - i - 1);
+
+    ++i;
   }
 
   return ans;
@@ -157,6 +149,94 @@ std::vector<int> productExceptSelf_1(std::vector<int> &nums) {
       ans.at(i) = ans.at(i) * nums.at(j);
     }
   }
+
+  return ans;
+}
+
+/*
+  # Approach 2:
+    --Reasoning:
+      First, we calculate the total product. Then, we iterate over 'nums[]' filling 'ans[]' with
+      total_product divided by self. We only need to deal with the special cases in which 'nums[i]=0'.
+      For these cases, we know the following:
+          [I]. If there are more than 1 zero, then no matter which element is excluded during the product,
+        there will always be a product by zero, so all the elements in the output array are zero.
+          [II]. If there is only 1 zero in the array, all the elements in the output array will be zero,
+        except for the position where the zero is present in nums[], since all the other elements except
+        itself will be multiplied by this zero.
+          [III]. If there are no zeros, then the element at position 'i' in the output array, 'ans[]', will
+        be the total product divided by self, i.e.:
+              ans[i] = total_product / nums[i].
+      This approach is an improvement over the "# Approach 1" since there are no nested loops involved;
+      however, it's not a valid solution to the problem according to the problem description since it
+      uses the division operator.
+
+    --Time Complexity: O(N)
+
+    --Space Complexity: O(1)
+*/
+std::vector<int> productExceptSelf_2(std::vector<int> &nums) {
+  const int SIZE = nums.size();
+
+  // count zeros:
+  int zeros = std::count(nums.begin(), nums.end(), 0);
+
+  // [I] we have more than 1 zero present in nums[]:
+  if (zeros > 1)
+    return std::vector<int>(SIZE, 0);
+
+  // calculate total product:
+  int total_product{1};
+  for (const auto &n : nums)
+    if (n)
+      total_product *= n;
+
+  std::vector<int> ans(SIZE, 1);
+
+  for (int i{0}; i < SIZE; ++i) {
+    // [II] there is only 1 zero:
+    if (zeros) {
+      ans.at(i) = (nums.at(i) != 0) ? 0 : total_product;
+      continue;
+    }
+    // [III] there are no zeros:
+    ans.at(i) = total_product / nums.at(i);
+  }
+
+  return ans;
+}
+
+/*
+  # Approach 3:
+    --Reasoning:
+      To solve the problem without using the division operator, we
+      maintain two arrays, 'left[]' and 'right[]', where 'left[i]'
+      has the product of all 'nums[j]' such that (j < i), and 'right[i]' has the product of all the
+      elements 'num[j]' such that (j > i). Finally, the output array 'ans[]' can be
+      calculated as
+              'ans[i] = left[i] * right[i]',
+      such that at a given position 'i' we have the product between all the elements before 'i', 'left[i]',
+      multiplied by the product of all the elements after 'i', 'right[i]', which is the same as the product
+      of all the array elements except self at each index.
+
+    --Time Complexity:
+      O(N), where N is the size of the 'nums[]' input array.
+
+    --Space Complexity:
+      O(N), since we allocate storage for the 'left[]' and 'right[]' arrays.
+*/
+std::vector<int> productExceptSelf_3(std::vector<int> &nums) {
+  const int SIZE = nums.size();
+  std::vector<int> ans(SIZE, 1), left(SIZE, 1), right(SIZE, 1);
+
+  for (int l = 1; l < SIZE; ++l)
+    left.at(l) = left.at(l - 1) * nums.at(l - 1);
+
+  for (int r = SIZE - 2; r >= 0; --r)
+    right.at(r) = right.at(r + 1) * nums.at(r + 1);
+
+  for (int i = 0; i < SIZE; ++i)
+    ans.at(i) = left.at(i) * right.at(i);
 
   return ans;
 }
