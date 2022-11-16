@@ -33,7 +33,7 @@
 --Time complexity:
   O(N), because in the worst case scenario we'll have too check all the nodes in the trees.
 
---Space complexity: O(1), no additional input-dependent space is allocated.
+--Space complexity: O(N), due to the stack memory consumed to keep track of the recursive function calls.
 
 */
 
@@ -50,7 +50,7 @@ struct TreeNode {
   TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-bool isSameTree(TreeNode *p, TreeNode *q) {
+bool isSameTree_1(TreeNode *p, TreeNode *q) {
   if (p == nullptr && q == nullptr)
     return true;
 
@@ -60,7 +60,16 @@ bool isSameTree(TreeNode *p, TreeNode *q) {
   if (p->val != q->val)
     return false;
 
-  return (isSameTree(p->left, q->left) && isSameTree(p->right, q->right));
+  return (isSameTree_1(p->left, q->left) && isSameTree_1(p->right, q->right));
+}
+
+bool isSameTree_2(TreeNode *p, TreeNode *q) {
+  if (!p && !q)
+    return true;
+  if (!p || !q)
+    return false;
+
+  return ((p->val == q->val) && isSameTree_2(p->left, q->left) && isSameTree_2(p->right, q->right));
 }
 
 int main() {
@@ -69,16 +78,20 @@ int main() {
   TreeNode *p = new TreeNode(1, new TreeNode(2), new TreeNode(3));
   TreeNode *q = new TreeNode(1, new TreeNode(2), new TreeNode(3));
 
-  std::cout << "Trees are equal: " << isSameTree(p, q) << "\n";
+  std::cout << "Trees are equal: " << isSameTree_1(p, q) << "\n";
+  std::cout << "Trees are equal: " << isSameTree_2(p, q) << "\n\n";
 
   q->left = 0;
-  std::cout << "Trees are equal: " << isSameTree(p, q) << "\n";
+  std::cout << "Trees are equal: " << isSameTree_1(p, q) << "\n";
+  std::cout << "Trees are equal: " << isSameTree_2(p, q) << "\n\n";
 
   p->left = 0;
-  std::cout << "Trees are equal: " << isSameTree(p, q) << "\n";
+  std::cout << "Trees are equal: " << isSameTree_1(p, q) << "\n";
+  std::cout << "Trees are equal: " << isSameTree_2(p, q) << "\n\n";
 
   p->val = 9;
-  std::cout << "Trees are equal: " << isSameTree(p, q) << "\n";
+  std::cout << "Trees are equal: " << isSameTree_1(p, q) << "\n";
+  std::cout << "Trees are equal: " << isSameTree_2(p, q) << "\n\n";
 
   return 0;
 }
