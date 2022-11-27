@@ -39,9 +39,9 @@
 
 --Reasoning: See comments below.
 
---Time complexity:
+--Time complexity: O(N^2)
 
---Space complexity:
+--Space complexity: O(N)
 
 */
 
