@@ -177,7 +177,7 @@ ListNode *mergeKLists_2(std::vector<ListNode *> &lists) {
 }
 
 int main() {
-  // testes perform on LC platform
+  //  ... tests performed on LeetCode's platform
 
   return 0;
 }
