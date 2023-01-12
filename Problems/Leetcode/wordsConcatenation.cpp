@@ -64,13 +64,7 @@ in any order.
     :: 1 <= words[i].length <= 30
     :: s and words[i] consist of lowercase English letters.
 
---Reasoning:
-  The question can be also seen as "Find the longest subarray with at most K zeros.
-  So, we keep count of the number of 0s found in the current window. If the count is
-  greater than K (flips > k), then the current windows is not valid and we decrease
-  it by moving its left border (increment L_border) until the number of zeros in the
-  current window is at most K (flips <= K). We could also say that the maximum window
-  gets carried throughout the iteration until a larger one is found.
+--Reasoning: See comments below.
 
 --Time complexity: O(S*W*L)
     S: length of the given string
