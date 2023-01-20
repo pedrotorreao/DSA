@@ -17,7 +17,7 @@
   -int: number of distinct islands found.
 
 --Reasoning:
-  We use DFS to traverse the island and record the path taken to traverse each island.
+  We use BFS to traverse the island and record the path taken to traverse each island.
   Then, we use a hashset DS to only store this recorded path unique entries. This way, since
   equal islands will have the same traversed paths and hashsets do not allow duplicate entries,
   even if we try to add them to the set, it will keep one instance stored. The hashset will
