@@ -80,7 +80,7 @@ void customTraversal(TreeNode *root);
 
 class Solution {
 public:
-  static TreeNode *connectLevelOrderSiblings(TreeNode *root) {
+  static TreeNode *connectLevelOrderSiblings_1(TreeNode *root) {
     // if the tree is empty, return NULL:
     if (root == nullptr)
       return root;
@@ -116,6 +116,74 @@ public:
 
     return root;
   }
+
+  static TreeNode *connectLevelOrderSiblings_2(TreeNode *root) {
+    // if the tree is empty, return NULL:
+    if (root == nullptr)
+      return root;
+    // queue for storing node neighbors:
+    std::queue<TreeNode *> q;
+    q.push(root);
+
+    while (!q.empty()) {
+      // remember the previous node to connect it with the current node:
+      TreeNode *prev = nullptr;
+      // number of elements on the current tree level:
+      int nodesAtCurrLevel = q.size();
+      // traverse all the nodes, "nodesAtCurrLevel", on the current level:
+      for (int node{0}; node < nodesAtCurrLevel; ++node) {
+        TreeNode *curr = q.front();
+        q.pop();
+
+        if (prev != nullptr)
+          prev->next = curr;
+        prev = curr;
+
+        // add "curr" children to the queue, if they exist:
+        if (curr->left != nullptr)
+          q.push(curr->left);
+
+        if (curr->right != nullptr)
+          q.push(curr->right);
+      }
+    }
+
+    return root;
+  }
+
+  static TreeNode *connectLevelOrderSiblings_3(TreeNode *root) {
+    if (root == nullptr)
+      return root;
+
+    std::queue<TreeNode *> q;
+    q.push(root);
+
+    // we are performing right-to-left BFS, starting at the rightmost node of each level,
+    // we then set the 'next' node of 'curr' as 'rightNode' and update "rightNode = cur".
+    // this ensures that each node is assigned its 'rightNode' properly while traversing
+    // from right to left:
+    while (!q.empty()) {
+      TreeNode *rightNode = nullptr;
+      int nodesAtCurrLevel = q.size();
+
+      // traverse all the nodes, "nodesAtCurrLevel", on the current level:
+      for (int node{0}; node < nodesAtCurrLevel; ++node) {
+        TreeNode *curr = q.front();
+        q.pop();
+
+        curr->next = rightNode;
+        rightNode = curr;
+
+        // add "curr" children to the queue, if they exist:
+        if (curr->right)
+          q.push(curr->right);
+        if (curr->left)
+          q.push(curr->left);
+      }
+    }
+
+    return root;
+  }
 };
 
 int main() {
@@ -135,7 +203,7 @@ int main() {
   root = insertNode(root, 9);
   root = insertNode(root, 100);
 
-  root = Solution::connectLevelOrderSiblings(root);
+  root = Solution::connectLevelOrderSiblings_3(root);
   // traverse the tree and print out its content:
   customTraversal(root);
   std::cout << "\n";
@@ -152,7 +220,7 @@ int main() {
   root = insertNode(root, 93);
   root = insertNode(root, 2);
 
-  root = Solution::connectLevelOrderSiblings(root);
+  root = Solution::connectLevelOrderSiblings_2(root);
   // traverse the tree and print out its content:
 
   return 0;
