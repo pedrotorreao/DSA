@@ -4,7 +4,7 @@
 /*
 --Problem statement:
   Given the root of a binary tree, imagine yourself standing on the right side of it,
-  return the values of the nodes you can see ordered from top to bottom.
+  return the nodes you can see ordered from top to bottom.
 
   > Example 1:
   Input: root = [1,2,3,null,5,null,4]
@@ -65,7 +65,7 @@ TreeNode *insertNode(TreeNode *root, int newVal);
 
 class Solution {
 public:
-  static std::vector<TreeNode *> treeRightSideView(TreeNode *root) {
+  static std::vector<TreeNode *> treeRightSideView_1(TreeNode *root) {
     if (root == nullptr)
       return std::vector<TreeNode *>();
 
@@ -98,6 +98,34 @@ public:
 
     return rightSideView;
   }
+
+  // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+  // DFS Approach:
+  static std::vector<TreeNode *> treeRightSideView_2(TreeNode *root) {
+    // output array:
+    std::vector<TreeNode *> rightSideView;
+    // dfs:
+    rightView(root, rightSideView, 0);
+
+    return rightSideView;
+  }
+
+  static void rightView(TreeNode *root, std::vector<TreeNode *> &view, int level) {
+    if (root == nullptr)
+      return;
+
+    // Each level has exactly 1 rightmost node, so once that node is added to the
+    // result, there are no more nodes to be added on that level. If we traverse the
+    // tree "right->left", we add current node' right child first (in case there is
+    // one) to the result array and its size will grow by 1, which will be then
+    // greater than the value of "level". Then, when we visit the left child,
+    // "view.size() > level", and the node is not added.
+    if (view.size() == level)
+      view.push_back(root);
+
+    rightView(root->right, view, level + 1);
+    rightView(root->left, view, level + 1);
+  }
 };
 
 int main() {
@@ -117,7 +145,7 @@ int main() {
   root = insertNode(root, 9);
   root = insertNode(root, 100);
 
-  std::vector<TreeNode *> rightSideView = Solution::treeRightSideView(root);
+  std::vector<TreeNode *> rightSideView = Solution::treeRightSideView_2(root);
   // traverse the tree and print out its content:
   display1D<TreeNode *>(rightSideView);
   std::cout << "\n";
@@ -134,7 +162,7 @@ int main() {
   root = insertNode(root, 93);
   root = insertNode(root, 2);
 
-  rightSideView = Solution::treeRightSideView(root);
+  rightSideView = Solution::treeRightSideView_2(root);
   // traverse the tree and print out its content:
   display1D<TreeNode *>(rightSideView);
   std::cout << "\n";
@@ -163,7 +191,7 @@ int main() {
 
   root = insertNode(root, -23);
 
-  rightSideView = Solution::treeRightSideView(root);
+  rightSideView = Solution::treeRightSideView_2(root);
   // traverse the tree and print out its content:
   display1D<TreeNode *>(rightSideView);
   std::cout << "\n";
