@@ -69,6 +69,10 @@ TreeNode *insertNode(TreeNode *root, int val);
 
 class Solution {
 public:
+  static bool isLeaf(TreeNode *node) {
+    return (node->left == nullptr) && (node->right == nullptr);
+  }
+
   static bool hasPathSumDFS_rec(TreeNode *root, int target, int currSum) {
     if (root == nullptr)
       return false;
@@ -77,11 +81,65 @@ public:
     currSum += root->val;
     // if current path sum matches the target value and current node is a
     // leaf node, we've got a matching path:
-    if ((currSum == target) && !(root->left || root->right))
+    if ((currSum == target) && isLeaf(root))
       return true;
 
-    // recurse down the tree with the updated path sum:
+    // otherwise, recurse down the tree with the updated path sum:
     return (hasPathSumDFS_rec(root->left, target, currSum) || hasPathSumDFS_rec(root->right, target, currSum));
+  }
+
+  static bool hasPathSumDFS_ite(TreeNode *root, int target) {
+    if (root == nullptr)
+      return false;
+
+    std::stack<TreeNode *> st;
+    TreeNode *curr = root;
+    TreeNode *prev = nullptr;
+
+    int currSum{0};
+
+    // For this solution, we use a the postorder traversal approach
+    // where a given node will only be removed from the stack when
+    // its right sub-tree has been visited. This way, the current path
+    // will be stored in the stack.
+
+    // Iterate while there are nodes to be traversed:
+    while (!st.empty() || curr != nullptr) {
+      // Go as deep as possible in current node' left subtree
+      // (i.e. while there are left children) keeping track of the current
+      // path sum:
+      while (curr != nullptr) {
+        st.push(curr);
+        currSum += curr->val;
+
+        curr = curr->left;
+      }
+
+      // Get 'curr' back to the previous valid node:
+      curr = st.top();
+
+      // If current path sum matches the target value and current node is a
+      // leaf node, we've got a matching path:
+      if ((currSum == target) && isLeaf(curr))
+        return true;
+
+      // Else, if there is a valid right subtree which has not been visited
+      // before, traverse it down. The expression "(prev != curr->right)" means
+      // that 'curr' has a right child and it was not visited yet.
+      if ((curr->right != nullptr) && (prev != curr->right))
+        curr = curr->right;
+      // Else, 'curr' node is a leaf node, but its path sum do not match the
+      // target value, so update the 'prev' reference to point to 'curr', and
+      // remove its value from the current path sum:
+      else {
+        prev = curr;
+        st.pop();
+        currSum -= curr->val;
+        curr = nullptr;
+      }
+    }
+
+    return false;
   }
 };
 
@@ -106,14 +164,20 @@ int main() {
   target = 116;
   hasPath = Solution::hasPathSumDFS_rec(root, target, 0);
   std::cout << "[rec] Tree has a path root->leaf which sum to " << target << ": " << hasPath << "\n"; // true
+  hasPath = Solution::hasPathSumDFS_ite(root, target);
+  std::cout << "[ite] Tree has a path root->leaf which sum to " << target << ": " << hasPath << "\n"; // true
 
   target = -4;
   hasPath = Solution::hasPathSumDFS_rec(root, target, 0);
   std::cout << "[rec] Tree has a path root->leaf which sum to " << target << ": " << hasPath << "\n"; // true
+  hasPath = Solution::hasPathSumDFS_ite(root, target);
+  std::cout << "[ite] Tree has a path root->leaf which sum to " << target << ": " << hasPath << "\n"; // true
 
   target = 5;
   hasPath = Solution::hasPathSumDFS_rec(root, target, 0);
   std::cout << "[rec] Tree has a path root->leaf which sum to " << target << ": " << hasPath << "\n"; // false
+  hasPath = Solution::hasPathSumDFS_ite(root, target);
+  std::cout << "[ite] Tree has a path root->leaf which sum to " << target << ": " << hasPath << "\n"; // false
 
   return 0;
 }
