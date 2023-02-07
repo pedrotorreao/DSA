@@ -73,12 +73,14 @@ public:
     if (root == nullptr)
       return false;
 
+    // add current node value to the sum:
     currSum += root->val;
-
-    if ((currSum == target)              // current path sum matches the target value
-        && !(root->left || root->right)) // current node is a leaf node
+    // if current path sum matches the target value and current node is a
+    // leaf node, we've got a matching path:
+    if ((currSum == target) && !(root->left || root->right))
       return true;
 
+    // recurse down the tree with the updated path sum:
     return (hasPathSumDFS_rec(root->left, target, currSum) || hasPathSumDFS_rec(root->right, target, currSum));
   }
 };
