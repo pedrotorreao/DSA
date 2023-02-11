@@ -83,14 +83,15 @@ public:
     std::vector<std::vector<int>> paths;
     std::vector<int> curr;
 
-    traversePaths_DFS(root, target, 0, paths, curr);
+    // traversePaths_DFS_1(root, target, 0, paths, curr);
+    traversePaths_DFS_2(root, target, paths, curr);
 
     return paths;
   }
 
-  static void traversePaths_DFS(TreeNode *root, int target, int currSum,
-                                std::vector<std::vector<int>> &paths,
-                                std::vector<int> currPath) {
+  static void traversePaths_DFS_1(TreeNode *root, int target, int currSum,
+                                  std::vector<std::vector<int>> &paths,
+                                  std::vector<int> currPath) {
     if (root == nullptr)
       return;
 
@@ -105,9 +106,40 @@ public:
 
     // otherwise, recurse down the tree with the updated path sum:
     // traverse left subtree:
-    traversePaths_DFS(root->left, target, currSum, paths, currPath);
+    traversePaths_DFS_1(root->left, target, currSum, paths, currPath);
     // traverse right subtree:
-    traversePaths_DFS(root->right, target, currSum, paths, currPath);
+    traversePaths_DFS_1(root->right, target, currSum, paths, currPath);
+  }
+
+  static void traversePaths_DFS_2(TreeNode *root, int target,
+                                  std::vector<std::vector<int>> &paths,
+                                  std::vector<int> &currPath) {
+    if (root == nullptr)
+      return;
+
+    // add current node value to the path:
+    currPath.push_back(root->val);
+
+    // if current path sum matches the target value and current node is a
+    // leaf node, we've got a matching path:
+    if ((root->val == target) && isLeaf(root))
+      paths.push_back(currPath);
+
+    // otherwise, recurse down the tree with the updated path sum:
+    // traverse left subtree:
+    traversePaths_DFS_2(root->left, target - root->val, paths, currPath);
+    // traverse right subtree:
+    traversePaths_DFS_2(root->right, target - root->val, paths, currPath);
+
+    /*
+    Since we're passing the 'currPath' vector by reference, there is only one 'currPath' vector being
+    passed as argument in the various recursive calls. To guarantee that at each node the vector only
+    contains the nodes up to the current node' value, we need to remove the nodes from the previous
+    calls after they're done. If we're passing the 'currPath' vector by value, at each recursive call
+    we'd be making a copy of the entire vector up until that node, which is expensive in terms of
+    performance and space.
+    */
+    currPath.pop_back();
   }
 };
 
@@ -133,12 +165,12 @@ int main() {
 
   target = 35;
   allPaths = Solution::allPathsToSum(root, target);
-  std::cout << "Tree has a path root->leaf which sum to " << target << ": ";
+  std::cout << "--Tree has a path root->leaf which sum to " << target << ": \n";
   display2D(allPaths);
 
   target = 16;
   allPaths = Solution::allPathsToSum(root, target);
-  std::cout << "Tree has a path root->leaf which sum to " << target << ": ";
+  std::cout << "--Tree has a path root->leaf which sum to " << target << ": \n";
   display2D(allPaths);
 
   root = nullptr;
@@ -156,7 +188,7 @@ int main() {
 
   target = 0;
   allPaths = Solution::allPathsToSum(root, target);
-  std::cout << "Tree has a path root->leaf which sum to " << target << ": ";
+  std::cout << "--Tree has a path root->leaf which sum to " << target << ": \n";
   display2D(allPaths);
 
   return 0;
