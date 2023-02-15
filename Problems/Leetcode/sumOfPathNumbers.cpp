@@ -43,6 +43,9 @@
 */
 
 #include <iostream>
+#include <queue>
+#include <stack>
+#include <utility>
 #include <vector>
 
 // Definition for a binary tree node:
@@ -59,7 +62,7 @@ TreeNode *insertNode(TreeNode *root, int val);
 
 class Solution {
 public:
-  /*  Approach #1 - naive approach:
+  /*  Approach #1 - Recursive DFS - naive approach:
     --Time complexity:
     O(N^2), if we consider the fact that for every leaf node, we might have to store its path, by
     making a copy of the current path, that takes O(N), which will then amount a total time complexity
@@ -88,7 +91,7 @@ public:
     return sum;
   }
 
-  /*  Approach #1 - optimized approach:
+  /*  Approach #2 - Recursive DFS - optimized approach:
     --Time complexity:
     O(N), where N is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
 
@@ -100,6 +103,81 @@ public:
       return 0;
 
     return getAllPaths_DFS_2(root, 0);
+  }
+
+  /* Approach #3 - Iterative DFS - preorder:
+    --Time complexity:
+    O(N), where N is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+
+    --Space complexity:
+    O(N) in the worst case, where this space will be used to store the recursion stack, if the tree is completely
+    skewed.
+  */
+  int sumOfAllPaths_3(TreeNode *root) {
+    if (root == nullptr)
+      return 0;
+
+    std::stack<std::pair<TreeNode *, int>> st; // {current node, current sum}
+    st.push({root, 0});
+
+    int sum{0};
+
+    while (!st.empty()) {
+      // structured bindings only available with c++ 17 or greater
+      auto [node, currSum] = st.top();
+      st.pop();
+
+      currSum = (currSum * 10) + node->val;
+
+      if (isLeaf(node)) { // reached a leaf node, add path sum to the total:
+        sum += currSum;
+        continue;
+      }
+
+      if (node->right != nullptr)
+        st.push({node->right, currSum});
+      if (node->left != nullptr)
+        st.push({node->left, currSum});
+    }
+
+    return sum;
+  }
+
+  /* Approach #4 - Iterative BFS:
+    --Time complexity:
+    O(N), where N is the total number of nodes in the tree. This is due to the fact that we traverse each node once.
+
+    --Space complexity:
+    O(N), atmost (N+1)/2 elements will be stored in queue in case of complete binary tree.
+  */
+  int sumOfAllPaths_4(TreeNode *root) {
+    if (root == nullptr)
+      return 0;
+
+    std::queue<std::pair<TreeNode *, int>> q; // {current node, current sum}
+    q.push({root, 0});
+
+    int sum{0};
+
+    while (!q.empty()) {
+      // structured bindings only available with c++ 17 or greater:
+      auto [node, currSum] = q.front();
+      q.pop();
+
+      currSum = (currSum * 10) + node->val;
+
+      if (isLeaf(node)) { // reached a leaf node, add path sum to the total:
+        sum += currSum;
+        continue;
+      }
+
+      if (node->right != nullptr)
+        q.push({node->right, currSum});
+      if (node->left != nullptr)
+        q.push({node->left, currSum});
+    }
+
+    return sum;
   }
 
 private:
@@ -154,6 +232,10 @@ int main() {
   std::cout << "Sum of all paths in the binary tree: " << sumAllPaths << "\n";
   sumAllPaths = sol.sumOfAllPaths_2(root);
   std::cout << "Sum of all paths in the binary tree: " << sumAllPaths << "\n";
+  sumAllPaths = sol.sumOfAllPaths_3(root);
+  std::cout << "Sum of all paths in the binary tree: " << sumAllPaths << "\n";
+  sumAllPaths = sol.sumOfAllPaths_4(root);
+  std::cout << "Sum of all paths in the binary tree: " << sumAllPaths << "\n";
   std::cout << "\n";
 
   root = nullptr;
@@ -167,6 +249,10 @@ int main() {
   sumAllPaths = sol.sumOfAllPaths_1(root);
   std::cout << "Sum of all paths in the binary tree: " << sumAllPaths << "\n";
   sumAllPaths = sol.sumOfAllPaths_2(root);
+  std::cout << "Sum of all paths in the binary tree: " << sumAllPaths << "\n";
+  sumAllPaths = sol.sumOfAllPaths_3(root);
+  std::cout << "Sum of all paths in the binary tree: " << sumAllPaths << "\n";
+  sumAllPaths = sol.sumOfAllPaths_4(root);
   std::cout << "Sum of all paths in the binary tree: " << sumAllPaths << "\n";
   std::cout << "\n";
 
