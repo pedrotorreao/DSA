@@ -35,23 +35,48 @@
 
 #include <iostream>
 
-// we want a value y such as (y*y < x) and (y+1)*(y+1) > x
 int mySqrt(int x) {
+  // If x is smaller than 2, it can only be 0 or 1, since x is an
+  // integer. As the square root of these numbers are themselves,
+  // return x:
   if (x < 2)
     return x;
 
-  int l = 1, r = x / 2;
+  // We'll use a binary search approach to find the square root of x.
+  // The start and end positions for the search are represented by the
+  // variables 'l', the lowest possible value for sqrt(x) which is 1,
+  // and 'r', the greatest possible value for sqrt(x), which cannot be
+  // greater than x/2:
+  int l = 1;
+  int r = x / 2;
 
+  // We are looking for a value mid ~= sqrt(x) such as:
+  //  -> (mid*mid < x), and
+  //  -> (mid+1)*(mid+1) > x
   while (true) {
-    int mid = l + (r - l) / 2;
-    if (mid > (x / mid)) // mid*mid > x: mid value too large, decrement
-      r = mid - 1;
+    // Let's divide the search interval in half and verify in which half
+    // our square root value can be found:
+    int mid = l + ((r - l) / 2); // avoid overflow for values of x too large
+
+    // If (mid*mid > x):
+    //  -> 'mid' value is too large, decrement it:
+    if (mid > (x / mid))
+      r = --mid;
     else {
-      if ((mid + 1) > x / (mid + 1)) // (mid*mid <= x) and (mid+1)*(mid+1) > x: mid is our guy
+      // If (mid*mid <= x) and (mid+1)*(mid+1) > x:
+      //  -> 'mid' is our guy:
+      if ((mid + 1) > (x / (mid + 1)))
         return mid;
-      l = mid + 1; // (mid+1)*(mid+1) < x: mid is still too small
+      // Otherwise, if (mid+1)*(mid+1) < x:
+      //  -> 'mid' is still too small, increment it:
+      l = ++mid;
     }
+
+    if (mid < 0)
+      break;
   }
+
+  return 0;
 }
 
 int main() {
