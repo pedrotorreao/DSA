@@ -23,13 +23,6 @@
 --Constraints:
   :: 1 <= s.length <= 3 * 105
   :: s consist of printable ASCII characters.
-
---Reasoning: See comments below.
-
---Time complexity: O(N), where N is the size of the array.
-
---Space complexity: Approach O(1), no additional input dependent space is allocated.
-
 */
 
 #include <cctype>
