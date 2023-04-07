@@ -13,12 +13,15 @@
   > Example 1:
   Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
   Output: 6
-  Explanation: The LCA of nodes 2 and 8 is 6.
+  Explanation:
+      The LCA of nodes 2 and 8 is 6.
 
   > Example 2:
   Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
   Output: 2
-  Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself according to the LCA definition.
+  Explanation:
+      The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself according to the
+      LCA definition.
 
   > Example 3:
   Input: root = [2,1], p = 2, q = 1
@@ -40,8 +43,12 @@
 --Reasoning: See comments below.
 
 --Time complexity:
+    O(log(n)), since at each level we only visit one node and at every step we halve our search
+    space. Thus, the TC is proportional to the height of the tree, which is log(n).
 
 --Space complexity:
+    O(1), since no input dependent space is allocated or O(log(n)) if we consider the stack space
+    that could be allocated for the recursive calls.
 
 */
 
@@ -55,6 +62,7 @@ struct TreeNode {
   TreeNode(int x) : val(x), left(NULL), right(NULL) {}
 };
 
+// Helper function for inserting nodes into the BST:
 TreeNode *insert(TreeNode *root, int value) {
   if (root == nullptr)
     return new TreeNode(value);
@@ -69,6 +77,27 @@ TreeNode *insert(TreeNode *root, int value) {
 
 class Solution {
 public:
+  TreeNode *lowestCommonAncestor(TreeNode *root, int p, int q) {
+    // Tree is empty:
+    if (!root)
+      return nullptr;
+
+    // Current subtree' root is smaller than both nodes,
+    // recurse down the right subtree:
+    if (root->val < p && root->val < q)
+      return lowestCommonAncestor(root->right, p, q);
+
+    // Current subtree' root is greater than both nodes,
+    // recurse down the left subtree:
+    if (root->val > p && root->val > q)
+      return lowestCommonAncestor(root->left, p, q);
+
+    // Current subtree' root value is between the nodes, p and q,
+    // values or matches one of these nodes valuie. Hence, we've
+    // found the lowest common ancestor:
+    return root;
+  }
+  /*
   TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
     if (!root)
       return nullptr;
@@ -81,25 +110,45 @@ public:
 
     return root;
   }
+  */
 };
 
 int main() {
   Solution sol;
 
   TreeNode *root = nullptr;
+  TreeNode *lca = nullptr;
+  int p, q;
 
-  root = new TreeNode(6);
+  root = insert(root, 6);
+  root = insert(root, 2);
+  root = insert(root, 8);
+  root = insert(root, 0);
+  root = insert(root, 4);
+  root = insert(root, 7);
+  root = insert(root, 9);
+  root = insert(root, 3);
+  root = insert(root, 5);
 
-  root->left = new TreeNode(2);
-  root->right = new TreeNode(8);
+  p = 2;
+  q = 8;
+  lca = sol.lowestCommonAncestor(root, p, q);
+  std::cout << "LCA of " << p << " and " << q << ": " << lca->val << "\n\n";
 
-  root->left->left = new TreeNode(0);
-  root->left->right = new TreeNode(4);
-  root->right->left = new TreeNode(7);
-  root->right->right = new TreeNode(9);
+  p = 2;
+  q = 4;
+  lca = sol.lowestCommonAncestor(root, p, q);
+  std::cout << "LCA of " << p << " and " << q << ": " << lca->val << "\n\n";
 
-  root->left->right->left = new TreeNode(3);
-  root->left->right->right = new TreeNode(5);
+  p = 3;
+  q = 5;
+  lca = sol.lowestCommonAncestor(root, p, q);
+  std::cout << "LCA of " << p << " and " << q << ": " << lca->val << "\n\n";
+
+  p = 9;
+  q = 9;
+  lca = sol.lowestCommonAncestor(root, p, q);
+  std::cout << "LCA of " << p << " and " << q << ": " << lca->val << "\n\n";
 
   return 0;
 }
