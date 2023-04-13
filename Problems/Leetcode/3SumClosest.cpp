@@ -58,7 +58,7 @@ int threeSumClosest(std::vector<int> &arr, int targetSum) {
   int closestSum = arr.at(0) + arr.at(1) + arr.at(2);
 
   // we're going to search by using the two-pointers approach:
-  //  - left_ptr:   leftmost pointer
+  //  - left_ptr:   leftmost pointer, defined the first element in the search window
   //  - mid_ptr:    middle pointer, it's moved when the current sum is smaller than target's
   //                and needs to be increased.
   //  - right_ptr:  righmost pointer, it's moved when the current sum is greater than target's
@@ -66,9 +66,11 @@ int threeSumClosest(std::vector<int> &arr, int targetSum) {
   for (int left_ptr{0}; left_ptr < N - 2; ++left_ptr) {
     int mid_ptr = left_ptr + 1, right_ptr = N - 1;
 
+    // iterate while the pointers do not meet:
     while (mid_ptr < right_ptr) {
       int currentSum = arr.at(left_ptr) + arr.at(mid_ptr) + arr.at(right_ptr);
 
+      // if we got an exact match, no need to keep searching, return the result:
       if (currentSum == targetSum) {
         closestSum = currentSum;
         break;
@@ -80,8 +82,10 @@ int threeSumClosest(std::vector<int> &arr, int targetSum) {
               ))
         closestSum = currentSum;
 
+      // current sum is smaller than target, move mid pointer right by 1 to increase sum:
       if (currentSum < targetSum)
         ++mid_ptr;
+      // current sum is greater than target, move right pointer left by 1 to reduce sum:
       else
         --right_ptr;
     }
