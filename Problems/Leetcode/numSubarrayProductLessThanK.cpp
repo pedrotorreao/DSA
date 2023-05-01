@@ -29,25 +29,52 @@
   :: 1 <= nums[i] <= 1000
   :: 0 <= k <= 106
 
---Reasoning:
+--Reasoning: See comments below.
 
 --Time complexity:
+    O(N), where N is the size of the input array, since we only need to traverse the whole
+    array once.
 
 --Space complexity:
+    O(1), since no input-dependent space is allocated.
 
 */
 
+#include <algorithm>
+#include <deque>
 #include <iostream>
 #include <vector>
 
 int numSubarrayProductLessThanK(std::vector<int> &nums, int k) {
+  const int N = nums.size();
   int result{};
 
-  const int N = nums.size();
   if (N == 0)
     return result;
 
-  // ...
+  int l_ptr = 0, r_ptr = 0, curr_prod = 1;
+
+  // Expand the sliding window until we've included and analyzed all the array elements:
+  while (r_ptr < N) {
+    // Calculate the current product, 'curr_prod':
+    curr_prod *= nums.at(r_ptr);
+    // In case the current product is greater than our target value, 'k', shrink the current
+    // window by moving the left pointer, 'l_ptr', and updating the current product to reflect
+    // the removal of 'nums[l_ptr]' from the product. Here, 'l_ptr' will be incremented until
+    // the current product is less than 'k' again or it reaches the end of the array:
+    while (curr_prod >= k && l_ptr < N) {
+      curr_prod /= nums.at(l_ptr);
+      ++l_ptr;
+    }
+    // If current product is less than threshold, i.e. the product of all the values between
+    // the pointers is less than 'k', all subarrays from 'l_ptr' to 'r_ptr' will meet this
+    // condition and can be added to the result:
+    if (curr_prod < k)
+      result += r_ptr - l_ptr + 1;
+
+    // Expand the window by moving the right pointer:
+    ++r_ptr;
+  }
 
   return result;
 }
