@@ -96,7 +96,7 @@ void sortColors_1(std::vector<int> &nums) {
       The 'white' pointer is 'blue', swap(nums[mid], nums[right]) and move the 'blue' pointer closer to 'white',
       i.e. decrement the 'right' variable, --right;
 
---Time complexity: O(N), where N is the amount of values in nums.
+--Time complexity: O(N), where N is the amount of values in the input array 'nums'.
 
 --Space complexity: O(1), there is no input dependent space allocated.
 */
