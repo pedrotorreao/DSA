@@ -32,11 +32,6 @@ Problem: Sort Colors
     :: nums[i] is either 0, 1, or 2.
 
 --Reasoning: See below.
-
---Time complexity: See b
-
---Space complexity: O(1), since there is no input dependent memory allocated.
-
 */
 
 #include <iostream>
