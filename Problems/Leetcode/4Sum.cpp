@@ -128,7 +128,7 @@ std::vector<std::vector<int>> fourSum_2(std::vector<int> &nums, int target) {
 -- Approach #3 - Two pointer + 3 nested for loops + skip repeated quads
 
 -- Time complexity: O(N^3)
--- Space complexity: O(1).
+-- Space complexity: O(N).
 */
 std::vector<std::vector<int>> fourSum(std::vector<int> &nums, int target) {
   // input size:
