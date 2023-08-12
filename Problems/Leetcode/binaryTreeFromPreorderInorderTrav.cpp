@@ -32,9 +32,9 @@
 
 --Reasoning: See comments below.
 
---Time complexity: See comments below.
+--Time complexity: O(N^2), where N is the total number of nodes to be added.
 
---Space complexity: See comments below.
+--Space complexity: O(1), if we don't take into account the memory allocated for the output.
 
 */
 
@@ -69,6 +69,7 @@ public:
                                     int &curr_root_id,
                                     int start_subtree,
                                     int end_subtree) {
+    // reached a leaf node:
     if (start_subtree > end_subtree)
       return nullptr;
 
