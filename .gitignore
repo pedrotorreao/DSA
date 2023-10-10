@@ -7,6 +7,7 @@ node_modules/
 # ignore a single file
 package-lock.json
 settings.json
+*.json
 
 # ignore compile/executable files
 *.o
