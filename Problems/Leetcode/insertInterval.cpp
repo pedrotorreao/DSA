@@ -40,8 +40,8 @@ Problem: LC 57. Insert Interval
     we only go through the entire array of intervals once.
 
 --Space complexity:
-  O(1) if we ignore the result list. O(N),if we take into account the resulting list,
-  where N is the length of the input interval list.
+    O(1) if we ignore the result list. O(N),if we take into account the resulting list,
+    where N is the length of the input interval list.
 
 */
 #include <algorithm>
@@ -67,13 +67,20 @@ std::vector<std::vector<int>> insertInterval(std::vector<std::vector<int>> &inte
   }
 
   // merge all intervals that overlap with 'new_interval':
-  //  a. we know intervals[i] ends after new_interval begin (i.e they overlap):
+  //  a. we know intervals[i] ends after new_interval begin:
   //      intervals[i][1] >= new_interval[0]
+  //  b. so, they either overlap (i.e. intervals[i][0] <= new_interval[1]) and
+  //      we need to merge them (1.:), or they don't overlap at all and we just found the insertion
+  //      point for new_interval (i.e. intervals[i][0] > new_interval[1]) in which case we
+  //      just need to insert new_interval (skip 1. and go straight to 2.).
+
+  // 1.:
   for (; i < intervals.size() && intervals[i][0] <= new_interval[1]; i++) {
     new_interval[0] = std::min(intervals[i][0], new_interval[0]);
     new_interval[1] = std::max(intervals[i][1], new_interval[1]);
   }
 
+  // 2.:
   result.push_back(new_interval);
 
   for (; i < intervals.size(); i++) {
@@ -112,50 +119,3 @@ void display2D(std::vector<std::vector<int>> &intervals) {
 
   std::cout << "\n";
 }
-
-/*
-
-std::vector<std::vector<int>> insertInterval(std::vector<std::vector<int>> &intervals,
-                                             std::vector<int> &new_interval) {
-  if (intervals.size() == 0)
-    return std::vector<std::vector<int>>({new_interval});
-  if (new_interval.size() == 0)
-    return intervals;
-
-  std::vector<std::vector<int>> result;
-
-  intervals.push_back(new_interval);
-
-  std::sort(intervals.begin(), intervals.end(), [](const std::vector<int> &i1, const std::vector<int> &i2) {
-    return i1[0] < i2[0];
-  });
-
-  std::vector<std::vector<int>>::iterator itr = intervals.begin();
-  std::vector<int> previous = *itr++;
-
-  int prev_start = previous[0];
-  int prev_end = previous[1];
-
-  while (itr != intervals.end()) {
-    // update previous:
-    previous = *itr++;
-
-    int curr_start = previous[0];
-    int curr_end = previous[1];
-
-    if (curr_start <= prev_end) // intervals overlap, calculate new ending:
-      prev_end = std::max(prev_end, curr_end);
-    else { // no overlap, add previous interval to the result:
-      result.push_back({prev_start, prev_end});
-
-      prev_start = curr_start;
-      prev_end = curr_end;
-    }
-  }
-
-  result.push_back({prev_start, prev_end});
-
-  return result;
-}
-
-*/
