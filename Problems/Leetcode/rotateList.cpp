@@ -1,21 +1,37 @@
-/******************************************************************************
-LC 61. Rotate List
-*******************************************************************************/
-/*
+/* * * * * * * * * * * * * * * * * *
+Problem: LC 61. Rotate List
+
+--Problem statement:
 Given the head of a linked list, rotate the list to the right by k places.
-Example 1:
-    Input: head = [1,2,3,4,5], k = 2
-    Output: [4,5,1,2,3]
 
-Example 2:
-    Input: head = [0,1,2], k = 4
-    Output: [2,0,1]
+  > Example 1:
+      Input: head = [1,2,3,4,5], k = 2
+      Output: [4,5,1,2,3]
 
-Constraints:
-    The number of nodes in the list is in the range [0, 500].
-    -100 <= Node.val <= 100
-    0 <= k <= 2 * 109
-*/
+  > Example 2:
+      Input: head = [0,1,2], k = 4
+      Output: [2,0,1]
+
+--Constraints:
+    :: The number of nodes in the list is in the range [0, 500].
+    :: -100 <= Node.val <= 100
+    :: 0 <= k <= 2*10^9
+
+--Inputs:
+  - ListNode*: head of the singly linked list
+
+--Outputs:
+  - ListNode*: head of the modified singly linked list
+
+--Reasoning:
+  See comments below.
+
+--Time complexity:
+    :: O(n), where n is the total number of nodes in the linked list.
+
+--Space complexity:
+    :: O(1), since no additional input-dependent space is allocated.
+* * * * * * * * * * * * * * * * * */
 
 #include <iostream>
 
@@ -103,15 +119,21 @@ ListNode *rotateRight_2(ListNode *head, int k) {
     ++ll_length;
     tail = tail->next;
   }
-  // attach tail to head node, creating a loop:
+
+  // create a loop by connecting the end node with the head to
+  // avoid the null pointer:
   tail->next = head;
-  // number of shifts needed:
+
+  // if (k > ll_length), we only need to rotate (k % ll_length) elements since, as
+  // we know, rotating (ll_length) elements get us the same list as the original:
   int rotations = ll_length - (k % ll_length);
 
   for (int i{0}; i < rotations; ++i)
     tail = tail->next;
 
+  // head is now the node pointed at by the new tail node' next pointer:
   head = tail->next;
+  // set the next pointer for the new tail node to null:
   tail->next = nullptr;
 
   return head;
