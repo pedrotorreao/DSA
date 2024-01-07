@@ -56,9 +56,11 @@ Increment the large integer by one and return the resulting array of digits.
 #include <iostream>
 #include <vector>
 
+void display1D(const std::vector<int> &nums);
+
 class Solution {
 public:
-  std::vector<int> plusOne(std::vector<int> &digits) {
+  static std::vector<int> plusOne(std::vector<int> &digits) {
     if (digits.empty())
       return digits;
 
@@ -92,3 +94,42 @@ public:
     return res;
   }
 };
+
+int main() {
+  std::vector<int> digits{};
+  std::vector<int> result{};
+
+  digits = {1, 2, 3};
+  std::cout << "Input array: ";
+  display1D(digits);
+  result = Solution::plusOne(digits);
+  std::cout << "Result: ";
+  display1D(result);
+  std::cout << "\n";
+
+  digits = {4, 3, 2, 1};
+  std::cout << "Input array: ";
+  display1D(digits);
+  result = Solution::plusOne(digits);
+  std::cout << "Result: ";
+  display1D(result);
+  std::cout << "\n";
+
+  digits = {9};
+  std::cout << "Input array: ";
+  display1D(digits);
+  result = Solution::plusOne(digits);
+  std::cout << "Result: ";
+  display1D(result);
+  std::cout << "\n";
+}
+
+void display1D(const std::vector<int> &nums) {
+  std::cout << "[ ";
+
+  for (int i = 0; i < nums.size(); i++) {
+    std::cout << nums[i] << " ";
+  }
+
+  std::cout << "]\n";
+}
