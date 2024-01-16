@@ -47,7 +47,7 @@ the bit representation has 1's where the input numbers differ. Example:
 
 class Solution {
 public:
-  static int hammingDistance(int x, int y) {
+  static int hammingDistance_1(int x, int y) {
     int r = (x ^ y), diff = 0;
 
     while (r) {
@@ -59,6 +59,18 @@ public:
 
     return diff;
   }
+
+  static int hammingDistance_2(int x, int y) {
+    int r = (x ^ y), diff = 0;
+
+    while (r) {
+      ++diff;
+
+      r = (r - 1) & r;
+    }
+
+    return diff;
+  }
 };
 
 int main() {
@@ -66,9 +78,11 @@ int main() {
 
   x = 1;
   y = 4;
-  std::cout << "The hamming distance between \"" << x << "\" and \"" << y << "\" is: \"" << Solution::hammingDistance(x, y) << "\"\n";
+  std::cout << "The hamming distance between \"" << x << "\" and \"" << y << "\" is: \"" << Solution::hammingDistance_1(x, y) << "\"\n";
+  std::cout << "The hamming distance between \"" << x << "\" and \"" << y << "\" is: \"" << Solution::hammingDistance_2(x, y) << "\"\n";
 
   x = 5;
   y = 2;
-  std::cout << "The hamming distance between \"" << x << "\" and \"" << y << "\" is: \"" << Solution::hammingDistance(x, y) << "\"\n";
+  std::cout << "The hamming distance between \"" << x << "\" and \"" << y << "\" is: \"" << Solution::hammingDistance_1(x, y) << "\"\n";
+  std::cout << "The hamming distance between \"" << x << "\" and \"" << y << "\" is: \"" << Solution::hammingDistance_2(x, y) << "\"\n";
 }
