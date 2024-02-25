@@ -1,5 +1,5 @@
 /******************************************************************************
-Problem: LC 581. Shortest Unsorted Continuous Subarray
+Problem: LC 581. Shortest Unsorted Continuous Subarray (Minimum Window Sort Problem)
 *******************************************************************************/
 /*
 --Problem statement:
@@ -124,9 +124,9 @@ int findUnsortedSubarray_2(std::vector<int> &nums) {
     element is larger than the previous max value found, 'max_now'. If it is, it means
     that the current segment of the array is sorted so we just update 'max_now' to be the
     current element. Otherwise, we know that the current element at nums[l] is out of
-    order, so we set the our variable that will assume the index of the rightmost element
+    order, so we set the variable that will assume the index of the rightmost element
     out of order to be 'l', i.e. 'end=l'.
-    -> the pointer 'r', which begin at index N-1, works in a similar way, but instead checks
+    -> the pointer 'r', which begins at index N-1, works in a similar way, but instead checks
     the descending order of the elements and gets the index of the leftmost element out of
     order, which will be the final value assumed by 'r', i.e. 'start=r'.
   The result, the length of the sorted subarray, is the difference between the two variables,
