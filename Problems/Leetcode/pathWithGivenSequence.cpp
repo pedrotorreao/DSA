@@ -1,7 +1,5 @@
-/****************************************************************************************/
-/* Problem: ???. Path With Given Sequence  **********************************************/
-/****************************************************************************************/
-/*
+/* * * * * * * * * * * * * * * * * *
+ Problem: 1430. Path With Given Sequence
 --Problem statement:
   Given a binary tree and a number sequence, find if the sequence is present as a
   root-to-leaf path in the given tree.
@@ -41,19 +39,21 @@
   -bool: whether there is a root-to-leaf path which matches the given sequence.
 
 --Constraints:
-  :: ?
+  :: 1 <= sequence.size <= 5000
+  :: 0 <= sequence[i] <= 9
+  :: each node's value is between [0 - 9]
 
 --Reasoning: See comments below.
 
 --Time complexity:
   O(N), where N is the total number of nodes in the tree, since, in the worst scenario, we'll
-  need to visit each node of the tree.
+  need to visit each node of the tree once.
 
 --Space complexity:
   O(N) in the worst case, where N is the total number of nodes in the tree. This is due to the storage
   required for the recursion stack. In the worst case, the tree is completely skewed and has the structure
   of a linked list.
-*/
+* * * * * * * * * * * * * * * * * */
 
 #include <iostream>
 #include <queue>
@@ -83,10 +83,11 @@ public:
 private:
   bool sequenceSearch_DFS(TreeNode *node, std::vector<int> &sequence, int idx) {
     // Base cases:
-    // a.) the sequence is smaller than the path, so the sequence does not cover root-to-leaf:
+    // a.) end of the current path, so it does not cover the whole sequence:
     if (node == nullptr)
       return false;
-    // b.) there is a mismatch between the path and the sequence:
+    // b.) there is a mismatch between the path and the sequence, or the current
+    // path is longer than the sequence:
     if (node->val != sequence.at(idx) || idx >= sequence.size())
       return false;
     // c.) current node is a leaf and we've got to the end of the sequence, e.g. sequence covers
