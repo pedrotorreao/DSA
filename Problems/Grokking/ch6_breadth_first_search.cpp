@@ -70,7 +70,7 @@ bool bfs(std::unordered_map<std::string, std::vector<Friend>> &g, Friend src) {
     }
   }
 
-  // if a selle was found, build the path to it from the source node:
+  // if a seller was found, build the path to it from the source node:
   if (sellerFound) {
     std::string parent = pathMap[sellerName];
     std::vector<std::string> path{};
@@ -88,6 +88,8 @@ bool bfs(std::unordered_map<std::string, std::vector<Friend>> &g, Friend src) {
       std::cout << *it << "  ";
     }
     std::cout << "\n";
+
+    return true;
   }
 
   return false;

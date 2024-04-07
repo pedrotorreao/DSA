@@ -1,46 +1,40 @@
-#include <iostream>
 #include <algorithm>
-#include <utility>
-#include <vector>
+#include <iostream>
+#include <limits>
+#include <numeric>
 #include <queue>
 #include <unordered_map>
-#include <numeric>
+#include <utility>
+#include <vector>
 
 typedef std::pair<int, int> vwpair;
 
-struct myComp
-{
+struct myComp {
   constexpr bool operator()(
       std::pair<int, int> const &a,
       std::pair<int, int> const &b)
-      const noexcept
-  {
+      const noexcept {
     return a.second > b.second;
   }
 };
 
 template <typename T>
-void displayVec(const std::vector<T> &vec)
-{
-  for (const auto &v : vec)
-  {
+void displayVec(const std::vector<T> &vec) {
+  for (const auto &v : vec) {
     std::cout << v << "  ";
   }
   std::cout << "\n";
 }
 
-void buildPath(std::vector<int> &predecessor, int source, int end, std::vector<int> &path)
-{
-  for (int i{end}; i != -1; i = predecessor.at(i))
-  {
+void buildPath(std::vector<int> &predecessor, int source, int end, std::vector<int> &path) {
+  for (int i{end}; i != -1; i = predecessor.at(i)) {
     path.push_back(i);
   }
 
   std::reverse(path.begin(), path.end());
 }
 
-void dijkstra(std::unordered_map<int, std::vector<std::pair<int, int>>> &graph, int source, int end)
-{
+void dijkstra(std::unordered_map<int, std::vector<std::pair<int, int>>> &graph, int source, int end) {
   std::vector<bool> visited(graph.size() + 10, false);
   std::vector<int> prev(graph.size() + 10, -1);
   std::vector<int> dist(graph.size() + 10, std::numeric_limits<int>::max());
@@ -52,8 +46,7 @@ void dijkstra(std::unordered_map<int, std::vector<std::pair<int, int>>> &graph, 
   visited.at(source) = true;
   dist.at(source) = 0;
 
-  while (!pq.empty())
-  {
+  while (!pq.empty()) {
     int curr_vertex = (pq.top()).first;
     int curr_weight = (pq.top()).second;
     pq.pop();
@@ -62,15 +55,12 @@ void dijkstra(std::unordered_map<int, std::vector<std::pair<int, int>>> &graph, 
 
     auto neighbors = graph.at(curr_vertex);
 
-    for (const auto &node : neighbors)
-    {
+    for (const auto &node : neighbors) {
       int v_to = node.first;
       int w_to = node.second;
 
-      if (!visited[v_to])
-      {
-        if (dist.at(curr_vertex) + w_to < dist.at(v_to))
-        {
+      if (!visited[v_to]) {
+        if (dist.at(curr_vertex) + w_to < dist.at(v_to)) {
           dist.at(v_to) = dist.at(curr_vertex) + w_to;
 
           prev.at(v_to) = curr_vertex;
@@ -88,8 +78,7 @@ void dijkstra(std::unordered_map<int, std::vector<std::pair<int, int>>> &graph, 
   displayVec(path);
 }
 
-int main()
-{
+int main() {
   std::unordered_map<int, std::vector<vwpair>> g_1{
       {1, {{2, 50}, {3, 45}, {4, 10}}},
       {2, {{3, 10}, {4, 15}}},
