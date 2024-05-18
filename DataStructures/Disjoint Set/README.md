@@ -1,6 +1,9 @@
 ## Disjoint Set Union
 
-See code for this data structure [here](/DataStructures/Disjoint%20Set/dsu.js).
+See code for this data structure:
+
+- [js](/DataStructures/Disjoint%20Set/dsu.js)
+- [c++](/DataStructures/Disjoint%20Set/dsu.cpp)
 
 ### Definition
 
@@ -64,7 +67,7 @@ a. Naive approach:
 union_set(A,B):
   // if A and B are in the same set return the set's representative:
   if parent[A] = parent[B]
-    return parent
+    return parent[A] // or parent[B]
 
   // else, merge sets by merging set B into set A, or the other way around:
   parent[B] = A // or it could be parent[A] = B
