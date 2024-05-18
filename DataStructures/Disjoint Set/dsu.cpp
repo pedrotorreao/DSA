@@ -35,10 +35,9 @@ public:
     T u = parent_itr->first;
     T p = parent_itr->second;
 
-    if (u != p /* parent[parent_itr] != *parent_itr */) {
+    if (u != p) {
       // path compression:
       bool dsuFind = Find(parent[p], parent[u]);
-      // parent[u] = Find(parent[p]);
     }
     setRepresentative = parent[u];
 
