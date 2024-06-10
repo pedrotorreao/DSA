@@ -1,144 +1,218 @@
 #pragma once
 
-#include <iostream>
-#include <memory>
-#include <stdexcept>
 #include <cassert>
+#include <iomanip>
+#include <iostream>
 
 template <typename T>
-class DynamicArray
-{
+class DynamicArray {
 private:
-  int size;
-  int total_capacity;
-  int growth_factor;
-  // std::unique_ptr<T> ptr;
-  T *arr;
+  int cur_size;      // number of elements currently in the array
+  int cur_capacity;  // total number of elements that the array can accomodate
+  int growth_factor; // factor by which the array will grow
 
+  T *arr; // T pointer to the first array element
 public:
-  /* ------------ Modifiers ------------ */
-  // adds new element to the end of the array:
-  void push(T value)
-  {
-    this->insert(value, this->get_size());
+  /**
+   * @brief Initialize attributes and Construct a new Dynamic Array object
+   *
+   * @param init_capacity
+   * @param grow_by_this_factor
+   */
+  DynamicArray(int init_capacity, int grow_by_this_factor) { // constructor
+    // initialize attributes:
+    this->cur_size = 0;                        // the array is initially empty
+    this->cur_capacity = init_capacity;        // current max. capacity
+    this->growth_factor = grow_by_this_factor; // factor by which cur_capacity will grow
+
+    arr = new T[this->cur_capacity]; // alocate space for 'cur_capacity' elements in the heap
   }
-  // pops element at the end of the array:
-  void pop(void)
-  {
-    this->remove(this->get_size() - 1);
+
+  /**
+   * @brief Destroy the Dynamic Array object
+   *
+   */
+  ~DynamicArray() {
+    delete[] arr; // free the allocated memory
   }
-  // insert new element at a given position:
-  void insert(T value, int pos)
-  {
-    if (this->get_size() == this->total_capacity)
-    {
-      resize();
+
+  /**
+   * @brief Add a new element to the end of the array.
+   *
+   * @param new_element
+   */
+  void push(T new_element) {
+    this->insert(new_element, this->cur_size);
+  }
+
+  /**
+   * @brief Remove last element in the array.
+   *
+   */
+  void pop(void) {
+    if (this->is_empty()) {
+      std::cout << "Array is currently empty."
+                << "\n";
+      return;
     }
 
-    for (int i = this->size; i > pos; --i)
-    {
-      this->arr[i] == this->arr[i - 1];
+    --this->cur_size;
+
+    if (this->cur_size < (this->cur_capacity / this->growth_factor))
+      this->shrink();
+  }
+
+  /**
+   * @brief Insert new element at a give position.
+   *
+   * @param new_element
+   * @param position
+   */
+  void insert(T new_element, int position) {
+    // if array has reached its current max. capacity, resize it:
+    if (this->cur_size == this->cur_capacity) {
+      this->resize();
     }
 
-    this->size++;
-    this->arr[pos] = value;
-  }
-  // removes element at a given position:
-  void remove(int pos)
-  {
-    assert(pos >= 0 && pos < this->get_size());
-
-    for (int i = pos; i < this->size; i++)
-    {
-      arr[i] = arr[i + 1];
+    // shift (copy) elements to the right of the given position in order to
+    // accomodate the new element:
+    for (int i = this->cur_size; i > position; --i) {
+      this->arr[i] = this->arr[i - 1];
     }
 
-    this->size--;
+    // insert new element:
+    this->arr[position] = new_element;
+
+    // update current array size:
+    ++this->cur_size;
   }
-  // resizes array to actual size:
-  void resize(void)
-  {
-    this->total_capacity *= this->growth_factor;
 
-    T *temp = new T[this->total_capacity];
+  /**
+   * @brief Remove element at a given position.
+   *
+   * @param position
+   */
+  void remove(int position) {
+    assert((this->cur_size > 0) && (position >= 0) && (position < this->cur_size));
 
-    std::copy(arr, arr + this->get_size(), temp);
+    for (int i = position; i < this->cur_size; i++) {
+      this->arr[i] = this->arr[i + 1];
+    }
+
+    --this->cur_size;
+
+    if (this->cur_size < (this->cur_capacity / this->growth_factor))
+      this->shrink();
+  }
+
+  /**
+   * @brief Resize array by the growth factor given.
+   *
+   */
+  void resize(void) {
+    this->cur_capacity *= this->growth_factor;
+
+    T *temp = new T[this->cur_capacity];
+
+    std::copy(arr, arr + this->cur_size, temp);
 
     delete[] arr;
 
     arr = temp;
   }
 
-  // Other methods that could be added: clear() and shrink()
+  /**
+   * @brief Shrink array dimensions to save memory.
+   *
+   */
+  void shrink(void) {
+    this->cur_capacity /= growth_factor;
 
-  /* ------------ Getters ------------ */
-  int get_size(void) const
-  {
-    return this->size;
+    T *temp = new T[this->cur_capacity];
+
+    std::copy(arr, arr + this->cur_size, temp);
+
+    delete[] arr;
+
+    arr = temp;
   }
 
-  int capacity(void) const
-  {
-    return this->total_capacity;
+  /**
+   * @brief Get the last array element.
+   *
+   * @return T
+   */
+  T back(void) {
+    assert(this->cur_size > 0);
+
+    return arr[this->cur_size - 1];
   }
 
-  T front(void) const
-  {
-    assert(this->get_size() > 0);
+  /**
+   * @brief Get the first array element.
+   *
+   * @return T
+   */
+  T front(void) {
+    assert(this->cur_size > 0);
 
     return arr[0];
   }
 
-  T back(void) const
-  {
-    assert(this->get_size() > 0);
-
-    return arr[this->size - 1];
+  /**
+   * @brief Get the size of the array object.
+   *
+   * @return int
+   */
+  int get_size(void) {
+    return this->cur_size;
   }
 
-  bool isEmpty(void) const
-  {
-    return (this->get_size() == 0);
+  /**
+   * @brief Get the max capacity of the array  object.
+   *
+   * @return int
+   */
+  int get_max_capacity(void) {
+    return this->cur_capacity;
   }
 
-  // overloaded operators:
-  //    should overload [] and possibly <<
-  T &operator[](int pos)
-  {
-    assert(pos < this->get_size() && pos >= 0);
-
-    return arr[pos];
+  /**
+   * @brief Return whether the array is empty or not.
+   *
+   * @return true
+   * @return false
+   */
+  bool is_empty(void) {
+    return this->cur_size == 0;
   }
 
-  // display:
-  void print(void)
-  {
-    if (this->isEmpty())
-    {
+  /**
+   * @brief Overload operator []
+   *
+   * @param position
+   * @return T&
+   */
+  T &operator[](int position) {
+    assert((this->cur_size > 0) && (position >= 0) && (position < this->cur_size));
+
+    return arr[position];
+  }
+
+  /**
+   * @brief Print array elements.
+   *
+   */
+  void print(void) {
+    if (this->is_empty()) {
       std::cout << "Array is currently empty.\n";
       return;
     }
 
     std::cout << "Array elements: ";
-    for (int i{0}; i < this->get_size(); ++i)
-    {
+    for (int i{0}; i < this->cur_size; ++i) {
       std::cout << arr[i] << "   ";
     }
     std::cout << "\n";
-  }
-
-  /* ------------ Overloaded constructor ------------- */
-  DynamicArray(int capacity = 5, int growth = 2)
-  {
-    this->size = 0;
-    this->total_capacity = capacity;
-    this->growth_factor = growth;
-
-    arr = new T[total_capacity];
-  }
-  /* ------------ Destructor ------------- */
-  ~DynamicArray()
-  {
-    delete[] arr;
   }
 };

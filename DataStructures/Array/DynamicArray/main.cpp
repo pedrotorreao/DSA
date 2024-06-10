@@ -1,21 +1,20 @@
-#include <iostream>
-#include <iomanip>
-#include <vector>
 #include "dynamicArray.h"
+#include <iomanip>
+#include <iostream>
+#include <vector>
 
-int main()
-{
+int main() {
   std::cout << std::boolalpha;
 
   DynamicArray<int> arr{3 /*capacity*/, 2 /*growth_factor*/};
 
-  // TC#1.1 - test isEmpty() method [Expected: TRUE]:
-  std::cout << "Array is empty: " << arr.isEmpty() << "\n";
+  // TC#1.1 - test is_empty() method [Expected: TRUE]:
+  std::cout << "Array is empty: " << arr.is_empty() << "\n";
 
   arr.push(11);
 
   // TC#1.2 - test isEmpty() method [Expected: FALSE]:
-  std::cout << "Array is empty: " << arr.isEmpty() << "\n";
+  std::cout << "Array is empty: " << arr.is_empty() << "\n";
 
   arr.push(15);
 
@@ -50,7 +49,7 @@ int main()
   arr.push(23);
   arr.push(3);
 
-  std::cout << "Array capacity: " << arr.capacity() << "\n";
+  std::cout << "Array capacity: " << arr.get_max_capacity() << "\n";
 
   // TC#3.2 - test print() method [Expected: 9 11]:
   arr.print();
