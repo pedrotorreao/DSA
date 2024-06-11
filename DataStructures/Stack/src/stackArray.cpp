@@ -1,6 +1,7 @@
 /******************************************************************************
 DS: Stack using Arrays
 *******************************************************************************/
+#include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -21,6 +22,8 @@ public:
   }
 
   bool push(std::string val) {
+    boost::algorithm::trim(val);
+
     if (val.empty())
       return false;
 
@@ -87,6 +90,10 @@ int main() {
   std::cout << "Stack size: " << stack.getSize() << "\n";         // 0
   std::cout << "The stack is empty: " << stack.isEmpty() << "\n"; // true
   std::cout << "---\n";
+
+  // --test 7: push an invalid string:
+  success = stack.push("  ");                         // false
+  std::cout << "Stack top: " << stack.peek() << "\n"; // "-- EMPTY STACK --"
 
   return 0;
 }
