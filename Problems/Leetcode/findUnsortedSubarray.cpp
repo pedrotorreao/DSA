@@ -38,6 +38,7 @@ Problem: LC 581. Shortest Unsorted Continuous Subarray (Minimum Window Sort Prob
 
 #include <algorithm>
 #include <iostream>
+#include <limits>
 #include <vector>
 
 /* -- APPROACH #1:
