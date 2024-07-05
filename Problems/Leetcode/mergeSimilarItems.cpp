@@ -99,36 +99,36 @@ public:
 };
 
 int main() {
-  Solution sol;
+    Solution sol;
 
-  std::vector<std::vector<int>> items1{}, items2{}, res{};
+    std::vector<std::vector<int>> items1{}, items2{}, res{};
 
-  items1 = {{1,1}, {4,5}, {3,8}};
-  items2 = {{3,1}, {1,5}};
-  res = sol.mergeSimilarItems(items1, items2);
-  std::cout << ">> Merged similar items: ";
-  display2D(res);
+    items1 = {{1,1}, {4,5}, {3,8}};
+    items2 = {{3,1}, {1,5}};
+    res = sol.mergeSimilarItems(items1, items2);
+    std::cout << ">> Merged similar items: ";
+    display2D(res);
 
-  items1 = {{1,1},{3,2},{2,3}};
-  items2 = {{2,1},{3,2},{1,3}};
-  res = sol.mergeSimilarItems(items1, items2);
-  std::cout << ">> Merged similar items: ";
-  display2D(res);
+    items1 = {{1,1},{3,2},{2,3}};
+    items2 = {{2,1},{3,2},{1,3}};
+    res = sol.mergeSimilarItems(items1, items2);
+    std::cout << ">> Merged similar items: ";
+    display2D(res);
 
-  items1 = {{1,3},{2,2}};
-  items2 = {{7,1},{2,2},{1,4}};
-  res = sol.mergeSimilarItems(items1, items2);
-  std::cout << ">> Merged similar items: ";
-  display2D(res);
+    items1 = {{1,3},{2,2}};
+    items2 = {{7,1},{2,2},{1,4}};
+    res = sol.mergeSimilarItems(items1, items2);
+    std::cout << ">> Merged similar items: ";
+    display2D(res);
 
-  return 0;
+    return 0;
 }
 
 void display2D(const std::vector<std::vector<int>> &arr) {
-  std::cout << "[ ";
-  for (const auto &item : arr) {
     std::cout << "[ ";
-    std::cout << item.at(0) << ", " << item.at(1) << " ] ";
-  }
-  std::cout << "]\n\n";
+    for (const auto &item : arr) {
+        std::cout << "[ ";
+        std::cout << item.at(0) << ", " << item.at(1) << " ] ";
+    }
+    std::cout << "]\n\n";
 }
