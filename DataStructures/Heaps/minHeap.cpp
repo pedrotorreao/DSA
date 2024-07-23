@@ -2,12 +2,11 @@
 /*Trees - Heaps: Min Heap C++ ********/
 /****************************************************************/
 #include <iostream>
-#include <vector>
-#include <math.h>
 #include <limits.h>
+#include <math.h>
+#include <vector>
 
-class MinHeap
-{
+class MinHeap {
 private:
   std::vector<int> minHeap;
 
@@ -23,21 +22,18 @@ public:
   void swapValues(int indexNew, int indexParent);
   int heapSize(void);
 
-  MinHeap()
-  {
+  MinHeap() {
     // element at position heap[0] does not count:
     minHeap.push_back(0);
   }
   ~MinHeap() {}
 };
 
-int MinHeap::peek(void)
-{
+int MinHeap::peek(void) {
   return minHeap.at(1);
 }
 
-void MinHeap::insertElement(int value)
-{
+void MinHeap::insertElement(int value) {
   // add new element to the first empty node at the bottommost leftmost /// empty position (aka the end of the array):
   this->minHeap.push_back(value);
 
@@ -46,8 +42,7 @@ void MinHeap::insertElement(int value)
   heapifyBottomTop();
 }
 
-void MinHeap::heapifyBottomTop(void)
-{
+void MinHeap::heapifyBottomTop(void) {
   int newElementIndex = this->minHeap.size() - 1; // last element
   int parentIndex;
 
@@ -60,21 +55,18 @@ void MinHeap::heapifyBottomTop(void)
 
     // if parent.value > child.value: swap them and update the index
     // of the node being bubbled down to the parent swapped:
-    if (this->minHeap.at(parentIndex) > this->minHeap.at(newElementIndex))
-    {
+    if (this->minHeap.at(parentIndex) > this->minHeap.at(newElementIndex)) {
       swapValues(newElementIndex, parentIndex);
       newElementIndex = parentIndex;
     }
     // there is no violation, i.e. parent.value < child.value:
-    else
-    {
+    else {
       return;
     }
   }
 }
 
-void MinHeap::removeMin(void)
-{
+void MinHeap::removeMin(void) {
   if (minHeap.size() < 2) // heap is empty
     return;
 
@@ -89,8 +81,7 @@ void MinHeap::removeMin(void)
   heapifyTopBottom();
 }
 
-void MinHeap::heapifyTopBottom(int parentIndex)
-{
+void MinHeap::heapifyTopBottom(int parentIndex) {
   if (!minHeap.at(parentIndex) || parentIndex == 0)
     return;
 
@@ -101,24 +92,21 @@ void MinHeap::heapifyTopBottom(int parentIndex)
   // exceeding the heap dimensions, if it is, there is no left
   // child and subsequently no right child since the heap is
   // filled from left to right:
-  if (leftChildIndex >= minHeap.size())
-  {
+  if (leftChildIndex >= minHeap.size()) {
     return;
   }
 
   // compares swapped parent with its children to see if the heap
-  // properties are being violated:
-  if (minHeap.at(parentIndex) > minHeap.at(leftChildIndex) || minHeap.at(parentIndex) > minHeap.at(rightChildIndex))
-  {
-    // if there is a violation, swap parent with its smaller child,
-    // update parent's index and keep checking:
-    if (!minHeap.at(rightChildIndex) || minHeap.at(leftChildIndex) < minHeap.at(rightChildIndex))
-    {
+  // properties are being violated; if so, swap parent with its smaller child,
+  // update parent's index and keep checking:
+  if (minHeap.at(parentIndex) > minHeap.at(leftChildIndex) || minHeap.at(parentIndex) > minHeap.at(rightChildIndex)) {
+    // if the right child does not exist or left < right, swap root and left:
+    if (!minHeap.at(rightChildIndex) || minHeap.at(leftChildIndex) < minHeap.at(rightChildIndex)) {
       swapValues(leftChildIndex, parentIndex);
       parentIndex = leftChildIndex;
     }
-    else
-    {
+    // otherwise, swap root and right:
+    else {
       swapValues(rightChildIndex, parentIndex);
       parentIndex = rightChildIndex;
     }
@@ -126,21 +114,18 @@ void MinHeap::heapifyTopBottom(int parentIndex)
   }
 }
 
-void MinHeap::swapValues(int indexNew, int indexParent)
-{
+void MinHeap::swapValues(int indexNew, int indexParent) {
   int temp = this->minHeap.at(indexNew);
 
   this->minHeap.at(indexNew) = this->minHeap.at(indexParent);
   this->minHeap.at(indexParent) = temp;
 }
 
-int MinHeap::heapSize(void)
-{
+int MinHeap::heapSize(void) {
   return minHeap.size() - 1; // element at position heap[0] does not count.
 }
 
-int main()
-{
+int main() {
   MinHeap minheap;
 
   minheap.insertElement(16);

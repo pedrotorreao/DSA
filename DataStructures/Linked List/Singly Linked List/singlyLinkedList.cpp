@@ -4,21 +4,18 @@ DS: Singly Linked List (SLL)
 #include <iostream>
 #include <string>
 
-class Node
-{
+class Node {
 public:
   std::string data;
   Node *next;
 
-  Node(std::string s)
-  {
+  Node(std::string s) {
     this->data = s;
     this->next = nullptr;
   }
 };
 
-class SinglyLinkedList
-{
+class SinglyLinkedList {
 private:
   Node *head;
   Node *tail;
@@ -34,8 +31,7 @@ public:
   void getSize(void);
   void displayLinkedList(void);
 
-  SinglyLinkedList()
-  {
+  SinglyLinkedList() {
     this->head = nullptr;
     this->tail = this->head;
     this->length = 0;
@@ -47,13 +43,10 @@ void SinglyLinkedList::append(std::string s) // add s to the end
 {
   Node *temp = new Node(s);
 
-  if (this->head == nullptr)
-  {
+  if (this->head == nullptr) {
     this->head = temp;
     this->tail = this->head;
-  }
-  else
-  {
+  } else {
     this->tail->next = temp;
     this->tail = temp;
   }
@@ -64,13 +57,10 @@ void SinglyLinkedList::prepend(std::string s) // add s to the beginning
 {
   Node *temp = new Node(s);
 
-  if (head == nullptr)
-  {
+  if (head == nullptr) {
     this->head = temp;
     this->tail = this->head;
-  }
-  else
-  {
+  } else {
     temp->next = this->head;
     this->head = temp;
   }
@@ -79,13 +69,10 @@ void SinglyLinkedList::prepend(std::string s) // add s to the beginning
 
 void SinglyLinkedList::insertNode(std::string s, int position) // insert s at a specific position
 {
-  if (position <= 1)
-  {
+  if (position <= 1) {
     this->prepend(s);
     return;
-  }
-  else if (position > this->length)
-  {
+  } else if (position > this->length) {
     this->append(s);
     return;
   }
@@ -94,8 +81,7 @@ void SinglyLinkedList::insertNode(std::string s, int position) // insert s at a 
   Node *new_node = new Node(s);
   int pos = 1;
 
-  while (pos < position - 1)
-  {
+  while (pos < position - 1) {
     temp = temp->next;
     pos++;
   }
@@ -105,16 +91,14 @@ void SinglyLinkedList::insertNode(std::string s, int position) // insert s at a 
 
 void SinglyLinkedList::deleteNode(std::string s) // remove s from the LL
 {
-  if (this->head->data == s)
-  {
+  if (this->head->data == s) {
     this->head = this->head->next;
     return;
   }
 
   Node *temp = this->head;
 
-  while (temp->next->data != s)
-  {
+  while (temp->next != nullptr && temp->next->data != s) {
     temp = temp->next;
   }
 
@@ -127,10 +111,8 @@ void SinglyLinkedList::search(std::string s) // search for s in the LL
   Node *temp = this->head;
   int pos = 1;
 
-  while (temp != nullptr)
-  {
-    if (temp->data == s)
-    {
+  while (temp != nullptr) {
+    if (temp->data == s) {
       std::cout << "Found " << s << " at position " << pos << "\n";
       return;
     }
@@ -141,16 +123,14 @@ void SinglyLinkedList::search(std::string s) // search for s in the LL
             << "\n";
 }
 
-void SinglyLinkedList::reverse(void)
-{
+void SinglyLinkedList::reverse(void) {
   if (!this->head->next)
     return;
 
   Node *first = this->head;
   Node *second = first->next;
 
-  while (second != nullptr)
-  {
+  while (second != nullptr) {
     Node *temp = second->next;
     second->next = first;
     first = second;
@@ -162,17 +142,14 @@ void SinglyLinkedList::reverse(void)
   this->head = first;
 }
 
-void SinglyLinkedList::getSize(void)
-{
+void SinglyLinkedList::getSize(void) {
   std::cout << "Linked List size: " << this->length << "\n";
 }
 
-void SinglyLinkedList::displayLinkedList(void)
-{
+void SinglyLinkedList::displayLinkedList(void) {
   Node *temp = this->head;
 
-  while (temp != nullptr)
-  {
+  while (temp != nullptr) {
     std::cout << temp->data;
     if (temp->next != nullptr)
       std::cout << " -> ";
@@ -181,8 +158,7 @@ void SinglyLinkedList::displayLinkedList(void)
   std::cout << "\n";
 }
 
-int main()
-{
+int main() {
   SinglyLinkedList sll;
 
   sll.append("RECIFE");
