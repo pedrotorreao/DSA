@@ -67,9 +67,6 @@ Follow up:
 #include <stack>
 #include <vector>
 
-void display1D(const std::vector<int> &nums);
-bool comp1D(const std::vector<int> &a, const std::vector<int> &b);
-
 // Definition for a binary tree node:
 struct TreeNode {
   int val;
