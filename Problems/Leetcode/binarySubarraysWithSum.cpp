@@ -43,9 +43,6 @@ they are all unique.
 #include <unordered_map>
 #include <vector>
 
-void display1D(const std::vector<int> &nums);
-bool comp1D(const std::vector<int> &a, const std::vector<int> &b);
-
 class Solution {
 public:
   int numSubarraysWithSum(std::vector<int> &nums, int goal) {
