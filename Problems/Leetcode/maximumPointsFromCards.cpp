@@ -29,19 +29,22 @@ and the integer 'k', return the maximum score you can obtain.
     Explanation: You have to take all the cards. Your score is the sum of points of all cards.
 
 --Inputs:
+  - int[]: integer array 'cardPoints'
+  - int: number of cards to be selected, 'k'
 
 --Output:
+  - int: maximum score obtained from selecting exactly 'k' cards
 
 --Constraints:
     :: 1 <= cardPoints.length <= 10^5
     :: 1 <= cardPoints[i] <= 10^4
     :: 1 <= k <= cardPoints.length
 
---Reasoning:
+--Reasoning: see comments below.
 
---Time complexity:
+--Time complexity: O(N), where N is the size of the input array.
 
---Space complexity:
+--Space complexity: O(1), since no input dependent memory needs to be allocated.
 
 */
 
