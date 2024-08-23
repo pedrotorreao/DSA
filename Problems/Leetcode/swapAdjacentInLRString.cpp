@@ -23,9 +23,10 @@ a sequence of moves to transform 'start' to 'end'.
     Output: false
 
 --Inputs:
+  string: start and end strings
 
 --Output:
-
+  bool: boolean indicating whether 'start' can be turned into 'end'.
 
 --Constraints:
     :: 1 <= start.length <= 10^4
