@@ -57,10 +57,21 @@ Problem: LC 71. Simplify Path
   > 'path' is a valid absolute Unix 'path'.
 
 --Reasoning:
+  Use a stack for keeping track of the directories. Then, split the input path into components by the "/" character,
+  and process each component. If a component is:
+    a.) "..": go to the previous directory by popping the top of the stack.
+    b.) "." or an empty string, "": do nothing.
+    c.) otherwise: push the component into the stack as a new directory.
+  See more comments in the code below.
 
 --Time complexity:
+    > splitting the input path string: O(N), where N is the length of the string.
+    > processing: O(N), also, since each component is processes at most once.
+    > building the output string: O(N). It's just a matter of going over the stack and appending the components.
 
---Space complexity:
+        TC: O(N) + O(N) + O(N) = O(3N) ~ O(N).
+
+--Space complexity: O(N), due to the additional space used by the stack.
 
 */
 
